@@ -1,65 +1,93 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const MessagePage = () => {
+const addAndHistory = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [notification, setNotification] = useState(""); // State for notifications
+  const [duplicateCount, setDuplicateCount] = useState(1); // State for duplicate count
   const router = useRouter();
 
   useEffect(() => {
-    // เรียก API เพื่อดึงข้อความที่เคยส่งของผู้ใช้
+    // Fetch previous messages from API
     const fetchMessages = async () => {
       try {
-        // เปลี่ยน URL เป็น API ของคุณ
         const response = await fetch("/api/messages");
         const data = await response.json();
         setMessages(data);
       } catch (error) {
         console.error("Error fetching messages:", error);
+        setNotification("Failed to fetch messages.");
       }
     };
     fetchMessages();
   }, []);
 
-  const handleSave = async (message) => {
-    // เรียก API เพื่อบันทึกข้อความ
+  const handleSave = async () => {
+    // Validate message before saving
+    if (!message.trim()) {
+      setNotification("Message cannot be empty.");
+      return;
+    }
+
     try {
       await fetch("http://localhost:8888/api/saveMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
       });
-      console.log("Message saved:", message);
       setMessage(""); // Clear the textarea after saving
+      setNotification("Message saved successfully.");
     } catch (error) {
       console.error("Error saving message:", error);
+      setNotification("Failed to save message.");
     }
   };
 
   const handleDuplicate = async (msg) => {
-    const newMessage = `${msg.text} (Duplicate)`; // Duplicate message logic
+    const newMessages = [];
+    for (let i = 0; i < duplicateCount; i++) {
+      const newMessage = `${msg.text} (Duplicate ${i + 1})`;
+      newMessages.push(newMessage);
+    }
+
     try {
-      await fetch("/api/saveMessage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: newMessage }),
-      });
-      setMessages([...messages, { id: Date.now(), text: newMessage }]); // Update state with new message
+      for (const newMessage of newMessages) {
+        await fetch("/api/saveMessage", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: newMessage }),
+        });
+      }
+      setMessages([...messages, ...newMessages.map((text, index) => ({ id: Date.now() + index, text }))]); // Update state with new messages
+      setNotification(`Message duplicated ${duplicateCount} time(s).`);
     } catch (error) {
       console.error("Error duplicating message:", error);
+      setNotification("Failed to duplicate message.");
     }
+  };
+
+  const handleNotificationClose = () => {
+    setNotification(""); // Clear notification
   };
 
   // Function to send messages via Line Chatbot
   const sendLineMessage = async () => {
+    if (!message.trim()) {
+      setNotification("Cannot send an empty message via Line Chatbot.");
+      return;
+    }
+
     try {
       await fetch("/api/sendLineMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        bady: JSON.stringify({ message: "Your scheduled message" }),
+        body: JSON.stringify({ message }),
       });
+      setNotification("Message sent via Line Chatbot successfully.");
     } catch (error) {
       console.error("Error sending message via Line Chatbot: ", error);
+      setNotification("Failed to send message via Line Chatbot.");
     }
   };
 
@@ -78,8 +106,7 @@ const MessagePage = () => {
       const timeToWait = targetTime - now;
       const timer = setTimeout(() => {
         sendLineMessage();
-        // Repeat daily
-        setInterval(sendLineMessage, 24 * 60 * 60 * 1000);
+        setInterval(sendLineMessage, 24 * 60 * 60 * 1000); // Repeat daily
       }, timeToWait);
       return () => clearTimeout(timer);
     } else {
@@ -94,6 +121,17 @@ const MessagePage = () => {
       style={{ backgroundImage: "url('bg_login.png')" }}
     >
       <h1 className="text-2xl font-bold">Add/Edit Message</h1>
+      {notification && (
+        <div className="bg-yellow-200 p-2 mt-2 rounded text-black">
+          {notification}
+          <button
+            className="ml-4 text-red-600"
+            onClick={handleNotificationClose}
+          >
+            X
+          </button>
+        </div>
+      )}
       <textarea
         className="w-full p-2 border border-gray-300 rounded mt-4"
         rows={4}
@@ -113,12 +151,21 @@ const MessagePage = () => {
         {messages.map((msg) => (
           <li key={msg.id} className="border p-2 mb-2">
             <p>{msg.text}</p>
-            <button
-              className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
-              onClick={() => handleDuplicate(msg)}
-            >
-              Duplicate
-            </button>
+            <div className="flex items-center mt-2">
+              <input
+                type="number"
+                className="mr-2 p-1 border border-gray-300 rounded"
+                value={duplicateCount}
+                min="1"
+                onChange={(e) => setDuplicateCount(e.target.value)}
+              />
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded"
+                onClick={() => handleDuplicate(msg)}
+              >
+                Duplicate
+              </button>
+            </div>
           </li>
         ))}
       </ul>
@@ -126,4 +173,4 @@ const MessagePage = () => {
   );
 };
 
-export default MessagePage;
+export default addAndHistory;
