@@ -21,10 +21,10 @@ const MessagePage = () => {
     fetchMessages();
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = async (message) => {
     // เรียก API เพื่อบันทึกข้อความ
     try {
-      await fetch("/api/saveMessage", {
+      await fetch("http://localhost:8888/api/saveMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
