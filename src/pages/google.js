@@ -8,7 +8,6 @@ import {
   signOut,
 } from "firebase/auth";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyAGrDbcLB6Xx8t8rh2noyFrSPVoRYdeizU",
   authDomain: "myapp-e0219.firebaseapp.com",

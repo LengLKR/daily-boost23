@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth, googleProvider } from "./google";
 import Image from "next/image";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { Router } from "next/router";
 
 const login = () => {
@@ -11,7 +12,8 @@ const login = () => {
   const [textBtn, setTextbtn] = useState("Login Google");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+
 
   const loginAction = async () => {
     console.log("this checkLogin", auth?.currentUser);
@@ -47,19 +49,38 @@ const login = () => {
     }
   };
 
-  const handlesSubmit = (e) => {
-    e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password", password);
-    //ADD your login logic here
+  const handlesSubmit = async(e) => {
+   e.preventDefault()
+   try{
+    const userCredential = await signInWithEmailAndPassword(auth,email,password)
+    setUser(userCredential.user)
+
+    if (rememberMe){
+      localStorage.setItem("user", JSON.stringify(userCredential.user))
+    }
+   }catch(error){
+    console.error("Login failed:",error)
+    alert("Login failed: " + error.message)
+   }
   };
+
   //Check if user is remembered
   useEffect(() => {
     const rememberedUser = localStorage.getItem("user");
     if (rememberMe) {
       setUser(JSON.parse(rememberedUser));
+      setRememberMe(true)
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    if (user){
+      setTextbtn("Logiut")
+    }else{
+      setTextbtn("Login with Google")
+    }
+  })
+ 
 
   return (
     <div>
