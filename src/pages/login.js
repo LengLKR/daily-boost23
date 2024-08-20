@@ -4,7 +4,7 @@ import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth, googleProvider } from "./google";
 import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Router } from "next/router";
+import { useRouter } from "next/router";
 import { sendDataToFirestore } from "./service";
 
 const login = () => {
@@ -14,6 +14,7 @@ const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const router = useRouter()
 
   const loginAction = async () => {
     console.log("this checkLogin", auth?.currentUser);
@@ -198,6 +199,7 @@ const login = () => {
                     <a
                       href="#"
                       className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      onClick={()=>router.push('/signup')}
                     >
                       Sign up
                     </a>

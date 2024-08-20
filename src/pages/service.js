@@ -6,7 +6,7 @@ export const sendDataToFirestore = async (data) => {
   console.log("testsetset");
   try {
     // ระบุชื่อ collection ที่ต้องการส่งข้อมูลไป
-    const docRef = await addDoc(collection(db, "565555"), data);
+    const docRef = await addDoc(collection(db, "user"), data);
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     console.error("Error adding document: ", e);
