@@ -5,7 +5,12 @@ import { auth, googleProvider } from "./google";
 import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
-import { sendDataToFirestore } from "./service";
+import {
+  getUserByEmail,
+  getUserByEmailAndPassword,
+  sendDataToFirestore,
+  verifyUsers,
+} from "./service";
 
 const login = () => {
   const [user, setUser] = useState(null);
@@ -14,7 +19,7 @@ const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const loginAction = async () => {
     console.log("this checkLogin", auth?.currentUser);
@@ -58,25 +63,36 @@ const login = () => {
     };
     await sendDataToFirestore(data);
   };
-  const handlesSubmit = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault(); // ป้องกันการรีเฟรชหน้า
     try {
-      const data = {
-        email:email ,
-        password:password ,
-        createdAt: new Date(),
-      };
-      await sendDataToFirestore(data);
+      const emailInput = email;
+      const passwordInput = password;
 
-      if (rememberMe) {
-        localStorage.setItem("user", JSON.stringify(userCredential.user));
+      const userData = await getUserByEmailAndPassword(
+        emailInput,
+        passwordInput
+      );
+
+      if (userData) {
+        console.log("Login successful:", userData);
+        setUser(userData);
+        router.push('/');
+        // ทำงานเพิ่มเติมหลังจากที่ผู้ใช้ล็อกอินสำเร็จ
+        if (rememberMe) {
+          localStorage.setItem("user", JSON.stringify(userData));
+        }
+        // คุณอาจจะเปลี่ยนเส้นทางหลังจากล็อกอินสำเร็จ เช่น:
+        // router.push("/dashboard");
+      } else {
+        console.error("Login failed: Incorrect email or password");
+        alert("Login failed: Incorrect email or password");
       }
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed: " + error.message);
     }
   };
-
   //Check if user is remembered
   useEffect(() => {
     const rememberedUser = localStorage.getItem("user");
@@ -119,7 +135,7 @@ const login = () => {
                 <form
                   id="loginForm"
                   className="space-y-4 md:space-y-6"
-                  onSubmit={handlesSubmit}
+                  onSubmit={handleLogin}
                 >
                   <div>
                     <label
@@ -199,7 +215,7 @@ const login = () => {
                     <a
                       href="#"
                       className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                      onClick={()=>router.push('/signup')}
+                      onClick={() => router.push("/signup")}
                     >
                       Sign up
                     </a>
