@@ -14,7 +14,6 @@ const login = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-
   const loginAction = async () => {
     console.log("this checkLogin", auth?.currentUser);
     if (!auth?.currentUser) {
@@ -49,19 +48,23 @@ const login = () => {
     }
   };
 
-  const handlesSubmit = async(e) => {
-   e.preventDefault()
-   try{
-    const userCredential = await signInWithEmailAndPassword(auth,email,password)
-    setUser(userCredential.user)
+  const handlesSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setUser(userCredential.user);
 
-    if (rememberMe){
-      localStorage.setItem("user", JSON.stringify(userCredential.user))
+      if (rememberMe) {
+        localStorage.setItem("user", JSON.stringify(userCredential.user));
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Login failed: " + error.message);
     }
-   }catch(error){
-    console.error("Login failed:",error)
-    alert("Login failed: " + error.message)
-   }
   };
 
   //Check if user is remembered
@@ -69,18 +72,17 @@ const login = () => {
     const rememberedUser = localStorage.getItem("user");
     if (rememberMe) {
       setUser(JSON.parse(rememberedUser));
-      setRememberMe(true)
+       
     }
   }, []);
 
   useEffect(() => {
-    if (user){
-      setTextbtn("Logiut")
-    }else{
-      setTextbtn("Login with Google")
+    if (user) {
+      setTextbtn("Logout");
+    } else {
+      setTextbtn("Login with Google");
     }
-  })
- 
+  }, [user]);
 
   return (
     <div>
@@ -155,7 +157,9 @@ const login = () => {
                           type="checkbox"
                           className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                           checked={rememberMe}
-                          onChange={(e) => setRememberMe(e.target.checked)}
+                          onChange={(e) => {setRememberMe(e.target.checked)
+                          console.log("Remember Me", e.target.checked)
+                          }}
                         />
                       </div>
                       <div className="ml-3 text-sm">
