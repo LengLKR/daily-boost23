@@ -5,6 +5,7 @@ import { auth, googleProvider } from "./google";
 import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Router } from "next/router";
+import { sendDataToFirestore } from "./service";
 
 const login = () => {
   const [user, setUser] = useState(null);
@@ -47,16 +48,24 @@ const login = () => {
       setTextbtn("Login with Google");
     }
   };
-
+  const handleTest = async () => {
+    console.log("testsetsets");
+    const data = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      createdAt: new Date(),
+    };
+    await sendDataToFirestore(data);
+  };
   const handlesSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      setUser(userCredential.user);
+      const data = {
+        email:email ,
+        password:password ,
+        createdAt: new Date(),
+      };
+      await sendDataToFirestore(data);
 
       if (rememberMe) {
         localStorage.setItem("user", JSON.stringify(userCredential.user));
@@ -72,7 +81,6 @@ const login = () => {
     const rememberedUser = localStorage.getItem("user");
     if (rememberMe) {
       setUser(JSON.parse(rememberedUser));
-       
     }
   }, []);
 
@@ -157,8 +165,9 @@ const login = () => {
                           type="checkbox"
                           className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                           checked={rememberMe}
-                          onChange={(e) => {setRememberMe(e.target.checked)
-                          console.log("Remember Me", e.target.checked)
+                          onChange={(e) => {
+                            setRememberMe(e.target.checked);
+                            console.log("Remember Me", e.target.checked);
                           }}
                         />
                       </div>
@@ -209,6 +218,7 @@ const login = () => {
                     </button>
                   </div>
                 </form>
+                <button onClick={handleTest}>346346</button>
               </div>
             </div>
           </div>
