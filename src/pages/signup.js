@@ -6,7 +6,8 @@ import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router"; // import useRouter
 import { sendDataToFirestore } from "./service";
-
+import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
+import { getFirestore, collection, query,where, getDocs } from "firebase/firestore";
 const Signup = () => {
   const [user, setUser] = useState(null);
   const [str, setStr] = useState("Hello");
@@ -20,24 +21,40 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = {
-        email: email,
-        password: password,
-        createdAt: new Date(),
-      };
-      await sendDataToFirestore(data);
-
-      if (rememberMe) {
-        localStorage.setItem("user", JSON.stringify(data));
+      // สร้างอินสแตนซ์ Firestore
+      const db = getFirestore();
+      const usersCollection = collection(db, "users");
+  
+      // ตรวจสอบว่ามีผู้ใช้ที่มี email และ password นี้อยู่ใน Firestore หรือไม่
+      const q = query(usersCollection, where("email", "==", email), where("password", "==", password));
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        // ถ้าดาต้าเบสไม่มีข้อมูล ให้ดำเนินการสร้างผู้ใช้ใหม่ใน Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+  
+        // เก็บข้อมูลผู้ใช้ใน Firestore
+        const data = {
+          email: user.email,
+          uid: user.uid,
+          password: password,  // เก็บรหัสผ่าน (ควรเข้ารหัสก่อนบันทึกในโปรดักชันจริง)
+          createdAt: new Date(),
+        };
+        await sendDataToFirestore(data);
+  
+        router.push('/login'); // นำผู้ใช้ไปยังหน้า login
+      } else {
+        // ถ้าพบผู้ใช้ที่มีอีเมลและรหัสผ่านนี้ใน Firestore
+        alert("Email และ Password นี้ถูกใช้งานไปแล้ว");
       }
-
-      router.push('/login'); // นำผู้ใช้ไปยังหน้า login หลังจากเก็บข้อมูลในฐานข้อมูลสำเร็จ
-
     } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed: " + error.message);
+      console.error("Signup failed:", error);
+      alert("Signup failed: " + error.message);
     }
   };
+  
+  
 
   useEffect(() => {
     if (user) {
@@ -120,13 +137,6 @@ const Signup = () => {
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <input
-                    id="rememberMe"
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
                   <label
                     htmlFor="rememberMe"
                     className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
