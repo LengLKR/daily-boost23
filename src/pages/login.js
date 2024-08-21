@@ -19,6 +19,7 @@ const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // เพิ่ม state สำหรับการแสดงรหัสผ่าน
   const router = useRouter();
 
   const loginAction = async () => {
@@ -54,15 +55,6 @@ const login = () => {
       setTextbtn("Login with Google");
     }
   };
-  const handleTest = async () => {
-    console.log("testsetsets");
-    const data = {
-      name: "John Doe",
-      email: "johndoe@example.com",
-      createdAt: new Date(),
-    };
-    await sendDataToFirestore(data);
-  };
   const handleLogin = async (e) => {
     e.preventDefault(); // ป้องกันการรีเฟรชหน้า
     try {
@@ -77,7 +69,7 @@ const login = () => {
       if (userData) {
         console.log("Login successful:", userData);
         setUser(userData);
-        router.push('/');
+        router.push("/");
         // ทำงานเพิ่มเติมหลังจากที่ผู้ใช้ล็อกอินสำเร็จ
         if (rememberMe) {
           localStorage.setItem("user", JSON.stringify(userData));
@@ -162,16 +154,25 @@ const login = () => {
                     >
                       Password
                     </label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"} // เปลี่ยน type ของ input ตามสถานะ showPassword
+                        name="password"
+                        id="password"
+                        placeholder="••••••••"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)} // เปลี่ยนสถานะ showPassword เมื่อคลิก
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                      >
+                        {showPassword ? "Hide" : "Show"}
+                      </button>
+                    </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-start">
@@ -236,7 +237,6 @@ const login = () => {
                     </button>
                   </div>
                 </form>
-                <button onClick={handleTest}>346346</button>
               </div>
             </div>
           </div>

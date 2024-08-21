@@ -6,8 +6,17 @@ import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router"; // import useRouter
 import { sendDataToFirestore } from "./service";
-import { createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
-import { getFirestore, collection, query,where, getDocs } from "firebase/firestore";
+import {
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 const Signup = () => {
   const [user, setUser] = useState(null);
   const [str, setStr] = useState("Hello");
@@ -24,26 +33,34 @@ const Signup = () => {
       // สร้างอินสแตนซ์ Firestore
       const db = getFirestore();
       const usersCollection = collection(db, "users");
-  
+
       // ตรวจสอบว่ามีผู้ใช้ที่มี email และ password นี้อยู่ใน Firestore หรือไม่
-      const q = query(usersCollection, where("email", "==", email), where("password", "==", password));
+      const q = query(
+        usersCollection,
+        where("email", "==", email),
+        where("password", "==", password)
+      );
       const querySnapshot = await getDocs(q);
-  
+
       if (querySnapshot.empty) {
         // ถ้าดาต้าเบสไม่มีข้อมูล ให้ดำเนินการสร้างผู้ใช้ใหม่ใน Firebase Authentication
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
         const user = userCredential.user;
-  
+
         // เก็บข้อมูลผู้ใช้ใน Firestore
         const data = {
           email: user.email,
           uid: user.uid,
-          password: password,  // เก็บรหัสผ่าน (ควรเข้ารหัสก่อนบันทึกในโปรดักชันจริง)
+          password: password, // เก็บรหัสผ่าน (ควรเข้ารหัสก่อนบันทึกในโปรดักชันจริง)
           createdAt: new Date(),
         };
         await sendDataToFirestore(data);
-  
-        router.push('/login'); // นำผู้ใช้ไปยังหน้า login
+
+        router.push("/login"); // นำผู้ใช้ไปยังหน้า login
       } else {
         // ถ้าพบผู้ใช้ที่มีอีเมลและรหัสผ่านนี้ใน Firestore
         alert("Email และ Password นี้ถูกใช้งานไปแล้ว");
@@ -53,8 +70,6 @@ const Signup = () => {
       alert("Signup failed: " + error.message);
     }
   };
-  
-  
 
   useEffect(() => {
     if (user) {
@@ -84,7 +99,7 @@ const Signup = () => {
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div id="formarea" className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Sign in to your account
+              Apply For Membership
               </h1>
               <form
                 id="loginForm"
@@ -135,14 +150,6 @@ const Signup = () => {
                       {showPassword ? "Hide" : "Show"}
                     </button>
                   </div>
-                </div>
-                <div className="flex items-center">
-                  <label
-                    htmlFor="rememberMe"
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Remember me
-                  </label>
                 </div>
 
                 <button
