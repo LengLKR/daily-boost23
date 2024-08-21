@@ -34,6 +34,11 @@ const login = () => {
           setUser(result.user);
           setStr("Is Login ....");
           setTextbtn("Logout");
+
+          //บันทึกข้อมูลผู้ใช้ localStorage
+          localStorage.setItem("user", JSON.stringify(result.user));
+          //นำทาวกลับไปที่หน้า Home
+          router.push("/");
         })
         .catch(function (error) {
           const errorCode = error.code;
@@ -53,6 +58,7 @@ const login = () => {
       setUser(null);
       setStr("not login");
       setTextbtn("Login with Google");
+      localStorage.removeItem("user"); //ลบข้อมูลผู้ใช้ออกจาก localStorage
     }
   };
   const handleLogin = async (e) => {
