@@ -120,55 +120,57 @@ const addAndHistory = () => {
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('bg_login.png')" }}
     >
-      <h1 className="text-2xl font-bold">Add/Edit Message</h1>
-      {notification && (
-        <div className="bg-yellow-200 p-2 mt-2 rounded text-black">
-          {notification}
-          <button
-            className="ml-4 text-red-600"
-            onClick={handleNotificationClose}
-          >
-            X
-          </button>
-        </div>
-      )}
-      <textarea
-        className="w-full p-2 border border-gray-300 rounded mt-4"
-        rows={4}
-        placeholder="Enter your message here..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      ></textarea>
-      <button
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={handleSave}
-      >
-        Save
-      </button>
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-2xl font-bold text-center">Add/Edit Message</h1>
+        {notification && (
+          <div className="bg-yellow-200 p-2 mt-2 rounded text-black">
+            {notification}
+            <button
+              className="ml-4 text-red-600"
+              onClick={handleNotificationClose}
+            >
+              X
+            </button>
+          </div>
+        )}
+        <textarea
+          className="w-full p-2 border border-gray-300 rounded mt-4"
+          rows={4}
+          placeholder="Enter your message here..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        ></textarea>
+        <button
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded w-full"
+          onClick={handleSave}
+        >
+          Save
+        </button>
 
-      <h1 className="text-2xl font-bold mt-8">Message History</h1>
-      <ul className="mt-4">
-        {messages.map((msg) => (
-          <li key={msg.id} className="border p-2 mb-2">
-            <p>{msg.text}</p>
-            <div className="flex items-center mt-2">
-              <input
-                type="number"
-                className="mr-2 p-1 border border-gray-300 rounded"
-                value={duplicateCount}
-                min="1"
-                onChange={(e) => setDuplicateCount(e.target.value)}
-              />
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded"
-                onClick={() => handleDuplicate(msg)}
-              >
-                Duplicate
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+        <h1 className="text-2xl font-bold mt-8 text-center">Message History</h1>
+        <ul className="mt-4">
+          {messages.map((msg) => (
+            <li key={msg.id} className="border p-2 mb-2 rounded-lg">
+              <p>{msg.text}</p>
+              <div className="flex items-center mt-2">
+                <input
+                  type="number"
+                  className="mr-2 p-1 border border-gray-300 rounded w-16"
+                  value={duplicateCount}
+                  min="1"
+                  onChange={(e) => setDuplicateCount(e.target.value)}
+                />
+                <button
+                  className="px-4 py-2 bg-green-500 text-white rounded"
+                  onClick={() => handleDuplicate(msg)}
+                >
+                  Duplicate
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
