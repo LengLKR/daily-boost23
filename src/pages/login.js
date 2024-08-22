@@ -80,7 +80,7 @@ const login = () => {
         if (rememberMe) {
           localStorage.setItem("user", JSON.stringify(userData));
         }
-        // คุณอาจจะเปลี่ยนเส้นทางหลังจากล็อกอินสำเร็จ เช่น:
+        // เปลี่ยนเส้นทางหลังจากล็อกอินสำเร็จ เช่น:
         // router.push("/dashboard");
       } else {
         console.error("Login failed: Incorrect email or password");
@@ -207,6 +207,7 @@ const login = () => {
                     <a
                       href="#"
                       className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      onClick={() => router.push("/forgotPassword")}
                     >
                       Forgot password?
                     </a>

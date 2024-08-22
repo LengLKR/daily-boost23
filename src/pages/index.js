@@ -111,22 +111,6 @@ export default function Home() {
               QRcode
             </button>
           </div>
-
-          {!isLoggedIn && (
-            <button
-              onClick={loginClick}
-              className="inline-flex items-center px-4 py-2 mt-4 text-pink-800 font-bold rounded-full bg-pink-200 border border-pink-300 shadow-lg hover:bg-pink-300 transition-colors"
-            >
-              <div className="flex items-center justify-center w-8 h-8 mr-2 bg-pink-300 rounded-full overflow-hidden">
-                <img
-                  src="/logo_login.png"
-                  alt="Login Icon"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <span>Log in</span>
-            </button>
-          )}
         </div>
       </main>
 
