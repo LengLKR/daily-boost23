@@ -137,7 +137,7 @@ const AddAndHistory = () => {
           </div>
         )}
         <textarea
-          className="w-full p-4 mt-6 text-black bg-gray-200 rounded-lg"
+          className="w-full p-4 mt-6 text-black bg-gray-200 rounded-lg resize-none"
           rows={4}
           placeholder="แบ่งปันข้อความของคุณ..."
           value={message}
@@ -150,7 +150,7 @@ const AddAndHistory = () => {
           ส่งข้อความ
         </button>
 
-        <h1 className="text-2xl font-bold mt-8 text-center text-white">ประวัติข้อความ</h1>
+        <h1 className=" text-sm font-bold mt-8 text-center text-white">ประวัติข้อความ</h1>
         <ul className="mt-4 max-h-64 overflow-y-auto">
           {messages.map((msg) => (
             <li key={msg.id} className="border p-2 mb-2 bg-white bg-opacity-70 rounded-lg shadow">
