@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const addAndHistory = () => {
+const AddAndHistory = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState(""); // State for notifications
@@ -31,7 +31,7 @@ const addAndHistory = () => {
     }
 
     try {
-      await fetch("http://localhost:8888/api/saveMessage", {
+      await fetch("/api/saveMessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
@@ -120,10 +120,13 @@ const addAndHistory = () => {
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('bg_login.png')" }}
     >
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center">Add/Edit Message</h1>
+      <div className="w-full max-w-lg p-8 ">
+        <h1 className="text-2xl font-bold text-center text-white">แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย</h1>
+        <p className="text-center text-white mt-2">
+          คุณสามารถเลือกใช้ <u>ข้อความแนะนำ</u> ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
+        </p>
         {notification && (
-          <div className="bg-yellow-200 p-2 mt-2 rounded text-black">
+          <div className="bg-violet-400 p-2 mt-4 rounded text-black">
             {notification}
             <button
               className="ml-4 text-red-600"
@@ -134,23 +137,23 @@ const addAndHistory = () => {
           </div>
         )}
         <textarea
-          className="w-full p-2 border border-gray-300 rounded mt-4"
+          className="w-full p-4 mt-6 text-black bg-gray-200 rounded-lg"
           rows={4}
-          placeholder="Enter your message here..."
+          placeholder="แบ่งปันข้อความของคุณ..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
         <button
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded w-full"
+          className="mt-4 w-full px-6 py-2 text-white bg-purple-600 rounded-full shadow hover:bg-purple-700 transition-colors"
           onClick={handleSave}
         >
-          Save
+          ส่งข้อความ
         </button>
 
-        <h1 className="text-2xl font-bold mt-8 text-center">Message History</h1>
-        <ul className="mt-4">
+        <h1 className="text-2xl font-bold mt-8 text-center text-white">ประวัติข้อความ</h1>
+        <ul className="mt-4 max-h-64 overflow-y-auto">
           {messages.map((msg) => (
-            <li key={msg.id} className="border p-2 mb-2 rounded-lg">
+            <li key={msg.id} className="border p-2 mb-2 bg-white bg-opacity-70 rounded-lg shadow">
               <p>{msg.text}</p>
               <div className="flex items-center mt-2">
                 <input
@@ -175,4 +178,4 @@ const addAndHistory = () => {
   );
 };
 
-export default addAndHistory;
+export default AddAndHistory;

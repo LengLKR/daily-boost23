@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import QRCodeComponent from "./line";
 import { useRouter } from "next/router";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./google"; // อ้างอิงไปที่ Firebase auth ของคุณ
 
 export default function Home() {
   const router = useRouter();
@@ -8,39 +10,23 @@ export default function Home() {
   const [showQRCode, setShowQRCode] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const user = localStorage.getItem("user");
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
       }
-    }
-  }, []);
+    });
 
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const user = localStorage.getItem("user");
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
+    return () => unsubscribe();
   }, []);
 
   const loginClick = () => {
     router.push("/login");
   };
 
-  const logoutClick = () => {
-    localStorage.removeItem("user");
+  const logoutClick = async () => {
+    await signOut(auth);
     setIsLoggedIn(false);
     router.push("/");
   };
@@ -102,13 +88,16 @@ export default function Home() {
             เริ่มต้นวันใหม่ด้วยพลังใจจาก Daily Boost!
           </h1>
           <p className="text-lg text-pink-200 mt-4">Welcome to Daily Boost</p>
-
-          <div className="mt-10">
+          <div className="mt-10 flex justify-center items-center space-x-4">
+            <button className="px-6 py-2 text-purple-500 font-bold bg-white rounded-full shadow-lg hover:bg-white/80 transition-colors border border-purple-500 flex items-center">
+              <span>เริ่มต้นใช้งาน</span>
+              <span className=" "></span>
+            </button>
             <button
               onClick={toggleQRCode}
-              className="px-4 py-2 text-white font-bold bg-pink-300 rounded-full shadow-lg hover:bg-pink-400 transition-colors"
+              className="px-6 py-2 text-purple-500 font-bold bg-white rounded-full shadow-lg hover:bg-white/80 transition-colors border border-purple-500 flex items-center"
             >
-              QRcode
+              <span>รับข้อความ</span>
             </button>
           </div>
         </div>
