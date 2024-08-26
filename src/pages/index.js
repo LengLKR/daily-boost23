@@ -277,7 +277,15 @@ export default function Home() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <div Classname="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ForgotPassword</div>
+                  <div className="flex justify-between items-center mt-4">
+                    <button
+                      type="button"
+                      className="text-sm text-blue-600 hover:underline dark:text-blue-500"
+                      onClick={() => router.push("/forgotPassword")}
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
