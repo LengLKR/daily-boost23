@@ -6,6 +6,8 @@ const AddAndHistory = () => {
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState(""); // State for notifications
   const [duplicateCount, setDuplicateCount] = useState(1); // State for duplicate count
+  const [showModal, setShowModal] = useState(false);
+  const [showRecommend, setRecommend] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -59,7 +61,10 @@ const AddAndHistory = () => {
           body: JSON.stringify({ message: newMessage }),
         });
       }
-      setMessages([...messages, ...newMessages.map((text, index) => ({ id: Date.now() + index, text }))]); // Update state with new messages
+      setMessages([
+        ...messages,
+        ...newMessages.map((text, index) => ({ id: Date.now() + index, text })),
+      ]); // Update state with new messages
       setNotification(`Message duplicated ${duplicateCount} time(s).`);
     } catch (error) {
       console.error("Error duplicating message:", error);
@@ -114,16 +119,65 @@ const AddAndHistory = () => {
       setInterval(sendLineMessage, 24 * 60 * 60 * 1000);
     }
   }, []);
+  const indexClick = () => {
+    router.push("/");
+  };
+  const toggleMedal = () => {
+    setShowModal(!showModal);
+  };
+  const toggleRecommend = () => {
+    setRecommend(!showRecommend);
+  };
 
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('bg_login.png')" }}
     >
+      <button>
+        <div className="fixed top-4 left-4 flex items-center space-x-4">
+          <div
+            onClick={indexClick}
+            className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-pink-300 shadow-lg"
+          >
+            <img
+              src="/logohome.png"
+              alt="Home Icon"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div onClick={indexClick} className="text-white font-bold">
+            Daily Boost
+          </div>
+        </div>
+      </button>
       <div className="w-full max-w-lg p-8 ">
-        <h1 className="text-2xl font-bold text-center text-white">แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย</h1>
+        <h1 className="text-2xl font-bold text-center text-white">
+          แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย
+        </h1>
         <p className="text-center text-white mt-2">
-          คุณสามารถเลือกใช้ <u>ข้อความแนะนำ</u> ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
+          คุณสามารถเลือกใช้{/*ปุ่มสำหรับแสดงข้อความแนะนำ */}{" "}
+          <button onClick={toggleRecommend}>
+            <u>ข้อความแนะนำ</u>
+          </button>{" "}
+          {/*ป๊อปอัพสำหรับข้อความแนะนำ */}
+          {showRecommend && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+            <h2 className="text-lg font-bold mb-4">ข้อความแนะนำ</h2>
+            <p className="text-gray-700">
+              นี่คือข้อความแนะนำที่คุณสามารถใช้ในการใช้งานแอปพลิเคชันนี้...
+            </p>
+            <button
+              onClick={toggleRecommend}
+              className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      )}
+          ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
         </p>
         {notification && (
           <div className="bg-violet-400 p-2 mt-4 rounded text-black">
@@ -150,10 +204,15 @@ const AddAndHistory = () => {
           ส่งข้อความ
         </button>
 
-        <h1 className=" text-sm font-bold mt-8 text-center text-white">ประวัติข้อความ</h1>
+        <h1 className=" text-sm font-bold mt-8 text-center text-white">
+          ประวัติข้อความ
+        </h1>
         <ul className="mt-4 max-h-64 overflow-y-auto">
           {messages.map((msg) => (
-            <li key={msg.id} className="border p-2 mb-2 bg-white bg-opacity-70 rounded-lg shadow">
+            <li
+              key={msg.id}
+              className="border p-2 mb-2 bg-white bg-opacity-70 rounded-lg shadow"
+            >
               <p>{msg.text}</p>
               <div className="flex items-center mt-2">
                 <input
@@ -173,6 +232,32 @@ const AddAndHistory = () => {
             </li>
           ))}
         </ul>
+        {/* ปุ่มที่มุมขวาล่าง */}
+        <div className="fixed bottom-4 right-4 z-50">
+          <button
+            onClick={toggleMedal}
+            className="text-white text-sm underline hover:text-gray-300 transition-colors"
+          >
+            คำแนะนำการใช้งาน
+          </button>
+        </div>
+        {/* ป๊อปอัพสำหรับแสดงคำแนะนำการใช้งาน */}
+        {showModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+              <h2 className="text-lg font-bold mb-4">คำแนะนำการใช้งาน</h2>
+              <p className="text-gray-700">
+                นี่คือคำแนะนำในการใช้งานของแอปพลิเคชันนี้...
+              </p>
+              <button
+                onClick={toggleMedal}
+                className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+              >
+                ปิด
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

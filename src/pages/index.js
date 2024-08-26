@@ -8,6 +8,8 @@ export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -22,7 +24,11 @@ export default function Home() {
   }, []);
 
   const loginClick = () => {
-    router.push("/login");
+    if (isLoggedIn) {
+      router.push("/addAndHistory");
+    } else {
+      router.push("/login")
+    }
   };
 
   const logoutClick = async () => {
@@ -34,7 +40,10 @@ export default function Home() {
   const toggleQRCode = () => {
     setShowQRCode(!showQRCode);
   };
-
+  const toggleMedal = () => {
+    setShowModal(!showModal);
+  };
+ 
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
@@ -80,6 +89,7 @@ export default function Home() {
             className="w-full h-full object-cover"
           />
         </div>
+        <div className="text-white font-bold">Daily Boost</div>
       </div>
 
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
@@ -89,9 +99,11 @@ export default function Home() {
           </h1>
           <p className="text-lg text-pink-200 mt-4">Welcome to Daily Boost</p>
           <div className="mt-10 flex justify-center items-center space-x-4">
-            <button className="px-6 py-2 text-purple-500 font-bold bg-white rounded-full shadow-lg hover:bg-white/80 transition-colors border border-purple-500 flex items-center">
+            <button
+              onClick={loginClick}
+              className="px-6 py-2 text-purple-500 font-bold bg-white rounded-full shadow-lg hover:bg-white/80 transition-colors border border-purple-500 flex items-center"
+            >
               <span>เริ่มต้นใช้งาน</span>
-              <span className=" "></span>
             </button>
             <button
               onClick={toggleQRCode}
@@ -117,10 +129,32 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      <footer className="w-full p-4 text-center text-pink-300">
-        การดำเนินการต่อแสดงว่าคุณยอมรับข้อกำหนดและโบยาบของเรา
-      </footer>
+      {/* ปุ่มที่มุมขวาล่าง */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <button
+          onClick={toggleMedal}
+          className="text-white text-sm underline hover:text-gray-300 transition-colors"
+        >
+          คำแนะนำการใช้งาน
+        </button>
+      </div>
+      {/* ป๊อปอัพสำหรับแสดงคำแนะนำการใช้งาน */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+            <h2 className="text-lg font-bold mb-4">คำแนะนำการใช้งาน</h2>
+            <p className="text-gray-700">
+              นี่คือคำแนะนำในการใช้งานของแอปพลิเคชันนี้...
+            </p>
+            <button
+              onClick={toggleMedal}
+              className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
