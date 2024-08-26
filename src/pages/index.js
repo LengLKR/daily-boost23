@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import QRCodeComponent from "./line";
 import { useRouter } from "next/router";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./google"; // อ้างอิงไปที่ Firebase auth ของคุณ
+import { auth, googleProvider } from "./google"; // อ้างอิงไปที่ Firebase auth ของคุณ
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -27,7 +32,7 @@ export default function Home() {
     if (isLoggedIn) {
       router.push("/addAndHistory");
     } else {
-      router.push("/login")
+      setShowLoginModal(true);
     }
   };
 
@@ -40,10 +45,55 @@ export default function Home() {
   const toggleQRCode = () => {
     setShowQRCode(!showQRCode);
   };
+
   const toggleMedal = () => {
     setShowModal(!showModal);
   };
- 
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      setShowLoginModal(false);
+    } catch (error) {
+      alert("Login failed: " + error.message);
+    }
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      setShowLoginModal(false);
+    } catch (error) {
+      alert("Signup failed: " + error.message);
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      setShowLoginModal(false);
+    } catch (error) {
+      alert("Google sign-in failed: " + error.message);
+    }
+  };
+
+  const loginWithPhone = () => {
+    router.push("/phoneLogin");
+  };
+
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
@@ -129,6 +179,7 @@ export default function Home() {
           </div>
         </div>
       )}
+
       {/* ปุ่มที่มุมขวาล่าง */}
       <div className="fixed bottom-4 right-4 z-50">
         <button
@@ -138,6 +189,7 @@ export default function Home() {
           คำแนะนำการใช้งาน
         </button>
       </div>
+
       {/* ป๊อปอัพสำหรับแสดงคำแนะนำการใช้งาน */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -148,6 +200,120 @@ export default function Home() {
             </p>
             <button
               onClick={toggleMedal}
+              className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ป๊อปอัพสำหรับการล็อกอิน */}
+      {showLoginModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+            <h2 className="text-lg font-bold mb-4">
+              {isLogin ? "Sign in to your account" : "Apply For Membership"}
+            </h2>
+            <div className="flex">
+              <button
+                className={`w-1/2 p-2 ${
+                  isLogin
+                    ? "bg-gray-800 text-white"
+                    : "bg-gray-200 dark:bg-gray-700"
+                }`}
+                onClick={() => setIsLogin(true)}
+              >
+                Login
+              </button>
+              <button
+                className={`w-1/2 p-2 ${
+                  !isLogin
+                    ? "bg-gray-800 text-white"
+                    : "bg-gray-200 dark:bg-gray-700"
+                }`}
+                onClick={() => setIsLogin(false)}
+              >
+                Sign up
+              </button>
+            </div>
+            <form
+              className="space-y-4 md:space-y-6"
+              onSubmit={isLogin ? handleLogin : handleSignup}
+            >
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Your email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="name@company.com"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    id="password"
+                    placeholder="••••••••"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <div Classname="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ForgotPassword</div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="w-full text-black bg-gray-100 hover:bg-pink-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
+              >
+                {isLogin ? "Sign in" : "Sign up"}
+              </button>
+              {isLogin && (
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    onClick={loginWithPhone}
+                  >
+                    Sign in with Phone
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    onClick={loginWithGoogle}
+                  >
+                    Sign in with Google
+                  </button>
+                </div>
+              )}
+            </form>
+            <button
+              onClick={() => setShowLoginModal(false)}
               className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
             >
               ปิด
