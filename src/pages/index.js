@@ -217,21 +217,21 @@ export default function Home() {
             </h2>
             <div className="flex">
               <button
-                className={`w-1/2 p-2 ${
+                className={`flex-1 p-2 ${
                   isLogin
                     ? "bg-gray-800 text-white"
                     : "bg-gray-200 dark:bg-gray-700"
-                }`}
+                } rounded-tl-lg`}
                 onClick={() => setIsLogin(true)}
               >
                 Login
               </button>
               <button
-                className={`w-1/2 p-2 ${
+                className={`flex-1 p-2 ${
                   !isLogin
                     ? "bg-gray-800 text-white"
                     : "bg-gray-200 dark:bg-gray-700"
-                }`}
+                } rounded-tr-lg`}
                 onClick={() => setIsLogin(false)}
               >
                 Sign up
@@ -278,13 +278,17 @@ export default function Home() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <div className="flex justify-between items-center mt-4">
-                    <button
-                      type="button"
-                      className="text-sm text-blue-600 hover:underline dark:text-blue-500"
-                      onClick={() => router.push("/forgotPassword")}
-                    >
-                      Forgot Password?
-                    </button>
+                    {isLogin ? (
+                      <button
+                        type="button"
+                        className="text-sm text-blue-600 hover:underline dark:text-blue-500"
+                        onClick={() => router.push("/forgotPassword")}
+                      >
+                        Forgot Password?
+                      </button>
+                    ) : (
+                      " "
+                    )}
                   </div>
                   <button
                     type="button"
