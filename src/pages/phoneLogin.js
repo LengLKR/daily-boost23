@@ -12,18 +12,25 @@ const PhoneLogin = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined" && !recaptchaInitialized) {
-      // ตั้งค่า appVerificationDisabledForTesting
-      if (auth && auth.settings) {
-        auth.settings.appVerificationDisabledForTesting = true;
-      }
       setupRecaptcha();
       setRecaptchaInitialized(true);
     }
   }, [recaptchaInitialized]);
 
+  useEffect(() => {
+    if (auth && auth.settings) {
+      auth.settings.appVerificationDisabledForTesting = true;
+    }
+  }, [auth]);
+
   const setupRecaptcha = () => {
     if (typeof window !== "undefined" && auth) {
       try {
+        // ตั้งค่า appVerificationDisabledForTesting หลังจากตรวจสอบว่า auth มีอยู่จริง
+        if (auth && auth.settings) {
+          auth.settings.appVerificationDisabledForTesting = true;
+        }
+
         window.recaptchaVerifier = new RecaptchaVerifier(
           "recaptcha-container",
           {
@@ -46,11 +53,15 @@ const PhoneLogin = () => {
       } catch (error) {
         console.error("Error initializing RecaptchaVerifier", error);
       }
+    } else {
+      console.error(
+        "Firebase auth หรือ window ยังไม่ได้รับการกำหนดค่าอย่างถูกต้อง"
+      );
     }
   };
 
   const handlePhoneSignIn = async () => {
-    if (!window.recaptchaVerifier) {
+    if (!recaptchaInitialized || !window.recaptchaVerifier) {
       console.error("reCAPTCHA ยังไม่ได้รับการเริ่มต้น หรือ undefined");
       alert("การตรวจสอบ reCAPTCHA ล้มเหลว กรุณารีเฟรชหน้าและลองใหม่อีกครั้ง");
       return;
@@ -71,7 +82,6 @@ const PhoneLogin = () => {
       alert("ไม่สามารถส่ง SMS ได้: " + error.message);
     }
   };
-
   const handleVerifyCode = async () => {
     try {
       const confirmationResult = window.confirmationResult;

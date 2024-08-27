@@ -9,6 +9,9 @@ import {
 import { auth, googleProvider } from "./google"; // อ้างอิงไปที่ Firebase auth
 import { signInWithPopup } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FcGoogle } from "react-icons/fc";
+import { FaPhoneAlt } from "react-icons/fa";
+
 export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -64,7 +67,7 @@ export default function Home() {
         password
       );
       const user = userCredential.user;
-      setShowLoginModal(false);  
+      setShowLoginModal(false);
     } catch (error) {
       alert("Login failed: " + error.message);
     }
@@ -313,22 +316,22 @@ export default function Home() {
                 {isLogin ? "Sign in" : "Sign up"}
               </button>
               {isLogin && (
-                <div className="flex justify-between">
-                  <button
-                    type="button"
-                    className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    onClick={loginWithPhone}
-                  >
-                    Sign in with Phone
-                  </button>
-                  <button
-                    type="button"
-                    className="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    onClick={loginWithGoogle}
-                  >
-                    Sign in with Google
-                  </button>
-                </div>
+               <div className="flex justify-between space-x-2 m-36">
+               <button
+                 type="button"
+                 className="p-1 bg-white rounded-full"
+                 onClick={loginWithPhone}
+               >
+                 <FaPhoneAlt className="text-2xl text-purple-500" />
+               </button>
+               <button
+                 type="button"
+                 onClick={loginWithGoogle}
+                 className="p-1 bg-white rounded-full"
+               >
+                 <FcGoogle className="text-2xl" />
+               </button>
+             </div>
               )}
             </form>
           </div>
