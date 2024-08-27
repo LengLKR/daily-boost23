@@ -12,6 +12,7 @@ import { auth, googleProvider } from "./google";
 import { sendDataToFirestore } from "./service";
 
 
+
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import QRCodeComponent from "./line";
 import { useRouter } from "next/router";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth, googleProvider } from "./google"; // อ้างอิงไปที่ Firebase auth ของคุณ
-import Image from "next/image";
-
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { auth, googleProvider } from "./google"; // อ้างอิงไปที่ Firebase auth
+import { signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +56,7 @@ export default function Home() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -59,7 +64,7 @@ export default function Home() {
         password
       );
       const user = userCredential.user;
-      setShowLoginModal(false);
+      setShowLoginModal(false);  
     } catch (error) {
       alert("Login failed: " + error.message);
     }
@@ -92,6 +97,9 @@ export default function Home() {
 
   const loginWithPhone = () => {
     router.push("/phoneLogin");
+  };
+  const goToForgetPassword = () => {
+    router.push("/ForgetPassword");
   };
 
   return (
@@ -211,27 +219,41 @@ export default function Home() {
       {/* ป๊อปอัพสำหรับการล็อกอิน */}
       {showLoginModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-lg font-bold mb-4">
-              {isLogin ? "Sign in to your account" : "Apply For Membership"}
-            </h2>
-            <div className="flex">
-              <button
-                className={`flex-1 p-2 ${
+          <div className="bg-black p-3 rounded-lg shadow-lg max-w-md w-full mx-auto ">
+            <button
+              onClick={() => setShowLoginModal(false)}
+              className="text-white flex ml-[400px] "
+            >
+              X
+            </button>
+            <h1 className="justify-center text-white text-2xl font-bold mb-4 flex ">
+              {isLogin ? "Login" : "Sign up"}
+            </h1>
+            <div className="flex bg-gray-700 rounded-lg overflow-hidden border border-gray-600 relative">
+              <div
+                className={`absolute inset-y-0 bg-gray-500 transition-transform duration-300 ease-in-out ${
                   isLogin
-                    ? "bg-gray-800 text-white"
-                    : "bg-gray-200 dark:bg-gray-700"
-                } rounded-tl-lg`}
+                    ? "transform translate-x-0"
+                    : "transform translate-x-full"
+                }`}
+                style={{
+                  width: "50%",
+                  borderRadius: "0.5rem",
+                  zIndex: 0,
+                }}
+              />
+              <button
+                className={`flex-1 p-2 z-10 relative ${
+                  isLogin ? "text-white" : "text-gray-400"
+                }`}
                 onClick={() => setIsLogin(true)}
               >
                 Login
               </button>
               <button
-                className={`flex-1 p-2 ${
-                  !isLogin
-                    ? "bg-gray-800 text-white"
-                    : "bg-gray-200 dark:bg-gray-700"
-                } rounded-tr-lg`}
+                className={`flex-1 p-2 z-10 relative ${
+                  !isLogin ? "text-white" : "text-gray-400"
+                }`}
                 onClick={() => setIsLogin(false)}
               >
                 Sign up
@@ -239,20 +261,15 @@ export default function Home() {
             </div>
             <form
               className="space-y-4 md:space-y-6"
+              style={{ minHeight: "300px" }} // กำหนดความสูงขั้นต่ำ
               onSubmit={isLogin ? handleLogin : handleSignup}
             >
               <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your email
-                </label>
                 <input
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-5"
                   placeholder="name@company.com"
                   required
                   value={email}
@@ -260,45 +277,35 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Password
-                </label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <div className="flex justify-between items-center mt-4">
-                    {isLogin ? (
-                      <button
-                        type="button"
-                        className="text-sm text-blue-600 hover:underline dark:text-blue-500"
-                        onClick={() => router.push("/forgotPassword")}
-                      >
-                        Forgot Password?
-                      </button>
-                    ) : (
-                      " "
-                    )}
-                  </div>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    style={{ right: "10px" }}
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
                 </div>
               </div>
+              {isLogin && (
+                <button
+                  onClick={goToForgetPassword}
+                  className="text-white flex ml-[290px] font-bold"
+                >
+                  Forget Password
+                </button>
+              )}
               <button
                 type="submit"
                 className="w-full text-black bg-gray-100 hover:bg-pink-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
@@ -324,12 +331,6 @@ export default function Home() {
                 </div>
               )}
             </form>
-            <button
-              onClick={() => setShowLoginModal(false)}
-              className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
-            >
-              ปิด
-            </button>
           </div>
         </div>
       )}

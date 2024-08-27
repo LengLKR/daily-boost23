@@ -3,7 +3,7 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "./google";
 import { useRouter } from "next/router";
 
-const ForgotPassword = () => {
+const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const router = useRouter();
@@ -42,6 +42,15 @@ const ForgotPassword = () => {
               className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500"
               required
             />
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mt-2"
+            >
+              Password
+            </label>
+            <input className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500"> 
+            
+            </input>
           </div>
           <button
             type="submit"
@@ -64,4 +73,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ForgetPassword;
