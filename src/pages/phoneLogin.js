@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
+import {signInWithPhoneNumber ,  RecaptchaVerifier} from "firebase/auth";
 import { auth } from "./google";
 import { useRouter } from "next/router";
 

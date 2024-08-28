@@ -7,6 +7,7 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   signOut,
+  signInWithPhoneNumber,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore"; // นำเข้า Firestore
 

@@ -12,7 +12,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { FaPhoneAlt } from "react-icons/fa";
 
-
 export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,6 +34,25 @@ export default function Home() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("showLogin") === "true") {
+      setShowLoginModal(true);
+    }
+  });
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("showLogin") === "true") {
+      router.replace("/", undefined, { shallow: true });
+    }
+  }, [router]);
+
+  const handleCloseLoginModal = () => {
+    setShowLoginModal(false);
+    router.push("/", undefined, { shallow: true });
+  };
 
   const loginClick = () => {
     if (isLoggedIn) {
@@ -225,7 +243,7 @@ export default function Home() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-black p-3 rounded-lg shadow-lg max-w-md w-full mx-auto ">
             <button
-              onClick={() => setShowLoginModal(false)}
+              onClick={handleCloseLoginModal}
               className="text-white flex ml-[400px] "
             >
               X
@@ -317,22 +335,22 @@ export default function Home() {
                 {isLogin ? "Sign in" : "Sign up"}
               </button>
               {isLogin && (
-               <div className="flex justify-between space-x-2 m-36">
-               <button
-                 type="button"
-                 className="p-1 bg-white rounded-full"
-                 onClick={loginWithPhone}
-               >
-                 <FaPhoneAlt className="text-2xl text-purple-500" />
-               </button>
-               <button
-                 type="button"
-                 onClick={loginWithGoogle}
-                 className="p-1 bg-white rounded-full"
-               >
-                 <FcGoogle className="text-2xl" />
-               </button>
-             </div>
+                <div className="flex justify-between space-x-2 m-36">
+                  <button
+                    type="button"
+                    className="p-1 bg-white rounded-full"
+                    onClick={loginWithPhone}
+                  >
+                    <FaPhoneAlt className="text-2xl text-purple-500" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={loginWithGoogle}
+                    className="p-1 bg-white rounded-full"
+                  >
+                    <FcGoogle className="text-2xl" />
+                  </button>
+                </div>
               )}
             </form>
           </div>

@@ -29,13 +29,16 @@ const ForgetPassword = () => {
       if (user) {
         await updatePassword(user, password);
         setMessage("Password updated successfully!");
-        router.push("/login");
+        router.push("/?showlogin=true");
       } else {
         setMessage("User not authenticated. Please log in first.");
       }
     } catch (error) {
       setMessage("Failed to update password. " + error.message);
     }
+  };
+  const handleBackToLogin = () => {
+    router.push("/?showLogin=true");
   };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -99,7 +102,7 @@ const ForgetPassword = () => {
           <p className="mt-4 text-center text-green-500">{message}</p>
         )}
         <button
-          onClick={() => router.push("/login")}
+          onClick={handleBackToLogin}
           className="w-full mt-4 text-blue-500 hover:underline"
         >
           Back to Login
