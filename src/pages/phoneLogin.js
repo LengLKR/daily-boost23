@@ -1,163 +1,99 @@
-import React, { useState, useEffect } from "react";
-import {signInWithPhoneNumber ,  RecaptchaVerifier} from "firebase/auth";
-import { auth } from "./google";
-import { useRouter } from "next/router";
+// phoneLogin.js
+import { useState } from "react";
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "./google";
 
 const PhoneLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [user, setUser] = useState(null);
-  const [recaptchaInitialized, setRecaptchaInitialized] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && !recaptchaInitialized) {
-      setupRecaptcha();
-      setRecaptchaInitialized(true);
-    }
-  }, [recaptchaInitialized]);
-
-  useEffect(() => {
-    if (auth && auth.settings) {
-      auth.settings.appVerificationDisabledForTesting = true;
-    }
-  }, [auth]);
+  const [otp, setOtp] = useState("");
+  const [verificationId, setVerificationId] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
 
   const setupRecaptcha = () => {
-    if (typeof window !== "undefined" && auth) {
-      try {
-        // ตั้งค่า appVerificationDisabledForTesting หลังจากตรวจสอบว่า auth มีอยู่จริง
-        if (auth && auth.settings) {
-          auth.settings.appVerificationDisabledForTesting = true;
-        }
-
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          "recaptcha-container",
-          {
-            size: "invisible",
-            callback: (response) => {
-              console.log("reCAPTCHA solved.");
-            },
-          },
-          auth
-        );
-
-        window.recaptchaVerifier
-          .render()
-          .then(() => {
-            console.log("reCAPTCHA ready");
-          })
-          .catch((error) => {
-            console.error("Error rendering reCAPTCHA", error);
-          });
-      } catch (error) {
-        console.error("Error initializing RecaptchaVerifier", error);
-      }
-    } else {
-      console.error(
-        "Firebase auth หรือ window ยังไม่ได้รับการกำหนดค่าอย่างถูกต้อง"
-      );
-    }
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log("Recaptcha resolved");
+        },
+      },
+      auth
+    );
   };
-
-  const handlePhoneSignIn = async () => {
-    if (!recaptchaInitialized || !window.recaptchaVerifier) {
-      console.error("reCAPTCHA ยังไม่ได้รับการเริ่มต้น หรือ undefined");
-      alert("การตรวจสอบ reCAPTCHA ล้มเหลว กรุณารีเฟรชหน้าและลองใหม่อีกครั้ง");
-      return;
-    }
-
+  const requestOtp = async (e) => {
+    // ฟังก์ชัน requestOtp ถูกประกาศที่นี่
+    e.preventDefault();
+    setupRecaptcha();
     const appVerifier = window.recaptchaVerifier;
-
     try {
       const confirmationResult = await signInWithPhoneNumber(
         auth,
         phoneNumber,
         appVerifier
       );
-      window.confirmationResult = confirmationResult;
-      console.log("ส่ง SMS สำเร็จแล้ว.");
+      setVerificationId(confirmationResult.verificationId);
+      setIsOtpSent(true);
     } catch (error) {
-      console.error("ส่ง SMS ล้มเหลว", error);
-      alert("ไม่สามารถส่ง SMS ได้: " + error.message);
+      console.log("Error sending OTP:", error);
     }
   };
-  const handleVerifyCode = async () => {
+
+  const verifyOtp = async (e) => {
+    e.preventDefault();
     try {
-      const confirmationResult = window.confirmationResult;
-      const result = await confirmationResult.confirm(verificationCode);
-      setUser(result.user);
-      console.log("ยืนยันตัวตนด้วยเบอร์โทรศัพท์สำเร็จ:", result.user);
-      router.push("/");
+      const credential = await auth.signInWithCredential(
+        firebase.auth.PhoneAuthProvider.credential(verificationId, otp)
+      );
+      console.log("Verification successful:", credential.user);
     } catch (error) {
-      console.error("การยืนยันล้มเหลว:", error);
-      alert("การยืนยันล้มเหลว: " + error.message);
+      console.log("Error verifying OTP:", error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-      <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            เข้าสู่ระบบด้วยเบอร์โทรศัพท์
-          </h1>
-          <form className="space-y-4 md:space-y-6">
-            <div>
-              <label
-                htmlFor="phone"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                เบอร์โทรศัพท์ของคุณ
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="+1234567890"
-                required
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-            </div>
-            <div id="recaptcha-container"></div>
-            <div>
-              <button
-                type="button"
-                className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                onClick={handlePhoneSignIn}
-                disabled={!recaptchaInitialized} // ปิดการใช้งานจนกว่า reCAPTCHA จะพร้อม
-              >
-                ส่งรหัสยืนยัน
-              </button>
-            </div>
-            <div className="mt-4">
-              <label
-                htmlFor="verificationCode"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                รหัสยืนยัน
-              </label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+          Login with Phone
+        </h2>
+        {!isOtpSent ? (
+          <form onSubmit={requestOtp}>
+            <div className="mb-4">
               <input
                 type="text"
-                name="verificationCode"
-                id="verificationCode"
-                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
+                placeholder="Enter your phone number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              <button
-                type="button"
-                onClick={handleVerifyCode}
-                className="w-full mt-2 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                ยืนยันรหัส
-              </button>
             </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+            >
+              Send OTP
+            </button>
+            <div id="recaptcha-container" className="mt-4"></div>
           </form>
-        </div>
+        ) : (
+          <form onSubmit={verifyOtp}>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Enter the OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 focus:outline-none"
+            >
+              Verify OTP
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

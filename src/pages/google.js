@@ -31,31 +31,5 @@ export const googleProvider = new GoogleAuthProvider();
 // Initialize Firestore and export
 export const db = getFirestore(app);
 
-export const setupRecaptcha = () => {
-  if (typeof window !== "undefined" && auth) {
-    try {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "normal",
-          callback: (response) => {
-            // Handle the reCAPTCHA success
-            console.log("reCAPTCHA solved.");
-          },
-        },
-        auth // ส่ง auth ที่ถูกตั้งค่าแล้วเข้าไปใน RecaptchaVerifier
-      );
+export {RecaptchaVerifier,signInWithPhoneNumber}
 
-      window.recaptchaVerifier
-        .render()
-        .then(() => {
-          console.log("reCAPTCHA ready");
-        })
-        .catch((error) => {
-          console.error("Error rendering reCAPTCHA", error);
-        });
-    } catch (error) {
-      console.error("Error initializing RecaptchaVerifier", error);
-    }
-  }
-};
