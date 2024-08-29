@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const AddAndHistory = () => {
   const [message, setMessage] = useState("");
@@ -33,11 +34,7 @@ const AddAndHistory = () => {
     }
 
     try {
-      await fetch("/api/saveMessage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      });
+      await axios.post("http://localhost:8888/api/saveMessage", { message });
       setMessage(""); // Clear the textarea after saving
       setNotification("Message saved successfully.");
     } catch (error) {
@@ -45,7 +42,6 @@ const AddAndHistory = () => {
       setNotification("Failed to save message.");
     }
   };
-
   const handleDuplicate = async (msg) => {
     const newMessages = [];
     for (let i = 0; i < duplicateCount; i++) {
@@ -162,21 +158,21 @@ const AddAndHistory = () => {
           </button>{" "}
           {/*ป๊อปอัพสำหรับข้อความแนะนำ */}
           {showRecommend && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-lg font-bold mb-4">ข้อความแนะนำ</h2>
-            <p className="text-gray-700">
-              นี่คือข้อความแนะนำที่คุณสามารถใช้ในการใช้งานแอปพลิเคชันนี้...
-            </p>
-            <button
-              onClick={toggleRecommend}
-              className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
-            >
-              ปิด
-            </button>
-          </div>
-        </div>
-      )}
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+                <h2 className="text-lg font-bold mb-4">ข้อความแนะนำ</h2>
+                <p className="text-gray-700">
+                  นี่คือข้อความแนะนำที่คุณสามารถใช้ในการใช้งานแอปพลิเคชันนี้...
+                </p>
+                <button
+                  onClick={toggleRecommend}
+                  className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+                >
+                  ปิด
+                </button>
+              </div>
+            </div>
+          )}
           ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
         </p>
         {notification && (

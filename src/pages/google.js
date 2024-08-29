@@ -33,3 +33,4 @@ export const db = getFirestore(app);
 
 export {RecaptchaVerifier,signInWithPhoneNumber}
 
+const db =getFirestore(app)
