@@ -96,7 +96,7 @@ const AddAndHistory = () => {
 
   const indexClick = () => {
     router.push("/");
-  };
+  };   7
   const toggleMedal = () => {
     setShowModal(!showModal);
   };
