@@ -10,19 +10,19 @@ const AddAndHistory = () => {
   const [showModal, setShowModal] = useState(false);
   const [showRecommend, setRecommend] = useState(false);
   const router = useRouter();
-
+  console.log(messages);
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch("http://localhost:8888/api/messages");
+      const data = await response.json();
+      setMessages(data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      setNotification("Failed to fetch messages.");
+    }
+  };
   useEffect(() => {
     // Fetch previous messages from API
-    const fetchMessages = async () => {
-      try {
-        const response = await fetch("/api/messages");
-        const data = await response.json();
-        setMessages(data);
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-        setNotification("Failed to fetch messages.");
-      }
-    };
     fetchMessages();
   }, []);
 
@@ -37,6 +37,8 @@ const AddAndHistory = () => {
       await axios.post("http://localhost:8888/api/saveMessage", { message });
       setMessage(""); // Clear the textarea after saving
       setNotification("Message saved successfully.");
+
+      fetchMessages();
     } catch (error) {
       console.error("Error saving message:", error);
       setNotification("Failed to save message.");
@@ -92,29 +94,6 @@ const AddAndHistory = () => {
     }
   };
 
-  useEffect(() => {
-    // Send messages every 7:00 AM
-    const now = new Date();
-    const targetTime = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      7,
-      0,
-      0
-    );
-    if (now < targetTime) {
-      const timeToWait = targetTime - now;
-      const timer = setTimeout(() => {
-        sendLineMessage();
-        setInterval(sendLineMessage, 24 * 60 * 60 * 1000); // Repeat daily
-      }, timeToWait);
-      return () => clearTimeout(timer);
-    } else {
-      sendLineMessage();
-      setInterval(sendLineMessage, 24 * 60 * 60 * 1000);
-    }
-  }, []);
   const indexClick = () => {
     router.push("/");
   };
