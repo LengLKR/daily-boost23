@@ -33,4 +33,4 @@ export const db = getFirestore(app);
 
 export {RecaptchaVerifier,signInWithPhoneNumber}
 
-
+auth.useDeviceLanguage()

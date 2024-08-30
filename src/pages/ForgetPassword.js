@@ -8,7 +8,7 @@ const ForgetPassword = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const router = useRouter();
-
+  
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
