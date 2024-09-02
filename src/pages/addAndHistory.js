@@ -10,7 +10,20 @@ const AddAndHistory = () => {
   const [showModal, setShowModal] = useState(false);
   const [showRecommend, setRecommend] = useState(false);
   const router = useRouter();
-  console.log(messages);
+
+  useEffect(() => {
+    // ดึงข้อความจาก API
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get("http://localhost:8888/api/messages");
+        setMessages(response.data); // อัปเดต state ของ messages ด้วยข้อมูลที่ดึงมา
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+        setNotification("Failed to fetch messages.");
+      }
+    };
+    fetchMessages();
+  }, []);
 
   const handleSave = async () => {
     // Validate message before saving
@@ -20,37 +33,14 @@ const AddAndHistory = () => {
     }
 
     try {
-      await axios.post("http://localhost:8888/api/saveMessage", { message });
+      const response = await axios.post("http://localhost:8888/api/saveMessage", { message });
+      const newMessage = response.data
+      setMessages([newMessage, ...messages])
       setMessage(""); // Clear the textarea after saving
       setNotification("Message saved successfully.");
     } catch (error) {
       console.error("Error saving message:", error);
       setNotification("Failed to save message.");
-    }
-  };
-  const handleDuplicate = async (msg) => {
-    const newMessages = [];
-    for (let i = 0; i < duplicateCount; i++) {
-      const newMessage = `${msg.text} (Duplicate ${i + 1})`;
-      newMessages.push(newMessage);
-    }
-
-    try {
-      for (const newMessage of newMessages) {
-        await fetch("/api/saveMessage", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: newMessage }),
-        });
-      }
-      setMessages([
-        ...messages,
-        ...newMessages.map((text, index) => ({ id: Date.now() + index, text })),
-      ]); // Update state with new messages
-      setNotification(`Message duplicated ${duplicateCount} time(s).`);
-    } catch (error) {
-      console.error("Error duplicating message:", error);
-      setNotification("Failed to duplicate message.");
     }
   };
 
@@ -61,10 +51,11 @@ const AddAndHistory = () => {
   const indexClick = () => {
     router.push("/");
   };
-  7;
+
   const toggleMedal = () => {
     setShowModal(!showModal);
   };
+
   const toggleRecommend = () => {
     setRecommend(!showRecommend);
   };
@@ -96,27 +87,10 @@ const AddAndHistory = () => {
           แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย
         </h1>
         <p className="text-center text-white mt-2">
-          คุณสามารถเลือกใช้{/*ปุ่มสำหรับแสดงข้อความแนะนำ */}{" "}
+          คุณสามารถเลือกใช้{" "}
           <button onClick={toggleRecommend}>
             <u>ข้อความแนะนำ</u>
           </button>{" "}
-          {/*ป๊อปอัพสำหรับข้อความแนะนำ */}
-          {showRecommend && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-                <h2 className="text-lg font-bold mb-4">ข้อความแนะนำ</h2>
-                <p className="text-gray-700">
-                  นี่คือข้อความแนะนำที่คุณสามารถใช้ในการใช้งานแอปพลิเคชันนี้...
-                </p>
-                <button
-                  onClick={toggleRecommend}
-                  className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
-                >
-                  ปิด
-                </button>
-              </div>
-            </div>
-          )}
           ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
         </p>
         {notification && (
@@ -153,22 +127,7 @@ const AddAndHistory = () => {
               key={msg.id}
               className="border p-2 mb-2 bg-white bg-opacity-70 rounded-lg shadow"
             >
-              <p>{msg.text}</p>
-              <div className="flex items-center mt-2">
-                <input
-                  type="number"
-                  className="mr-2 p-1 border border-gray-300 rounded w-16"
-                  value={duplicateCount}
-                  min="1"
-                  onChange={(e) => setDuplicateCount(e.target.value)}
-                />
-                <button
-                  className="px-4 py-2 bg-green-500 text-white rounded"
-                  onClick={() => handleDuplicate(msg)}
-                >
-                  Duplicate
-                </button>
-              </div>
+              <p>{msg.text}</p>{" "}
             </li>
           ))}
         </ul>
