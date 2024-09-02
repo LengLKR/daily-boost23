@@ -16,7 +16,16 @@ const AddAndHistory = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get("http://localhost:8888/api/messages");
-        setMessages(response.data); // อัปเดต state ของ messages ด้วยข้อมูลที่ดึงมา
+        const filteredMessages = response.data.map((msg) => {
+          return {
+            ...msg,
+            text: badWords.reduce(
+              (acc, word) => acc.replace(new RegExp(word, "gi"), "***"),
+              msg.text
+            ),
+          };
+        });
+        setMessage(filteredMessages);
       } catch (error) {
         console.error("Error fetching messages:", error);
         setNotification("Failed to fetch messages.");
@@ -26,16 +35,51 @@ const AddAndHistory = () => {
   }, []);
 
   const handleSave = async () => {
+    const badWords = [
+      "ควย",
+      "หี",
+      "ไอเหี้ย",
+      "ไอสัตว์",
+      "ไอสัส",
+      "ควาย",
+      "เฮงซวย",
+      "อีตอแหล",
+      "ไอ้ระยำ",
+      "ไอ้ตัวแสบ",
+      "ผู้หญิงต่ำๆ",
+      "พระหน้าผี",
+      "อีดอก",
+      "อีดอกทอง",
+      "หมา",
+      "ไอเวร",
+      "มารศาสนา",
+      "ไอ้หน้าโง่",
+      "กระโหลก",
+      "อีสัส",
+    ];
+
+    const containsBadWords = (text) => {
+      return badWords.some((word) => text.includes(word));
+    };
     // Validate message before saving
     if (!message.trim()) {
       setNotification("Message cannot be empty.");
       return;
     }
 
+    if (containsBadWords(message)) {
+      setNotification(
+        "Your message contains inappropriate language and cannot be saved."
+      );
+      return;
+    }
     try {
-      const response = await axios.post("http://localhost:8888/api/saveMessage", { message });
-      const newMessage = response.data
-      setMessages([newMessage, ...messages])
+      const response = await axios.post(
+        "http://localhost:8888/api/saveMessage",
+        { message }
+      );
+  
+      setMessages([response.data, ...messages]);
       setMessage(""); // Clear the textarea after saving
       setNotification("Message saved successfully.");
     } catch (error) {
@@ -43,7 +87,6 @@ const AddAndHistory = () => {
       setNotification("Failed to save message.");
     }
   };
-
   const handleNotificationClose = () => {
     setNotification(""); // Clear notification
   };
