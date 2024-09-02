@@ -1,6 +1,6 @@
-// phoneLogin.js
 import { useState } from "react";
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "./google";
+import { initializeApp, getApps } from "firebase/app";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 const PhoneLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -8,6 +8,29 @@ const PhoneLogin = () => {
   const [verificationId, setVerificationId] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
 
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAGrDbcLB6Xx8t8rh2noyFrSPVoRYdeizU",
+    authDomain: "myapp-e0219.firebaseapp.com",
+    databaseURL: "https://myapp-e0219-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "myapp-e0219",
+    storageBucket: "myapp-e0219.appspot.com",
+    messagingSenderId: "265220609618",
+    appId: "1:265220609618:web:63c2055428b0a05baef18b",
+    measurementId: "G-J63G9Y5YHJ",
+  };
+
+  // Initialize Firebase and Auth
+  let app;
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApps()[0]; // ใช้ Firebase app ที่มีอยู่แล้ว
+  }
+  
+  const auth = getAuth(app);
+
+  // Setup Recaptcha
   const setupRecaptcha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
       "recaptcha-container",
@@ -19,18 +42,18 @@ const PhoneLogin = () => {
       },
       auth
     );
+    window.recaptchaVerifier.render().then((widgetId) => {
+      window.recaptchaWidgetId = widgetId;
+    });
   };
+
+  // Request OTP
   const requestOtp = async (e) => {
-    // ฟังก์ชัน requestOtp ถูกประกาศที่นี่
     e.preventDefault();
     setupRecaptcha();
     const appVerifier = window.recaptchaVerifier;
     try {
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        appVerifier
-      );
+      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
       setVerificationId(confirmationResult.verificationId);
       setIsOtpSent(true);
     } catch (error) {
@@ -38,13 +61,13 @@ const PhoneLogin = () => {
     }
   };
 
+  // Verify OTP
   const verifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const credential = await auth.signInWithCredential(
-        firebase.auth.PhoneAuthProvider.credential(verificationId, otp)
-      );
-      console.log("Verification successful:", credential.user);
+      const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otp);
+      const userCredential = await auth.signInWithCredential(credential);
+      console.log("Verification successful:", userCredential.user);
     } catch (error) {
       console.log("Error verifying OTP:", error);
     }

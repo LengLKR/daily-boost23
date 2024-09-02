@@ -11,20 +11,6 @@ const AddAndHistory = () => {
   const [showRecommend, setRecommend] = useState(false);
   const router = useRouter();
   console.log(messages);
-  const fetchMessages = async () => {
-    try {
-      const response = await fetch("http://localhost:8888/api/messages");
-      const data = await response.json();
-      setMessages(data);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-      setNotification("Failed to fetch messages.");
-    }
-  };
-  useEffect(() => {
-    // Fetch previous messages from API
-    fetchMessages();
-  }, []);
 
   const handleSave = async () => {
     // Validate message before saving
@@ -37,8 +23,6 @@ const AddAndHistory = () => {
       await axios.post("http://localhost:8888/api/saveMessage", { message });
       setMessage(""); // Clear the textarea after saving
       setNotification("Message saved successfully.");
-
-      fetchMessages();
     } catch (error) {
       console.error("Error saving message:", error);
       setNotification("Failed to save message.");
@@ -74,29 +58,10 @@ const AddAndHistory = () => {
     setNotification(""); // Clear notification
   };
 
-  // Function to send messages via Line Chatbot
-  const sendLineMessage = async () => {
-    if (!message.trim()) {
-      setNotification("Cannot send an empty message via Line Chatbot.");
-      return;
-    }
-
-    try {
-      await fetch("/api/sendLineMessage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      });
-      setNotification("Message sent via Line Chatbot successfully.");
-    } catch (error) {
-      console.error("Error sending message via Line Chatbot: ", error);
-      setNotification("Failed to send message via Line Chatbot.");
-    }
-  };
-
   const indexClick = () => {
     router.push("/");
-  };   7
+  };
+  7;
   const toggleMedal = () => {
     setShowModal(!showModal);
   };
