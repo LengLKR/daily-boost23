@@ -11,6 +11,8 @@ import { signInWithPopup } from "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { FaPhoneAlt } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 export default function Home() {
   const router = useRouter();
@@ -173,21 +175,35 @@ export default function Home() {
       </div>
 
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
-        <div className="w-full max-w-md">
-          <h1 className="text-4xl font-bold text-pink-100 drop-shadow-lg">
-            เริ่มต้นวันใหม่ด้วยพลังใจจาก Daily Boost!
+        <div className="w-full max-w-3xl">
+          <p className="text-lg text-white font-bold">Daily Boost!</p>
+          <h1
+            className="text-4xl text-center font-bold text-white drop-shadow-lg"
+            style={{ whiteSpace: "nowrap", marginLeft: "20px" }}
+          >
+            เริ่มต้นวันใหม่ด้วยพลังใจที่สดใสในทุกๆเช้า
           </h1>
-          <p className="text-lg text-pink-200 mt-4">Welcome to Daily Boost</p>
+
+          <p className="text-lg text-white mt-4 font-bold">
+            เพื่อให้คุณพร้อมรับมือกับทุกความท้าทาย ไม่เพียงแค่รับแรงบันดาลใจ
+          </p>
+          <p className="text-lg text-white font-bold">
+            คุณยังสามารถแบ่งปันข้อความดีๆให้กับคนที่คุณรักและห่วงใยได้เช่นกัน
+          </p>
+          <p className="text-lg text-white font-bold">
+            มาเติมพลังใจทุกวันกับเรา!
+          </p>
+
           <div className="mt-10 flex justify-center items-center space-x-4">
             <button
               onClick={loginClick}
-              className="px-6 py-2 text-purple-500 font-bold bg-white rounded-full shadow-lg hover:bg-white/80 transition-colors border border-purple-500 flex items-center"
+              className="px-6 py-2 text-white font-bold  rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
             >
               <span>เริ่มต้นใช้งาน</span>
             </button>
             <button
               onClick={toggleQRCode}
-              className="px-6 py-2 text-purple-500 font-bold bg-white rounded-full shadow-lg hover:bg-white/80 transition-colors border border-purple-500 flex items-center"
+              className="px-6 py-2 text-white font-bold  rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
             >
               <span>รับข้อความ</span>
             </button>
@@ -202,7 +218,7 @@ export default function Home() {
             <QRCodeComponent lineID="@686bymtt" />
             <button
               onClick={toggleQRCode}
-              className="mt-4 px-4 py-2 text-white font-bold bg-pink-300 rounded-full shadow-lg hover:bg-pink-400 transition-colors"
+              className="mt-4 px-4 py-2 text-white font-bold bg-violet-500 rounded-full shadow-lg hover:bg-violet-600  transition-colors"
             >
               ปิด
             </button>
@@ -214,7 +230,7 @@ export default function Home() {
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={toggleMedal}
-          className="text-white text-sm underline hover:text-gray-300 transition-colors"
+          className="text-white text-base underline hover:text-gray-300 transition-colors"
         >
           คำแนะนำการใช้งาน
         </button>
@@ -230,7 +246,7 @@ export default function Home() {
             </p>
             <button
               onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+              className="mt-4 px-4 py-2 text-white font-bold bg-violet-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
             >
               ปิด
             </button>
@@ -316,7 +332,7 @@ export default function Home() {
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
                     style={{ right: "10px" }}
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
                 </div>
               </div>

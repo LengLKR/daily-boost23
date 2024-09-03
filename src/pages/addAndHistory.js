@@ -225,7 +225,7 @@ const AddAndHistory = () => {
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
                 <h2 className="text-lg font-bold mb-4">ข้อความแนะนำ</h2>
-                <p className="text-gray-700 text-black">
+                <p className="text-gray-700 ">
                   นี่คือตัวอย่างข้อความที่คุณสามารถใช้ส่งไปให้คนที่คุณรักได้...
                 </p>
                 <button
@@ -285,7 +285,7 @@ const AddAndHistory = () => {
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={toggleMedal}
-          className="text-white text-sm underline hover:text-gray-300 transition-colors"
+          className="text-white text-base underline hover:text-gray-300 transition-colors"
         >
           คำแนะนำการใช้งาน
         </button>
