@@ -139,7 +139,7 @@ const AddAndHistory = () => {
       "blowjob",
       "sod",
       "son of a bitch",
-      "ๆอสัส",
+      "ๆอสัส","แม่เยต","แม่เยส","ฆวย","ฃวย"
     ];
     const containsBadWords = (text) => {
       return badWords.some((word) => text.includes(word));
