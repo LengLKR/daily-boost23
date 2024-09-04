@@ -144,7 +144,9 @@ export default function Home() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <span className="text-pink-800 font-bold">Log out</span>
+            <span className="text-pink-800 font-serif ">
+              Log out
+            </span>
           </button>
         ) : (
           <button
@@ -158,7 +160,7 @@ export default function Home() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <span className="text-pink-800 font-bold">Log in</span>
+            <span className="text-pink-800 font-serif ">Log in</span>
           </button>
         )}
       </div>
@@ -171,39 +173,41 @@ export default function Home() {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="text-white font-bold">Daily Boost</div>
+        <div className="text-white font-serif ">Daily Boost</div>
       </div>
 
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
         <div className="w-full max-w-3xl">
-          <p className="text-lg text-white font-bold">Daily Boost!</p>
+          <p className="text-lg text-white font-serif ">
+            Daily Boost!
+          </p>
           <h1
-            className="text-4xl text-center font-bold text-white drop-shadow-lg"
+            className="text-4xl text-center font-serif  text-white drop-shadow-lg"
             style={{ whiteSpace: "nowrap", marginLeft: "20px" }}
           >
             เริ่มต้นวันใหม่ด้วยพลังใจที่สดใสในทุกๆเช้า
           </h1>
 
-          <p className="text-lg text-white mt-4 font-bold">
+          <p className="text-lg text-white mt-4 font-serif ">
             เพื่อให้คุณพร้อมรับมือกับทุกความท้าทาย ไม่เพียงแค่รับแรงบันดาลใจ
           </p>
-          <p className="text-lg text-white font-bold">
+          <p className="text-lg text-white font-serif ">
             คุณยังสามารถแบ่งปันข้อความดีๆให้กับคนที่คุณรักและห่วงใยได้เช่นกัน
           </p>
-          <p className="text-lg text-white font-bold">
+          <p className="text-lg text-white font-serif ">
             มาเติมพลังใจทุกวันกับเรา!
           </p>
 
           <div className="mt-10 flex justify-center items-center space-x-4">
             <button
               onClick={loginClick}
-              className="px-6 py-2 text-white font-bold  rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
             >
               <span>เริ่มต้นใช้งาน</span>
             </button>
             <button
               onClick={toggleQRCode}
-              className="px-6 py-2 text-white font-bold  rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
             >
               <span>รับข้อความ</span>
             </button>
@@ -214,11 +218,13 @@ export default function Home() {
       {showQRCode && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-bold mb-4">สแกน QR code</h2>
+            <h2 className="text-lg font-serif  mb-4">
+              สแกน QR code
+            </h2>
             <QRCodeComponent lineID="@686bymtt" />
             <button
               onClick={toggleQRCode}
-              className="mt-4 px-4 py-2 text-white font-bold bg-violet-500 rounded-full shadow-lg hover:bg-violet-600  transition-colors"
+              className="mt-4 px-4 py-2 text-white font-serif  bg-violet-500 rounded-full shadow-lg hover:bg-violet-600  transition-colors"
             >
               ปิด
             </button>
@@ -240,13 +246,15 @@ export default function Home() {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-lg font-bold mb-4">คำแนะนำการใช้งาน</h2>
+            <h2 className="text-lg font-serif  mb-4">
+              คำแนะนำการใช้งาน
+            </h2>
             <p className="text-gray-700">
-              นี่คือคำแนะนำในการใช้งานของแอปพลิเคชันนี้...
+              เป็นเว็บที่ทำขึ้นมาเพื่อแบ่งปันข้อความดีๆให้กับคนที่คุณรัก และ ห่วงใยให้มีความสุขในทุกๆเช้าของวัน  ทำการ <span onClick={() => { toggleMedal(); setShowLoginModal(true); }} className="text-purple-500 cursor-pointer">Login</span>  เพื่อใส่ข้อความดีๆให้มีกำลังใจในทุกๆเช้ากัน
             </p>
             <button
               onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-bold bg-violet-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+              className="mt-4 px-4 py-2 text-white font-serif  bg-violet-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
             >
               ปิด
             </button>
@@ -264,7 +272,7 @@ export default function Home() {
             >
               X
             </button>
-            <h1 className="justify-center text-white text-2xl font-bold mb-4 flex ">
+            <h1 className="justify-center text-white text-2xl font-serif  mb-4 flex ">
               {isLogin ? "Login" : "Sign up"}
             </h1>
             <div className="flex bg-gray-700 rounded-lg overflow-hidden border border-gray-600 relative">
@@ -339,7 +347,7 @@ export default function Home() {
               {isLogin && (
                 <button
                   onClick={goToForgetPassword}
-                  className="text-white flex ml-[290px] font-bold"
+                  className="text-white flex ml-[290px] font-serif "
                 >
                   Forget Password
                 </button>

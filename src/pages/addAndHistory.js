@@ -35,7 +35,6 @@ const AddAndHistory = () => {
     };
     fetchMessages();
   }, []);
-  
 
   const handleSave = async () => {
     const badWords = [
@@ -139,11 +138,26 @@ const AddAndHistory = () => {
       "blowjob",
       "sod",
       "son of a bitch",
-      "ๆอสัส","แม่เยต","แม่เยส","ฆวย","ฃวย"
+      "ๆอสัส",
+      "แม่เยต",
+      "แม่เยส",
+      "ฆวย",
+      "ฃวย",
+      "ไอสั*","ไอสัA"
     ];
+
+    //Regular Expression จากคำหยาบ
+    const regexPattern = new RegExp(
+      badWords
+        .map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        .join("|"),
+      "gi"
+    );
+
     const containsBadWords = (text) => {
-      return badWords.some((word) => text.includes(word));
+      return regexPattern.test(text);
     };
+
     // Validate message before saving
     if (!message.trim()) {
       setNotification("Message cannot be empty.");
@@ -156,6 +170,7 @@ const AddAndHistory = () => {
       );
       return;
     }
+
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
@@ -170,6 +185,7 @@ const AddAndHistory = () => {
       setNotification("Failed to save message.");
     }
   };
+
   const handleNotificationClose = () => {
     setNotification(""); // Clear notification
   };
@@ -202,7 +218,7 @@ const AddAndHistory = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div onClick={indexClick} className="text-white font-bold">
+          <div onClick={indexClick} className="text-white font-serif">
             Daily Boost
           </div>
         </div>
@@ -210,7 +226,7 @@ const AddAndHistory = () => {
       <div className="w-full max-w-4xl p-8 flex">
         {/* ฟอร์มแบ่งปันข้อความ */}
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-center text-white">
+          <h1 className="text-2xl font-serif text-center text-white">
             แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย
           </h1>
           <p className="text-center text-white mt-2">
@@ -220,17 +236,17 @@ const AddAndHistory = () => {
             </button>{" "}
             ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
           </p>
-  
+
           {showRecommend && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-                <h2 className="text-lg font-bold mb-4">ข้อความแนะนำ</h2>
+                <h2 className="text-lg font-serif mb-4">ข้อความแนะนำ</h2>
                 <p className="text-gray-700 ">
                   นี่คือตัวอย่างข้อความที่คุณสามารถใช้ส่งไปให้คนที่คุณรักได้...
                 </p>
                 <button
                   onClick={toggleRecommend}
-                  className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+                  className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
                 >
                   ปิด
                 </button>
@@ -241,7 +257,7 @@ const AddAndHistory = () => {
             <div className="bg-violet-400 p-2 mt-4 rounded text-black">
               {notification}
               <button
-                className="ml-4 text-red-600"
+                className="ml-4 text-white"
                 onClick={handleNotificationClose}
               >
                 X
@@ -262,10 +278,10 @@ const AddAndHistory = () => {
             ส่งข้อความ
           </button>
         </div>
-  
+
         {/* ประวัติข้อความ */}
         <div className="flex-1 ml-24">
-          <h1 className="text-2xl font-bold mt-8 text-center text-white">
+          <h1 className="text-2xl font-serif mt-8 text-center text-white">
             ประวัติข้อความ
           </h1>
           <ul className="mt-4 max-h-64 overflow-y-auto">
@@ -280,7 +296,7 @@ const AddAndHistory = () => {
           </ul>
         </div>
       </div>
-  
+
       {/* ปุ่มที่มุมขวาล่าง */}
       <div className="fixed bottom-4 right-4 z-50">
         <button
@@ -290,18 +306,18 @@ const AddAndHistory = () => {
           คำแนะนำการใช้งาน
         </button>
       </div>
-  
+
       {/* ป๊อปอัพสำหรับแสดงคำแนะนำการใช้งาน */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-lg font-bold mb-4">คำแนะนำการใช้งาน</h2>
+            <h2 className="text-lg font-serif mb-4">คำแนะนำการใช้งาน</h2>
             <p className="text-gray-700">
               นี่คือคำแนะนำในการใช้งานของแอปพลิเคชันนี้...
             </p>
             <button
               onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-bold bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+              className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
             >
               ปิด
             </button>
@@ -310,7 +326,6 @@ const AddAndHistory = () => {
       )}
     </div>
   );
-  
 };
 
 export default AddAndHistory;
