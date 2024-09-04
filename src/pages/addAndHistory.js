@@ -143,7 +143,8 @@ const AddAndHistory = () => {
       "แม่เยส",
       "ฆวย",
       "ฃวย",
-      "ไอสั*","ไอสัA"
+      "ไอสั*",
+      "ไอสัA",
     ];
 
     //Regular Expression จากคำหยาบ
@@ -160,17 +161,18 @@ const AddAndHistory = () => {
 
     // Validate message before saving
     if (!message.trim()) {
-      setNotification("Message cannot be empty.");
+      setNotification(<div className="text-white p-2 reounded">Message cannot be empty.</div>);
       return;
     }
 
     if (containsBadWords(message)) {
       setNotification(
-        "Your message contains inappropriate language and cannot be saved."
+        <div className=" text-orange-900 p-2 reounded">
+        ข้อความของคุณไม่น่ารักเลยนะคะไม่สามารถบันทึกได้ค่ะ
+        </div>
       );
       return;
     }
-
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
@@ -179,7 +181,7 @@ const AddAndHistory = () => {
 
       setMessages([response.data, ...messages]);
       setMessage(""); // Clear the textarea after saving
-      setNotification("Message saved successfully.");
+      setNotification(<div className="text-white p-2 reounded">บันทึกข้อความสำเร็จค่ะ</div>);
     } catch (error) {
       console.error("Error saving message:", error);
       setNotification("Failed to save message.");
@@ -239,25 +241,25 @@ const AddAndHistory = () => {
 
           {showRecommend && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-                <h2 className="text-lg font-serif mb-4">ข้อความแนะนำ</h2>
-                <p className="text-gray-700 ">
-                  นี่คือตัวอย่างข้อความที่คุณสามารถใช้ส่งไปให้คนที่คุณรักได้...
-                </p>
-                <button
-                  onClick={toggleRecommend}
-                  className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
-                >
-                  ปิด
-                </button>
-              </div>
+            <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
+              <h2 className="text-xl font-bold text-purple-600 mb-4">ข้อความแนะนำ</h2>
+              <p className="text-gray-700 font-medium">
+                ทุกเช้าคือการเริ่มต้นใหม่ อย่าลืมใช้โอกาสนี้ทำสิ่งดีๆ ให้กับตัวเอง! , เช้านี้อย่าลืมมองโลกในแง่ดีและให้กำลังใจตัวเองกับทุกความท้าทายที่รออยู่!
+              </p>
+              <button
+                onClick={toggleRecommend}
+                className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
+              >
+                ปิด
+              </button>
             </div>
+          </div>
           )}
           {notification && (
-            <div className="bg-violet-400 p-2 mt-4 rounded text-black">
+            <div className="relative bg-violet-400 p-2 mt-4 rounded text-black">
               {notification}
               <button
-                className="ml-4 text-white"
+                className="absolute top-0 right-0 m-2 text-white"
                 onClick={handleNotificationClose}
               >
                 X
@@ -311,13 +313,13 @@ const AddAndHistory = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-lg font-serif mb-4">คำแนะนำการใช้งาน</h2>
+            <h2 className="text-xl font-bold text-purple-600 mb-4">คำแนะนำการใช้งาน</h2>
             <p className="text-gray-700">
               นี่คือคำแนะนำในการใช้งานของแอปพลิเคชันนี้...
             </p>
             <button
               onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+              className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
             >
               ปิด
             </button>

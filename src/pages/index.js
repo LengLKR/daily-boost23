@@ -224,7 +224,7 @@ export default function Home() {
             <QRCodeComponent lineID="@686bymtt" />
             <button
               onClick={toggleQRCode}
-              className="mt-4 px-4 py-2 text-white font-serif  bg-violet-500 rounded-full shadow-lg hover:bg-violet-600  transition-colors"
+              className="mt-4 px-4 py-2 text-white font-serif  bg-violet-500 rounded-full shadow-lg hover:bg-violet-600   transition-all duration-300 transform hover:scale-105"
             >
               ปิด
             </button>
@@ -246,7 +246,7 @@ export default function Home() {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-lg font-serif  mb-4">
+            <h2 className="text-xl font-bold text-purple-600 mb-4">
               คำแนะนำการใช้งาน
             </h2>
             <p className="text-gray-700">
@@ -254,7 +254,7 @@ export default function Home() {
             </p>
             <button
               onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-serif  bg-violet-500 rounded-full shadow-lg hover:bg-purple-600 transition-colors w-full"
+              className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
             >
               ปิด
             </button>

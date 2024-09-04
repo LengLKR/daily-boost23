@@ -8,7 +8,7 @@ const ForgetPassword = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const router = useRouter();
-  
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
@@ -41,17 +41,26 @@ const ForgetPassword = () => {
     router.push("/?showLogin=true");
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center">Forgot Password</h2>
-        <p className="mt-4 text-center text-gray-600">
+    <div
+      className="flex flex-col items-center justify-center min-h-screen bg-violet-500"
+      style={{
+        backgroundImage: "url(https://cdn.discordapp.com/attachments/1253195538254528554/1280827862722805801/DALLE-2024-09-04-16.20.png?ex=66d97f67&is=66d82de7&hm=1a101f29baca5e4ce8686d856f2d36465672d6cbb8828674e04194bbe0f2e372&)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="w-full max-w-md p-6 bg-black rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center text-white">
+          Forgot Password
+        </h2>
+        <p className="mt-4 text-center text-white">
           Enter your email to receive a password reset link.
         </p>
         <form onSubmit={handleResetPassword} className="mt-6">
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-white"
             >
               Email
             </label>
@@ -78,7 +87,7 @@ const ForgetPassword = () => {
           <div className="mb-4">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-white"
             >
               New Password
             </label>
@@ -103,7 +112,7 @@ const ForgetPassword = () => {
         )}
         <button
           onClick={handleBackToLogin}
-          className="w-full mt-4 text-blue-500 hover:underline"
+          className="w-full mt-4 text-white hover:underline"
         >
           Back to Login
         </button>
