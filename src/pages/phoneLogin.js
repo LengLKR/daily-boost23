@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { initializeApp, getApps } from "firebase/app";
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import {
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  PhoneAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
 
 const PhoneLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -12,7 +18,8 @@ const PhoneLogin = () => {
   const firebaseConfig = {
     apiKey: "AIzaSyAGrDbcLB6Xx8t8rh2noyFrSPVoRYdeizU",
     authDomain: "myapp-e0219.firebaseapp.com",
-    databaseURL: "https://myapp-e0219-default-rtdb.asia-southeast1.firebasedatabase.app",
+    databaseURL:
+      "https://myapp-e0219-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "myapp-e0219",
     storageBucket: "myapp-e0219.appspot.com",
     messagingSenderId: "265220609618",
@@ -20,31 +27,39 @@ const PhoneLogin = () => {
     measurementId: "G-J63G9Y5YHJ",
   };
 
-  // Initialize Firebase and Auth
+
+  // Initialize Firebase
   let app;
   if (!getApps().length) {
     app = initializeApp(firebaseConfig);
   } else {
     app = getApps()[0]; // ใช้ Firebase app ที่มีอยู่แล้ว
   }
-  
+
   const auth = getAuth(app);
 
   // Setup Recaptcha
   const setupRecaptcha = () => {
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: (response) => {
-          console.log("Recaptcha resolved");
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container", // ต้องมี id "recaptcha-container" ใน DOM
+        {
+          size: "invisible", // หรือใช้ "normal" เพื่อแสดง
+          callback: (response) => {
+            console.log("Recaptcha solved successfully.");
+          },
+          "expired-callback": () => {
+            console.log("Recaptcha expired. Please retry.");
+          },
         },
-      },
-      auth
-    );
-    window.recaptchaVerifier.render().then((widgetId) => {
-      window.recaptchaWidgetId = widgetId;
-    });
+        auth
+      );
+      window.recaptchaVerifier.render().then((widgetId) => {
+        console.log("Recaptcha rendered successfully with widgetId:", widgetId);
+      }).catch((error) => {
+        console.error("Error rendering Recaptcha:", error);
+      });
+    }
   };
 
   // Request OTP
@@ -57,7 +72,7 @@ const PhoneLogin = () => {
       setVerificationId(confirmationResult.verificationId);
       setIsOtpSent(true);
     } catch (error) {
-      console.log("Error sending OTP:", error);
+      console.error("Error sending OTP:", error);
     }
   };
 
@@ -65,8 +80,8 @@ const PhoneLogin = () => {
   const verifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otp);
-      const userCredential = await auth.signInWithCredential(credential);
+      const credential = PhoneAuthProvider.credential(verificationId, otp);
+      const userCredential = await signInWithCredential(auth, credential);
       console.log("Verification successful:", userCredential.user);
     } catch (error) {
       console.log("Error verifying OTP:", error);
@@ -79,6 +94,7 @@ const PhoneLogin = () => {
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Login with Phone
         </h2>
+        <div id="recaptcha-container"></div>
         {!isOtpSent ? (
           <form onSubmit={requestOtp}>
             <div className="mb-4">
@@ -96,7 +112,6 @@ const PhoneLogin = () => {
             >
               Send OTP
             </button>
-            <div id="recaptcha-container" className="mt-4"></div>
           </form>
         ) : (
           <form onSubmit={verifyOtp}>

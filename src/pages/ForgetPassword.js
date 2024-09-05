@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { sendPasswordResetEmail, updatePassword } from "firebase/auth";
 import { auth } from "./google";
 import { useRouter } from "next/router";
-
+import { IoMdArrowRoundBack } from "react-icons/io";
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,17 +40,28 @@ const ForgetPassword = () => {
   const handleBackToLogin = () => {
     router.push("/?showLogin=true");
   };
+  const BackToLogin = () => {
+    router.push("/?showLogin=true");
+  };
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen bg-violet-500"
+      className="flex flex-col items-center justify-center min-h-screen"
       style={{
-        backgroundImage: "url(https://cdn.discordapp.com/attachments/1253195538254528554/1280827862722805801/DALLE-2024-09-04-16.20.png?ex=66d97f67&is=66d82de7&hm=1a101f29baca5e4ce8686d856f2d36465672d6cbb8828674e04194bbe0f2e372&)",
+        backgroundImage: "url('/DALL·E-2024-09-04-16.20.png')", // เส้นทางที่ถูกต้อง
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
+      <div>
+        <button
+          className="fixed top-4 left-4 z-50 text-4xl text-black underline hover:text-purple-600 transition-colors font-serif"
+          onClick={BackToLogin}
+        >
+         <IoMdArrowRoundBack />
+        </button>
+      </div>
       <div className="w-full max-w-md p-6 bg-black rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-white">
+        <h2 className="text-2xl font-serif text-center text-white">
           Forgot Password
         </h2>
         <p className="mt-4 text-center text-white">
@@ -75,7 +86,7 @@ const ForgetPassword = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+            className="w-full px-4 py-2 text-white bg-violet-500 rounded-lg hover:bg-violet-600"
           >
             Reset Password
           </button>
@@ -102,7 +113,7 @@ const ForgetPassword = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+            className="w-full px-4 py-2 text-white bg-violet-500 rounded-lg hover:bg-violet-600"
           >
             Update Password
           </button>

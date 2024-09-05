@@ -144,9 +144,7 @@ export default function Home() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <span className="text-pink-800 font-serif ">
-              Log out
-            </span>
+            <span className="text-pink-800 font-serif ">Log out</span>
           </button>
         ) : (
           <button
@@ -178,9 +176,7 @@ export default function Home() {
 
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
         <div className="w-full max-w-3xl">
-          <p className="text-lg text-white font-serif ">
-            Daily Boost!
-          </p>
+          <p className="text-lg text-white font-serif ">Daily Boost!</p>
           <h1
             className="text-4xl text-center font-serif  text-white drop-shadow-lg"
             style={{ whiteSpace: "nowrap", marginLeft: "20px" }}
@@ -218,9 +214,7 @@ export default function Home() {
       {showQRCode && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-serif  mb-4">
-              สแกน QR code
-            </h2>
+            <h2 className="text-lg font-serif  mb-4">สแกน QR code</h2>
             <QRCodeComponent lineID="@686bymtt" />
             <button
               onClick={toggleQRCode}
@@ -236,7 +230,7 @@ export default function Home() {
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={toggleMedal}
-          className="text-white text-base underline hover:text-gray-300 transition-colors"
+          className="text-white text-base underline hover:text-gray-300 transition-colors font-serif"
         >
           คำแนะนำการใช้งาน
         </button>
@@ -246,12 +240,28 @@ export default function Home() {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl font-bold text-purple-600 mb-4">
+            <h2 className="text-xl font-serif text-purple-600 mb-4">
               คำแนะนำการใช้งาน
             </h2>
-            <p className="text-gray-700">
-              เป็นเว็บที่ทำขึ้นมาเพื่อแบ่งปันข้อความดีๆให้กับคนที่คุณรัก และ ห่วงใยให้มีความสุขในทุกๆเช้าของวัน  ทำการ <span onClick={() => { toggleMedal(); setShowLoginModal(true); }} className="text-purple-500 cursor-pointer">Login</span>  เพื่อใส่ข้อความดีๆให้มีกำลังใจในทุกๆเช้ากัน
+            <p className="text-gray-700 font-serif">
+              เป็นเว็บที่ทำขึ้นมาเพื่อแบ่งปันข้อความดีๆให้กับคนที่คุณรัก และ
+              ห่วงใยให้มีความสุขในทุกๆเช้าของวัน ทำการ
+              <span
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    toggleMedal();
+                    setShowLoginModal(true);
+                  } else {
+                    alert("คุณได้ล็อกอินแล้ว เริ่มต้นใช้งานได้เลยค่ะ");
+                  }
+                }}
+                className="text-purple-500 cursor-pointer"
+              >
+               {""} Login {""}
+              </span>
+              เพื่อใส่ข้อความดีๆให้มีกำลังใจในทุกๆเช้ากัน
             </p>
+
             <button
               onClick={toggleMedal}
               className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
@@ -354,7 +364,7 @@ export default function Home() {
               )}
               <button
                 type="submit"
-                className="w-full text-black bg-gray-100 hover:bg-pink-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
+                className="w-full text-black bg-gray-100 hover:bg-purple-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
               >
                 {isLogin ? "Sign in" : "Sign up"}
               </button>

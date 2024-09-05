@@ -145,6 +145,9 @@ const AddAndHistory = () => {
       "ฃวย",
       "ไอสั*",
       "ไอสัA",
+      "ขวย",
+      "ใครรวย",
+      "ไอัสส","ๆอัสเ"
     ];
 
     //Regular Expression จากคำหยาบ
@@ -161,14 +164,18 @@ const AddAndHistory = () => {
 
     // Validate message before saving
     if (!message.trim()) {
-      setNotification(<div className="text-white p-2 reounded">Message cannot be empty.</div>);
+      setNotification(
+        <div className="text-white p-2 reounded">
+          มาแบ่งปันข้อความดีๆของคุณกัน!
+        </div>
+      );
       return;
     }
 
     if (containsBadWords(message)) {
       setNotification(
         <div className=" text-orange-900 p-2 reounded">
-        ข้อความของคุณไม่น่ารักเลยนะคะไม่สามารถบันทึกได้ค่ะ
+          ข้อความของคุณไม่น่ารักเลยนะคะไม่สามารถบันทึกได้ค่ะ
         </div>
       );
       return;
@@ -181,7 +188,9 @@ const AddAndHistory = () => {
 
       setMessages([response.data, ...messages]);
       setMessage(""); // Clear the textarea after saving
-      setNotification(<div className="text-white p-2 reounded">บันทึกข้อความสำเร็จค่ะ</div>);
+      setNotification(
+        <div className="text-white p-2 reounded">บันทึกข้อความสำเร็จค่ะ</div>
+      );
     } catch (error) {
       console.error("Error saving message:", error);
       setNotification("Failed to save message.");
@@ -225,13 +234,13 @@ const AddAndHistory = () => {
           </div>
         </div>
       </button>
-      <div className="w-full max-w-4xl p-8 flex">
+      <div className="w-full max-w-4xl p-8 flex flex-col items-center justify-center">
         {/* ฟอร์มแบ่งปันข้อความ */}
-        <div className="flex-1">
-          <h1 className="text-2xl font-serif text-center text-white">
+        <div className="flex-1 text-center">
+          <h1 className="text-4xl font-serif text-white">
             แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย
           </h1>
-          <p className="text-center text-white mt-2">
+          <p className="text-white mt-5 text-xl">
             คุณสามารถเลือกใช้{" "}
             <button onClick={toggleRecommend}>
               <u>ข้อความแนะนำ</u>
@@ -241,40 +250,52 @@ const AddAndHistory = () => {
 
           {showRecommend && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
-              <h2 className="text-xl font-bold text-purple-600 mb-4">ข้อความแนะนำ</h2>
-              <p className="text-gray-700 font-medium">
-                ทุกเช้าคือการเริ่มต้นใหม่ อย่าลืมใช้โอกาสนี้ทำสิ่งดีๆ ให้กับตัวเอง! , เช้านี้อย่าลืมมองโลกในแง่ดีและให้กำลังใจตัวเองกับทุกความท้าทายที่รออยู่!
-              </p>
-              <button
-                onClick={toggleRecommend}
-                className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
-              >
-                ปิด
-              </button>
+              <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
+                <h2 className="text-xl font-bold text-purple-600 mb-4">
+                  ข้อความแนะนำ
+                </h2>
+                <p className="text-gray-700 font-medium">
+                  ทุกเช้าคือการเริ่มต้นใหม่ อย่าลืมใช้โอกาสนี้ทำสิ่งดีๆ
+                  ให้กับตัวเอง! ,
+                  เช้านี้อย่าลืมมองโลกในแง่ดีและให้กำลังใจตัวเองกับทุกความท้าทายที่รออยู่!
+                </p>
+                <button
+                  onClick={toggleRecommend}
+                  className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
+                >
+                  ปิด
+                </button>
+              </div>
             </div>
-          </div>
           )}
           {notification && (
-            <div className="relative bg-violet-400 p-2 mt-4 rounded text-black">
+            <div className="relative  bg-violet-400 p-2 mt-4 rounded text-black">
               {notification}
               <button
-                className="absolute top-0 right-0 m-2 text-white"
+                className="absolute  top-0 right-0 m-2 text-white "
                 onClick={handleNotificationClose}
               >
                 X
               </button>
             </div>
           )}
+
           <textarea
-            className="w-full p-4 mt-6 text-black bg-gray-200 rounded-lg resize-none"
+            className="w-3/4 max-w-lg p-4 mt-6 text-purple-300 bg-gray-800 rounded-lg resize-none"
             rows={4}
             placeholder="แบ่งปันข้อความของคุณ..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSave();
+              }
+            }}
           ></textarea>
+
           <button
-            className="mt-4 w-full px-6 py-2 text-white bg-purple-600 rounded-full shadow hover:bg-purple-700 transition-colors"
+            className="mt-4 w-full max-w-56 px-6 py-2 text-white bg-purple-600  rounded-full shadow transition-colors mx-auto hover:bg-purple-700"
             onClick={handleSave}
           >
             ส่งข้อความ
@@ -282,15 +303,13 @@ const AddAndHistory = () => {
         </div>
 
         {/* ประวัติข้อความ */}
-        <div className="flex-1 ml-24">
-          <h1 className="text-2xl font-serif mt-8 text-center text-white">
-            ประวัติข้อความ
-          </h1>
+        <div className="flex-1 mt-8 text-center">
+          <h1 className="text-xl font-serif  text-white">ประวัติข้อความ</h1>
           <ul className="mt-4 max-h-64 overflow-y-auto">
             {messages.map((msg) => (
               <li
                 key={msg.id}
-                className="border p-2 mb-2 bg-white bg-opacity-70 rounded-lg shadow"
+                className="p-2 mb-2 text-white bg-gray-800 bg-opacity-70 rounded-lg shadow"
               >
                 <p>{msg.text}</p>
               </li>
@@ -313,9 +332,14 @@ const AddAndHistory = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl font-bold text-purple-600 mb-4">คำแนะนำการใช้งาน</h2>
+            <h2 className="text-xl font-bold text-purple-600 mb-4">
+              คำแนะนำการใช้งาน
+            </h2>
             <p className="text-gray-700">
-              นี่คือคำแนะนำในการใช้งานของแอปพลิเคชันนี้...
+              สามารถนำข้อความของคุณใส่ตรง{" "}
+              <span className="text-purple-400">ช่องแบ่งปันข้อความ</span>{" "}
+              ได้เลยนะคะ มาแบ่งปันข้อความของคุณให้กับคนที่คุณรัก และ ห่วงใย
+              กันค่ะ!
             </p>
             <button
               onClick={toggleMedal}
