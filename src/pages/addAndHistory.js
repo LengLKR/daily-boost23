@@ -2,6 +2,120 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
+const badWords = [
+  "ควย",
+  "หี",
+  "ไอเหี้ย",
+  "ไอสัตว์",
+  "ไอสัส",
+  "ควาย",
+  "เฮงซวย",
+  "อีตอแหล",
+  "ไอ้ระยำ",
+  "ไอ้ตัวแสบ",
+  "ผู้หญิงต่ำๆ",
+  "พระหน้าผี",
+  "อีดอก",
+  "อีดอกทอง",
+  "หมา",
+  "ไอเวร",
+  "มารศาสนา",
+  "ไอ้หน้าโง่",
+  "กระโหลก",
+  "อีสัส",
+  "ขว$ย",
+  "xีสั$",
+  "ค*ย",
+  "hี",
+  "ืเu",
+  "ควาi",
+  "l]งซวย",
+  "อีต@แหล",
+  "ไอระยำ",
+  "aัส",
+  "xัส",
+  "vtwic",
+  "ก$ย",
+  "คsย",
+  "ฆวย",
+  "คๅย",
+  "คุวย",
+  "อีแก่",
+  "อีบ้า",
+  "อีโง่",
+  "ไอ้ขี้เมา",
+  "ไอ้หน้าแหก",
+  "ไอ้ตอแหล",
+  "อีชั่ว",
+  "อีอ้วน",
+  "อีบัดซบ",
+  "ไอ้ถ่อย",
+  "อีสันดาน",
+  "ไอ้หัวขวด",
+  "อีปอบ",
+  "ไอ้จังไร",
+  "อีชิงหมาเกิด",
+  "ไอ้ขี้โกง",
+  "ไอ้ขี้ขโมย",
+  "ขวาย",
+  "สันขวาน",
+  "xี",
+  "มึง",
+  "กู",
+  "ไอกาก",
+  "fuck",
+  "shit",
+  "bitch",
+  "asshole",
+  "bastard",
+  "damn",
+  "cunt",
+  "dick",
+  "piss",
+  "whore",
+  "slut",
+  "fag",
+  "nigger",
+  "motherfucker",
+  "cock",
+  "pussy",
+  "wanker",
+  "jerk",
+  "douchebag",
+  "twat",
+  "prick",
+  "bollocks",
+  "bugger",
+  "arse",
+  "tosser",
+  "skank",
+  "scumbag",
+  "dickhead",
+  "shithead",
+  "fucker",
+  "cocksucker",
+  "twathead",
+  "asswipe",
+  "crap",
+  "hell",
+  "bloody",
+  "blowjob",
+  "sod",
+  "son of a bitch",
+  "ๆอสัส",
+  "แม่เยต",
+  "แม่เยส",
+  "ฆวย",
+  "ฃวย",
+  "ไอสั*",
+  "ไอสัA",
+  "ขวย",
+  "ใครรวย",
+  "ไอัสส",
+  "ๆอัสเ",
+  "ควสยไก่",
+];
+
 const AddAndHistory = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -9,7 +123,6 @@ const AddAndHistory = () => {
   const [showModal, setShowModal] = useState(false);
   const [showRecommend, setRecommend] = useState(false);
   const router = useRouter();
-
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -19,17 +132,18 @@ const AddAndHistory = () => {
             return {
               ...msg,
               text: badWords.reduce(
-                (acc, word) => acc.replace(new RegExp(word, "gi"), "***"),
+                (acc, word) =>
+                  acc.replace(new RegExp(`\\b${word}\\b`, "gi"), "***"),
                 msg.text
               ),
             };
           });
           setMessages(filteredMessages);
         } else {
-          setNotification("No messages found.");
+          setNotification("ไม่พบข้อความ.");
         }
       } catch (error) {
-        console.error("Error fetching messages:", error);
+        console.error("เกิดข้อผิดพลาดในการดึงข้อความ:", error);
         setNotification("");
       }
     };
@@ -37,119 +151,6 @@ const AddAndHistory = () => {
   }, []);
 
   const handleSave = async () => {
-    const badWords = [
-      "ควย",
-      "หี",
-      "ไอเหี้ย",
-      "ไอสัตว์",
-      "ไอสัส",
-      "ควาย",
-      "เฮงซวย",
-      "อีตอแหล",
-      "ไอ้ระยำ",
-      "ไอ้ตัวแสบ",
-      "ผู้หญิงต่ำๆ",
-      "พระหน้าผี",
-      "อีดอก",
-      "อีดอกทอง",
-      "หมา",
-      "ไอเวร",
-      "มารศาสนา",
-      "ไอ้หน้าโง่",
-      "กระโหลก",
-      "อีสัส",
-      "ขว$ย",
-      "vตวu[[y6i",
-      "xีสั$",
-      "ค*ย",
-      "hี",
-      "ืเu",
-      "ควาi",
-      "l]งซวย",
-      "อีต@แหล",
-      "ไอระยำ",
-      "aัส",
-      "xัส",
-      "vtwic",
-      "ก$ย",
-      "คsย",
-      "ฆวย",
-      "คๅย",
-      "คุวย",
-      "อีแก่",
-      "อีบ้า",
-      "อีโง่",
-      "ไอ้ขี้เมา",
-      "ไอ้หน้าแหก",
-      "ไอ้ตอแหล",
-      "อีชั่ว",
-      "อีอ้วน",
-      "อีบัดซบ",
-      "ไอ้ถ่อย",
-      "อีสันดาน",
-      "ไอ้หัวขวด",
-      "อีปอบ",
-      "ไอ้จังไร",
-      "อีชิงหมาเกิด",
-      "ไอ้ขี้โกง",
-      "ไอ้ขี้ขโมย",
-      "ขวาย",
-      "สันขวาน",
-      "xี",
-      "มึง",
-      "กู",
-      "ไอกาก",
-      "fuck",
-      "shit",
-      "bitch",
-      "asshole",
-      "bastard",
-      "damn",
-      "cunt",
-      "dick",
-      "piss",
-      "whore",
-      "slut",
-      "fag",
-      "nigger",
-      "motherfucker",
-      "cock",
-      "pussy",
-      "wanker",
-      "jerk",
-      "douchebag",
-      "twat",
-      "prick",
-      "bollocks",
-      "bugger",
-      "arse",
-      "tosser",
-      "skank",
-      "scumbag",
-      "dickhead",
-      "shithead",
-      "fucker",
-      "cocksucker",
-      "twathead",
-      "asswipe",
-      "crap",
-      "hell",
-      "bloody",
-      "blowjob",
-      "sod",
-      "son of a bitch",
-      "ๆอสัส",
-      "แม่เยต",
-      "แม่เยส",
-      "ฆวย",
-      "ฃวย",
-      "ไอสั*",
-      "ไอสัA",
-      "ขวย",
-      "ใครรวย",
-      "ไอัสส","ๆอัสเ"
-    ];
-
     //Regular Expression จากคำหยาบ
     const regexPattern = new RegExp(
       badWords
@@ -251,10 +252,10 @@ const AddAndHistory = () => {
           {showRecommend && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
-                <h2 className="text-xl font-bold text-purple-600 mb-4">
+                <h2 className="text-xl text-left font-serif text-purple-600 mb-4 ">
                   ข้อความแนะนำ
                 </h2>
-                <p className="text-gray-700 font-medium">
+                <p className="text-gray-700 font-medium font-serif">
                   ทุกเช้าคือการเริ่มต้นใหม่ อย่าลืมใช้โอกาสนี้ทำสิ่งดีๆ
                   ให้กับตัวเอง! ,
                   เช้านี้อย่าลืมมองโลกในแง่ดีและให้กำลังใจตัวเองกับทุกความท้าทายที่รออยู่!
@@ -269,7 +270,7 @@ const AddAndHistory = () => {
             </div>
           )}
           {notification && (
-            <div className="relative  bg-violet-400 p-2 mt-4 rounded text-black">
+            <div className="relative  bg-violet-400 p-1 mt-2 rounded text-black">
               {notification}
               <button
                 className="absolute  top-0 right-0 m-2 text-white "
@@ -304,8 +305,8 @@ const AddAndHistory = () => {
 
         {/* ประวัติข้อความ */}
         <div className="flex-1 mt-8 text-center">
-          <h1 className="text-xl font-serif  text-white">ประวัติข้อความ</h1>
-          <ul className="mt-4 max-h-64 overflow-y-auto">
+          <h1 className="text-xl font-serif  text-white">ประวัติ</h1>
+          <ul className="mt-4 max-h-64 overflow-y-auto ">
             {messages.map((msg) => (
               <li
                 key={msg.id}
@@ -316,6 +317,7 @@ const AddAndHistory = () => {
             ))}
           </ul>
         </div>
+
       </div>
 
       {/* ปุ่มที่มุมขวาล่าง */}
@@ -332,12 +334,14 @@ const AddAndHistory = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl font-bold text-purple-600 mb-4">
+            <h2 className="text-xl font-serif text-purple-600 mb-4">
               คำแนะนำการใช้งาน
             </h2>
-            <p className="text-gray-700">
+            <p className="text-gray-700 font">
               สามารถนำข้อความของคุณใส่ตรง{" "}
-              <span className="text-purple-400">ช่องแบ่งปันข้อความ</span>{" "}
+              <span className="text-purple-400 font-serif">
+                ช่องแบ่งปันข้อความ
+              </span>{" "}
               ได้เลยนะคะ มาแบ่งปันข้อความของคุณให้กับคนที่คุณรัก และ ห่วงใย
               กันค่ะ!
             </p>

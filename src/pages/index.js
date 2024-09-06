@@ -356,6 +356,7 @@ export default function Home() {
               </div>
               {isLogin && (
                 <button
+                type="button"
                   onClick={goToForgetPassword}
                   className="text-white flex ml-[290px] font-serif "
                 >
