@@ -33,7 +33,7 @@ export default function Home() {
         setIsLoggedIn(false);
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
 
@@ -51,7 +51,6 @@ export default function Home() {
       router.replace("/", undefined, { shallow: true });
     }
   }, [router]);
-  
 
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
@@ -82,9 +81,13 @@ export default function Home() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       setShowLoginModal(false);
       router.push("/addAndHistory");
@@ -114,7 +117,7 @@ export default function Home() {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       setShowLoginModal(false);
-      router.push("/addAndHistory")
+      router.push("/addAndHistory");
     } catch (error) {
       alert("Google sign-in failed: " + error.message);
     }
@@ -258,9 +261,22 @@ export default function Home() {
                 }}
                 className="text-purple-500 cursor-pointer"
               >
-               {""} Login {""}
+                {""} Login {""}
               </span>
-              เพื่อใส่ข้อความดีๆให้มีกำลังใจในทุกๆเช้ากัน
+              เพื่อใส่ข้อความดีๆให้มีกำลังใจในทุกๆเช้ากัน และ
+              สามารถรับข้อความได้ง่ายๆแค่ สแกน{" "}
+              <span
+                onClick={() => {
+                  if (!showQRCode) {
+                    toggleMedal();
+                    setShowQRCode(true);
+                  }
+                }}
+                className="text-purple-500 cursor-pointer"
+              >
+                {""} QRCode {""}
+              </span>
+              เพื่อรับข้อความได้เลยค่ะ
             </p>
 
             <button
@@ -357,7 +373,7 @@ export default function Home() {
               </div>
               {isLogin && (
                 <button
-                type="button"
+                  type="button"
                   onClick={goToForgetPassword}
                   className="text-white flex ml-[290px] font-serif "
                 >

@@ -63,6 +63,7 @@ const badWords = [
   "มึง",
   "กู",
   "ไอกาก",
+  "เย็ด",
   "fuck",
   "shit",
   "bitch",
@@ -114,6 +115,11 @@ const badWords = [
   "ไอัสส",
   "ๆอัสเ",
   "ควสยไก่",
+  "ขยะ",
+  "หมอย",
+  "แรด",
+  "ตายซะ",
+  "ปากหมา",
 ];
 
 const AddAndHistory = () => {
@@ -212,7 +218,7 @@ const AddAndHistory = () => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('bg_login.png')" }}
+      style={{ backgroundImage: "url('DALL·E-2024-09-09-13.31.png')" }}
     >
       <button>
         <div className="fixed top-4 left-4 flex items-center space-x-4">
@@ -250,14 +256,14 @@ const AddAndHistory = () => {
                 <h2 className="text-xl text-left font-serif text-purple-600 mb-4">
                   ข้อความแนะนำ
                 </h2>
-                <p className="text-gray-700 font-medium font-serif">
-                  เลือกข้อความจากประวัติ
+                <p className="text-gray-800 font-mono font-serif">
+                  เลือกข้อความจากประวัติได้เลยค่ะ
                 </p>
                 <ul className="max-h-40 overflow-y-auto">
                   {messages.map((msg) => (
                     <li
                       key={msg.id}
-                      className="p-2 mb-2 text-black bg-gray-200 rounded-lg shadow cursor-pointer"
+                      className="p-2 mb-2 text-black bg-gray-200 rounded-lg shadow cursor-pointer hover:bg-purple-300"
                       onClick={() => handleHistoryClick(msg.text)}
                     >
                       {msg.text}
@@ -278,7 +284,7 @@ const AddAndHistory = () => {
             <div className="relative bg-violet-400 p-1 mt-2 rounded text-black">
               {notification}
               <button
-                className="absolute top-0 right-0 m-2 text-white"
+                className="absolute top-0 right-0 z-10 p-1 text-black rounded-full"
                 onClick={handleNotificationClose}
               >
                 X
