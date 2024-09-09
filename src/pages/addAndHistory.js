@@ -119,10 +119,11 @@ const badWords = [
 const AddAndHistory = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [notification, setNotification] = useState(""); // State for notifications
+  const [notification, setNotification] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showRecommend, setRecommend] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -144,14 +145,13 @@ const AddAndHistory = () => {
         }
       } catch (error) {
         console.error("เกิดข้อผิดพลาดในการดึงข้อความ:", error);
-        setNotification("");
+        setNotification("เกิดข้อผิดพลาดในการดึงข้อความ.");
       }
     };
     fetchMessages();
   }, []);
 
   const handleSave = async () => {
-    //Regular Expression จากคำหยาบ
     const regexPattern = new RegExp(
       badWords
         .map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
@@ -163,24 +163,16 @@ const AddAndHistory = () => {
       return regexPattern.test(text);
     };
 
-    // Validate message before saving
     if (!message.trim()) {
-      setNotification(
-        <div className="text-white p-2 reounded">
-          มาแบ่งปันข้อความดีๆของคุณกัน!
-        </div>
-      );
+      setNotification("มาแบ่งปันข้อความดีๆของคุณกัน!");
       return;
     }
 
     if (containsBadWords(message)) {
-      setNotification(
-        <div className=" text-orange-900 p-2 reounded">
-          ข้อความของคุณไม่น่ารักเลยนะคะไม่สามารถบันทึกได้ค่ะ
-        </div>
-      );
+      setNotification("ข้อความของคุณไม่น่ารักเลยนะคะ ไม่สามารถบันทึกได้ค่ะ");
       return;
     }
+
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
@@ -188,18 +180,16 @@ const AddAndHistory = () => {
       );
 
       setMessages([response.data, ...messages]);
-      setMessage(""); // Clear the textarea after saving
-      setNotification(
-        <div className="text-white p-2 reounded">บันทึกข้อความสำเร็จค่ะ</div>
-      );
+      setMessage("");
+      setNotification("บันทึกข้อความสำเร็จค่ะ");
     } catch (error) {
       console.error("Error saving message:", error);
-      setNotification("Failed to save message.");
+      setNotification("ไม่สามารถบันทึกข้อความได้.");
     }
   };
 
   const handleNotificationClose = () => {
-    setNotification(""); // Clear notification
+    setNotification("");
   };
 
   const indexClick = () => {
@@ -213,6 +203,12 @@ const AddAndHistory = () => {
   const toggleRecommend = () => {
     setRecommend(!showRecommend);
   };
+
+  const handleHistoryClick = (msgText) => {
+    setMessage(msgText);
+    setRecommend(false);
+  };
+
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
@@ -236,7 +232,6 @@ const AddAndHistory = () => {
         </div>
       </button>
       <div className="w-full max-w-4xl p-8 flex flex-col items-center justify-center">
-        {/* ฟอร์มแบ่งปันข้อความ */}
         <div className="flex-1 text-center">
           <h1 className="text-4xl font-serif text-white">
             แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย
@@ -252,14 +247,23 @@ const AddAndHistory = () => {
           {showRecommend && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
-                <h2 className="text-xl text-left font-serif text-purple-600 mb-4 ">
+                <h2 className="text-xl text-left font-serif text-purple-600 mb-4">
                   ข้อความแนะนำ
                 </h2>
                 <p className="text-gray-700 font-medium font-serif">
-                  ทุกเช้าคือการเริ่มต้นใหม่ อย่าลืมใช้โอกาสนี้ทำสิ่งดีๆ
-                  ให้กับตัวเอง! ,
-                  เช้านี้อย่าลืมมองโลกในแง่ดีและให้กำลังใจตัวเองกับทุกความท้าทายที่รออยู่!
+                  เลือกข้อความจากประวัติ
                 </p>
+                <ul className="max-h-40 overflow-y-auto">
+                  {messages.map((msg) => (
+                    <li
+                      key={msg.id}
+                      className="p-2 mb-2 text-black bg-gray-200 rounded-lg shadow cursor-pointer"
+                      onClick={() => handleHistoryClick(msg.text)}
+                    >
+                      {msg.text}
+                    </li>
+                  ))}
+                </ul>
                 <button
                   onClick={toggleRecommend}
                   className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
@@ -269,11 +273,12 @@ const AddAndHistory = () => {
               </div>
             </div>
           )}
+
           {notification && (
-            <div className="relative  bg-violet-400 p-1 mt-2 rounded text-black">
+            <div className="relative bg-violet-400 p-1 mt-2 rounded text-black">
               {notification}
               <button
-                className="absolute  top-0 right-0 m-2 text-white "
+                className="absolute top-0 right-0 m-2 text-white"
                 onClick={handleNotificationClose}
               >
                 X
@@ -296,7 +301,7 @@ const AddAndHistory = () => {
           ></textarea>
 
           <button
-            className="mt-4 w-full max-w-56 px-6 py-2 text-white bg-purple-600  rounded-full shadow transition-colors mx-auto hover:bg-purple-700"
+            className="mt-4 w-full max-w-56 px-6 py-2 text-white bg-purple-600 rounded-full shadow transition-colors mx-auto hover:bg-purple-700"
             onClick={handleSave}
           >
             ส่งข้อความ
@@ -305,8 +310,8 @@ const AddAndHistory = () => {
 
         {/* ประวัติข้อความ */}
         <div className="flex-1 mt-8 text-center">
-          <h1 className="text-xl font-serif  text-white">ประวัติ</h1>
-          <ul className="mt-4 max-h-64 overflow-y-auto ">
+          <h1 className="text-xl font-serif text-white">ประวัติ</h1>
+          <ul className="mt-4 max-h-64 overflow-y-auto">
             {messages.map((msg) => (
               <li
                 key={msg.id}
@@ -317,7 +322,6 @@ const AddAndHistory = () => {
             ))}
           </ul>
         </div>
-
       </div>
 
       {/* ปุ่มที่มุมขวาล่าง */}

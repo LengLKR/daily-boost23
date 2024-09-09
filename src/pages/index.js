@@ -33,7 +33,7 @@ export default function Home() {
         setIsLoggedIn(false);
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
 
@@ -47,9 +47,11 @@ export default function Home() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     if (query.get("showLogin") === "true") {
+      setShowLoginModal(true);
       router.replace("/", undefined, { shallow: true });
     }
   }, [router]);
+  
 
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
@@ -80,15 +82,12 @@ export default function Home() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       setShowLoginModal(false);
+      router.push("/addAndHistory");
     } catch (error) {
       alert("Login failed: " + error.message);
     }
@@ -104,6 +103,7 @@ export default function Home() {
       );
       const user = userCredential.user;
       setShowLoginModal(false);
+      router.push("/addAndHistory");
     } catch (error) {
       alert("Signup failed: " + error.message);
     }
@@ -114,6 +114,7 @@ export default function Home() {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       setShowLoginModal(false);
+      router.push("/addAndHistory")
     } catch (error) {
       alert("Google sign-in failed: " + error.message);
     }
