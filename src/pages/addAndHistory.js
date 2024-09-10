@@ -120,6 +120,7 @@ const badWords = [
   "แรด",
   "ตายซะ",
   "ปากหมา",
+  "ไอสัตร์นรก","ไอสัตว์นรก",
 ];
 
 const AddAndHistory = () => {
@@ -256,7 +257,7 @@ const AddAndHistory = () => {
                 <h2 className="text-xl text-left font-serif text-purple-600 mb-4">
                   ข้อความแนะนำ
                 </h2>
-                <p className="text-gray-800 font-mono font-serif">
+                <p className="text-gray-800  font-serif">
                   เลือกข้อความจากประวัติได้เลยค่ะ
                 </p>
                 <ul className="max-h-40 overflow-y-auto">
@@ -315,9 +316,9 @@ const AddAndHistory = () => {
         </div>
 
         {/* ประวัติข้อความ */}
-        <div className="flex-1 mt-8 text-center">
+        <div className="flex-1 mt-8 text-center ">
           <h1 className="text-xl font-serif text-white">ประวัติ</h1>
-          <ul className="mt-4 max-h-64 overflow-y-auto">
+          <ul className="mt-4 max-h-64 overflow-y-auto scrollbar-custom">
             {messages.map((msg) => (
               <li
                 key={msg.id}

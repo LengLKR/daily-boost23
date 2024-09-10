@@ -37,11 +37,12 @@ const PhoneLogin = () => {
   }
 
   const auth = getAuth(app);
+  auth.useDeviceLanguage();
 
   // Setup Recaptcha
   const setupRecaptcha = () => {
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
+      window.recaptchaVerifier = new RecaptchaVerifier(   auth,
         "recaptcha-container", // ต้องมี id "recaptcha-container" ใน DOM
         {
           size: "invisible", // หรือใช้ "normal" เพื่อแสดง
@@ -49,14 +50,16 @@ const PhoneLogin = () => {
             console.log("Recaptcha solved successfully.");
           },
           "expired-callback": () => {
-            console.log("Recaptcha expired. Please retry.");
+            console.log("Recaptcha expired. Please retry",requestOtp);
           },
-        },
-        auth
+        }
+
       );
       window.recaptchaVerifier.render().then((widgetId) => {
         console.log("Recaptcha rendered successfully with widgetId:", widgetId);
-      }).catch((error) => {
+      })
+      .catch((error) => {
+        alert(error.toString())
         console.error("Error rendering Recaptcha:", error);
       });
     }
@@ -66,14 +69,19 @@ const PhoneLogin = () => {
   const requestOtp = async (e) => {
     e.preventDefault();
     setupRecaptcha();
-    const appVerifier = window.recaptchaVerifier;
-    try {
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+    const applicationVerifier = new RecaptchaVerifier(auth,'recaptcha-container');
+    // try {
+    if(phoneNumber?.startsWith("0")){
+      setPhoneNumber("+66"+ phoneNumber.substring(0,1))
+    }
+      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, applicationVerifier);
+      // const credential = await confirmationResult.confirm(verificationCode);
       setVerificationId(confirmationResult.verificationId);
       setIsOtpSent(true);
-    } catch (error) {
-      console.error("Error sending OTP:", error);
-    }
+    // } catch (error) {
+    //   console.error("Error sending OTP:", error);
+    //   alert(error.toString())
+    // }
   };
 
   // Verify OTP
