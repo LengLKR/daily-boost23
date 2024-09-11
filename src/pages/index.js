@@ -24,6 +24,7 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [user,setUser] = useState(null)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -79,23 +80,25 @@ export default function Home() {
     setShowModal(!showModal);
   };
 
+  console.log(user)
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      setUser(user);
+  
+      // Store user data in localStorage
+      localStorage.setItem('profileUser', JSON.stringify(user));
+  
       setShowLoginModal(false);
       router.push("/addAndHistory");
     } catch (error) {
       alert("Login failed: " + error.message);
     }
   };
-
+  
   const handleSignup = async (e) => {
     e.preventDefault();
     try {

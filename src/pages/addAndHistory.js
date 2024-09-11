@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Modal from "./modalprofile";
 
 const badWords = [
   "ควย",
@@ -120,7 +121,7 @@ const badWords = [
   "แรด",
   "ตายซะ",
   "ปากหมา",
-  "ไอสัตร์นรก","ไอสัตว์นรก",
+  "ไอสัตร์นรก", "ไอสัตว์นรก",
 ];
 
 const AddAndHistory = () => {
@@ -129,12 +130,43 @@ const AddAndHistory = () => {
   const [notification, setNotification] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showRecommend, setRecommend] = useState(false);
+  const [user, setUser] = useState(null)
   const router = useRouter();
+  console.log(user?.email)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  useEffect(() => {
+    // ดึงข้อมูลจาก localStorage
+    const storedUser = localStorage.getItem('profileUser');
+
+    if (storedUser) {
+      // แปลงข้อมูล JSON เป็นอ็อบเจกต์
+      const user = JSON.parse(storedUser);
+      setUser(user)
+      // ใช้งานข้อมูลผู้ใช้ตามต้องการ
+      console.log(user);
+    } else {
+      console.log('No user data found in localStorage');
+    }
+  }, [])
 
   useEffect(() => {
     const fetchMessages = async () => {
+      const email = user?.email;
+      if (!email) {
+        setNotification("Email not provided.");
+        return;
+      }
+
       try {
-        const response = await axios.get("http://localhost:8888/api/messages");
+        const response = await axios.post("http://localhost:8888/api/messages", { email });
         if (response.data.length > 0) {
           const filteredMessages = response.data.map((msg) => {
             return {
@@ -155,8 +187,12 @@ const AddAndHistory = () => {
         setNotification("เกิดข้อผิดพลาดในการดึงข้อความ.");
       }
     };
-    fetchMessages();
-  }, []);
+
+    if (user?.email) {
+      fetchMessages();
+    }
+  }, [user]); // เพิ่ม user เป็น dependency
+
 
   const handleSave = async () => {
     const regexPattern = new RegExp(
@@ -179,11 +215,11 @@ const AddAndHistory = () => {
       setNotification("ข้อความของคุณไม่น่ารักเลยนะคะ ไม่สามารถบันทึกได้ค่ะ");
       return;
     }
-
+    const email = user?.email
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
-        { message }
+        { message, email }
       );
 
       setMessages([response.data, ...messages]);
@@ -220,24 +256,38 @@ const AddAndHistory = () => {
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('DALL·E-2024-09-09-13.31.png')" }}
-    >
-      <button>
+    ><div>
+
         <div className="fixed top-4 left-4 flex items-center space-x-4">
-          <div
-            onClick={indexClick}
-            className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-pink-300 shadow-lg"
-          >
-            <img
-              src="/logohome.png"
-              alt="Home Icon"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div onClick={indexClick} className="text-white font-serif">
-            Daily Boost
+          <button>
+            <div
+              onClick={indexClick}
+              className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-pink-300 shadow-lg"
+            >
+              <img
+                src="/logohome.png"
+                alt="Home Icon"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div onClick={indexClick} className="text-white font-serif">
+              Daily Boost
+            </div>
+          </button>
+          <div className="flex justify-end">
+            <div className="flex justify-center m-5">
+              <button
+                id="successButton"
+                onClick={handleOpenModal}
+                className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Show success message
+              </button>
+            </div>
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
           </div>
         </div>
-      </button>
+      </div>
       <div className="w-full max-w-4xl p-8 flex flex-col items-center justify-center">
         <div className="flex-1 text-center">
           <h1 className="text-4xl font-serif text-white">
