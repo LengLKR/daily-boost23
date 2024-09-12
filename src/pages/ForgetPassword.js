@@ -45,11 +45,9 @@ const ForgetPassword = () => {
   };
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen"
+      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: "url('/DALL·E-2024-09-04-16.20.png')", // เส้นทางที่ถูกต้อง
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundImage: "url('https://cdn.discordapp.com/attachments/1078547722879107163/1283637553144004659/sky-clouds-abstract-digital-art-uhdpaper.com-4K-4.327.jpg?ex=66e3b821&is=66e266a1&hm=be2894470fb77d83fd445ccb7262dd373121c4a1cc94df7c10fb9be7a61ebd26&')", 
       }}
     >
       <div>

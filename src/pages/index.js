@@ -134,9 +134,9 @@ export default function Home() {
   };
 
   return (
-    <div
+    <div flex-col items-center justify-center min-h-screen bg-cover bg-center
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('bg_login.png')" }}
+      style={{ backgroundImage: "url('https://cdn.discordapp.com/attachments/1078547722879107163/1283632728666800148/night-sky-stars-sunrise-horizon-scenery-2k-wallpaper-uhdpaper.com-8060g.jpg?ex=66e3b3a3&is=66e26223&hm=7562061e90ec777004ff5d8a20af65df1067b1fa2cb2881809a0c5a3a193be87&')" }}
     >
       <div className="fixed top-4 right-4 flex items-center space-x-4">
         {isLoggedIn ? (
@@ -171,9 +171,9 @@ export default function Home() {
       </div>
 
       <div className="fixed top-4 left-4 flex items-center space-x-4">
-        <div className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-pink-300 shadow-lg">
+        <div className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
-            src="/logohome.png"
+            src="https://cdn.discordapp.com/attachments/1078547722879107163/1283640731147436094/moon_logo_half_580c61bd-cc8f-484c-9ea0-1b9414888ae1.png?ex=66e3bb17&is=66e26997&hm=989fac35a3906898079a102183d6f5208e5e5d34abc98b97c40ecd2592d12ffd&"
             alt="Home Icon"
             className="w-full h-full object-cover"
           />

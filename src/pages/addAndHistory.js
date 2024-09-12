@@ -255,11 +255,11 @@ const AddAndHistory = () => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('DALL·E-2024-09-09-13.31.png')" }}
+      style={{ backgroundImage: "url('https://cdn.discordapp.com/attachments/1253195538254528554/1283620890105614336/beautiful-sky-sunrise-scenery-4k-wallpaper-uhdpaper.com-8070g.jpg?ex=66e3a89c&is=66e2571c&hm=a6ea87c3c137f6855b32d6668f3daa07958d8f56e97660504c35dc62ec384215&')" }}
     ><div>
 
         <div className="fixed top-4 left-4 flex items-center space-x-4">
-          <button>
+          <button className="flex items-center space-x-2">
             <div
               onClick={indexClick}
               className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-pink-300 shadow-lg"
