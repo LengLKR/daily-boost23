@@ -30,7 +30,7 @@ export default function Home() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user || localStorage.getItem('profileUser')) {
         setIsLoggedIn(true);
         const storedUser = localStorage.getItem('profileUser');
         if (storedUser) {
@@ -97,6 +97,8 @@ export default function Home() {
 
   console.log(user)
   const handleLogin = async (e) => {
+    console.log(email,password)
+    
     e.preventDefault();
   
     if (!email || !password) {
@@ -106,10 +108,10 @@ export default function Home() {
   
     try {
       const usersCollection = collection(db, "users");
-      const q = query(usersCollection, where("email", "==", email));
-  
+      const q = query(usersCollection, where("email", "==", email.trim()));
+      
       const querySnapshot = await getDocs(q);
-  
+      console.log(querySnapshot )
       if (querySnapshot.empty) {
         alert("ไม่พบผู้ใช้ที่มีอีเมลนี้");
         return;
@@ -193,7 +195,7 @@ export default function Home() {
   };
 
   return (
-    <div flex-col items-center justify-center min-h-screen bg-cover bg-center
+    <div 
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('https://cdn.discordapp.com/attachments/1078547722879107163/1283632728666800148/night-sky-stars-sunrise-horizon-scenery-2k-wallpaper-uhdpaper.com-8060g.jpg?ex=66e3b3a3&is=66e26223&hm=7562061e90ec777004ff5d8a20af65df1067b1fa2cb2881809a0c5a3a193be87&')" }}
     >
