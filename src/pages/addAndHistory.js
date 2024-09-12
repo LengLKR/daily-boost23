@@ -132,7 +132,7 @@ const AddAndHistory = () => {
   const [showRecommend, setRecommend] = useState(false);
   const [user, setUser] = useState(null)
   const router = useRouter();
-  console.log(user?.email)
+  console.log(user?.name)
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -216,10 +216,11 @@ const AddAndHistory = () => {
       return;
     }
     const email = user?.email
+    const nickName = user?.name
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
-        { message, email }
+        { message, email,nickName }
       );
 
       setMessages([response.data, ...messages]);
@@ -262,10 +263,10 @@ const AddAndHistory = () => {
           <button className="flex items-center space-x-2">
             <div
               onClick={indexClick}
-              className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-pink-300 shadow-lg"
+              className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-white shadow-lg"
             >
               <img
-                src="/logohome.png"
+                src="https://cdn.discordapp.com/attachments/1078547722879107163/1283640731147436094/moon_logo_half_580c61bd-cc8f-484c-9ea0-1b9414888ae1.png?ex=66e3bb17&is=66e26997&hm=989fac35a3906898079a102183d6f5208e5e5d34abc98b97c40ecd2592d12ffd&"
                 alt="Home Icon"
                 className="w-full h-full object-cover"
               />
@@ -284,7 +285,7 @@ const AddAndHistory = () => {
                 Show success message
               </button>
             </div>
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} email={user?.email}/>
           </div>
         </div>
       </div>

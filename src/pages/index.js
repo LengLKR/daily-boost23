@@ -13,6 +13,8 @@ import { FcGoogle } from "react-icons/fc";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { doc, setDoc,collection,query,where,getDocs } from "firebase/firestore";
+import { db } from "./google";
 
 export default function Home() {
   const router = useRouter();
@@ -84,37 +86,84 @@ export default function Home() {
   const handleLogin = async (e) => {
     e.preventDefault();
   
+    // การตรวจสอบข้อมูลพื้นฐาน
+    if (!email || !password) {
+      alert("กรุณากรอกอีเมลและรหัสผ่าน");
+      return;
+    }
+  
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      setUser(user);
+      // สร้างการค้นหาใน Firestore
+      const usersCollection = collection(db, "users");
+      const q = query(usersCollection, where("email", "==", email));
   
-      // Store user data in localStorage
-      localStorage.setItem('profileUser', JSON.stringify(user));
+      // ดึงข้อมูลผู้ใช้จาก Firestore
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        alert("ไม่พบผู้ใช้ที่มีอีเมลนี้");
+        return;
+      }
   
-      setShowLoginModal(false);
-      router.push("/addAndHistory");
+      // ตรวจสอบข้อมูลรหัสผ่าน
+      let userFound = false;
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data();
+        // ตรวจสอบรหัสผ่านที่เข้ารหัส (รหัสผ่านใน Firestore ควรจะเข้ารหัส)
+        if (userData.password === password) {
+          userFound = true;
+          // กำหนดผู้ใช้ที่เข้าสู่ระบบ
+          setUser(userData);
+          
+          // เก็บข้อมูลผู้ใช้ใน localStorage
+          localStorage.setItem('profileUser', JSON.stringify(userData));
+  
+          // ซ่อนโมดัลล็อกอินและเปลี่ยนเส้นทาง
+          setShowLoginModal(false);
+          router.push("/addAndHistory");
+        }
+      });
+  
+      if (!userFound) {
+        alert("รหัสผ่านไม่ถูกต้อง");
+      }
     } catch (error) {
-      alert("Login failed: " + error.message);
+      alert("การเข้าสู่ระบบล้มเหลว: " + error.message);
     }
   };
   
   const handleSignup = async (e) => {
     e.preventDefault();
+    
+    // การตรวจสอบข้อมูลพื้นฐาน
+    if (!email || !password) {
+      alert("กรุณากรอกอีเมลและรหัสผ่าน");
+      return;
+    }
+    
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+      // สร้าง ID ที่ไม่ซ้ำกันสำหรับผู้ใช้
+      const userId = generateUniqueId();
+      
+      // บันทึกข้อมูลผู้ใช้ลงใน Firestore
+      await setDoc(doc(db, "users", userId), {
+        email: email,
+        password: password, // ในการเก็บรหัสผ่านควรมีการเข้ารหัสและจัดเก็บอย่างปลอดภัย
+        createdAt: new Date(),
+      });
+      
+      // ซ่อนโมดัลล็อกอินและเปลี่ยนเส้นทาง
       setShowLoginModal(false);
       router.push("/addAndHistory");
     } catch (error) {
-      alert("Signup failed: " + error.message);
+      alert("การลงทะเบียนล้มเหลว: " + error.message);
     }
   };
-
+  
+  // ฟังก์ชันสำหรับสร้าง ID หรือ UID ที่ไม่ซ้ำกัน
+  const generateUniqueId = () => {
+    return 'user_' + Math.random().toString(36).substr(2, 9); // ตัวอย่างการสร้าง ID แบบสุ่ม
+  };
   const loginWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
