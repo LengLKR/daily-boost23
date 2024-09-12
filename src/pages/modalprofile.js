@@ -12,10 +12,9 @@ import { db } from "./google"; // นำเข้าการตั้งค่�
 
 const Modal = ({ isOpen, onClose, email }) => {
   const [formData, setFormData] = useState({
- 
     name: "",
   });
-
+  console.log(email);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -27,14 +26,13 @@ const Modal = ({ isOpen, onClose, email }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // การตรวจสอบข้อมูลพื้นฐาน
     if (!email || !formData.name) {
       alert("กรุณากรอกอีเมลและชื่อ");
       return;
     }
 
     try {
-      // ค้นหาผู้ใช้ที่มีอีเมลตรงกัน
+      // ค้นหาผู้ใช้ที่มีอีเมลตรงกันในคอลเลคชัน users
       const usersCollection = collection(db, "users");
       const q = query(usersCollection, where("email", "==", email));
       const querySnapshot = await getDocs(q);
@@ -44,21 +42,61 @@ const Modal = ({ isOpen, onClose, email }) => {
         return;
       }
 
-      // บันทึกข้อมูลผู้ใช้ลงใน Firestore
-      querySnapshot.forEach(async (docSnapshot) => {
+      // อัพเดทข้อมูลผู้ใช้ในคอลเลคชัน users
+      const userDocRefs = [];
+      querySnapshot.forEach((docSnapshot) => {
         const userDocRef = doc(db, "users", docSnapshot.id);
-        await updateDoc(
-          userDocRef,
-          {
-            name: formData.name,
-            email: email,
-            // คุณอาจต้องการเพิ่มข้อมูลอื่น ๆ ที่นี่
-          },
-          { merge: true }
-        ); // ใช้ merge: true เพื่อไม่ลบข้อมูลที่มีอยู่
+        userDocRefs.push(userDocRef);
       });
 
-      // ดำเนินการเมื่อสำเร็จ
+      await Promise.all(
+        userDocRefs.map(async (userDocRef) => {
+          await updateDoc(
+            userDocRef,
+            {
+              name: formData.name, // ใช้ชื่อฟิลด์ name ใน users
+              email: email,
+            },
+            { merge: true }
+          );
+        })
+      );
+
+      console.log("Users updated successfully");
+
+      // ตรวจสอบว่า formData.name มีค่าอยู่หรือไม่
+      const nickName = formData?.name;
+      if (nickName) {
+        const messagesCollection = collection(db, "messages");
+        const messageQuery = query(
+          messagesCollection,
+          where("email", "==", email)
+        );
+        const messageSnapshot = await getDocs(messageQuery);
+
+        if (!messageSnapshot.empty) {
+          const messageDocRefs = [];
+          messageSnapshot.forEach((docSnapshot) => {
+            const messageDocRef = doc(db, "messages", docSnapshot.id);
+            messageDocRefs.push(messageDocRef);
+          });
+
+          await Promise.all(
+            messageDocRefs.map(async (messageDocRef) => {
+              await updateDoc(
+                messageDocRef,
+                {
+                  nickName: formData.name, // ใช้ชื่อฟิลด์ nickName ใน messages
+                },
+                { merge: true }
+              );
+            })
+          );
+
+          console.log("Messages updated successfully");
+        }
+      }
+
       console.log("ข้อมูลถูกบันทึกเรียบร้อยแล้ว:", formData);
       onClose();
     } catch (error) {
@@ -96,7 +134,6 @@ const Modal = ({ isOpen, onClose, email }) => {
           <span className="sr-only">Close modal</span>
         </button>
         <form onSubmit={handleSubmit}>
-          
           <div className="mb-4">
             <label
               htmlFor="name"
