@@ -147,7 +147,7 @@ const Modal = ({ isOpen, onClose, email }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
+              className="mt-1 block w-full p-2 border text-black border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
               required
             />
           </div>
