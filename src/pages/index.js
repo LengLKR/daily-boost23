@@ -32,13 +32,26 @@ export default function Home() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsLoggedIn(true);
+        const storedUser = localStorage.getItem('profileUser');
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
       } else {
         setIsLoggedIn(false);
+        setUser(null);
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
+  
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('profileUser'));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+  
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -86,35 +99,29 @@ export default function Home() {
   const handleLogin = async (e) => {
     e.preventDefault();
   
-    // การตรวจสอบข้อมูลพื้นฐาน
     if (!email || !password) {
       alert("กรุณากรอกอีเมลและรหัสผ่าน");
       return;
     }
   
     try {
-      // สร้างการค้นหาใน Firestore
       const usersCollection = collection(db, "users");
       const q = query(usersCollection, where("email", "==", email));
   
-      // ดึงข้อมูลผู้ใช้จาก Firestore
       const querySnapshot = await getDocs(q);
-      
+  
       if (querySnapshot.empty) {
         alert("ไม่พบผู้ใช้ที่มีอีเมลนี้");
         return;
       }
   
-      // ตรวจสอบข้อมูลรหัสผ่าน
       let userFound = false;
       querySnapshot.forEach((doc) => {
         const userData = doc.data();
-        // ตรวจสอบรหัสผ่านที่เข้ารหัส (รหัสผ่านใน Firestore ควรจะเข้ารหัส)
         if (userData.password === password) {
           userFound = true;
-          // กำหนดผู้ใช้ที่เข้าสู่ระบบ
           setUser(userData);
-          
+  
           // เก็บข้อมูลผู้ใช้ใน localStorage
           localStorage.setItem('profileUser', JSON.stringify(userData));
   
@@ -134,31 +141,34 @@ export default function Home() {
   
   const handleSignup = async (e) => {
     e.preventDefault();
-    
-    // การตรวจสอบข้อมูลพื้นฐาน
+  
     if (!email || !password) {
       alert("กรุณากรอกอีเมลและรหัสผ่าน");
       return;
     }
-    
+  
     try {
-      // สร้าง ID ที่ไม่ซ้ำกันสำหรับผู้ใช้
       const userId = generateUniqueId();
-      
-      // บันทึกข้อมูลผู้ใช้ลงใน Firestore
-      await setDoc(doc(db, "users", userId), {
+      const newUser = {
         email: email,
-        password: password, // ในการเก็บรหัสผ่านควรมีการเข้ารหัสและจัดเก็บอย่างปลอดภัย
+        password: password, 
         createdAt: new Date(),
-      });
-      
-      // ซ่อนโมดัลล็อกอินและเปลี่ยนเส้นทาง
+      };
+  
+      await setDoc(doc(db, "users", userId), newUser);
+  
+      // เก็บข้อมูลผู้ใช้ใน localStorage
+      localStorage.setItem('profileUser', JSON.stringify(newUser));
+  
+      setUser(newUser);
+  
       setShowLoginModal(false);
       router.push("/addAndHistory");
     } catch (error) {
       alert("การลงทะเบียนล้มเหลว: " + error.message);
     }
   };
+  
   
   // ฟังก์ชันสำหรับสร้าง ID หรือ UID ที่ไม่ซ้ำกัน
   const generateUniqueId = () => {
