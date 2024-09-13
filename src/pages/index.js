@@ -13,7 +13,16 @@ import { FcGoogle } from "react-icons/fc";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { doc, setDoc,collection,query,where,getDocs } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { MdSunny } from "react-icons/md";
+import { RiMoonFill } from "react-icons/ri";
 import { db } from "./google";
 
 export default function Home() {
@@ -26,13 +35,13 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [user,setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user || localStorage.getItem('profileUser')) {
+      if (user || localStorage.getItem("profileUser")) {
         setIsLoggedIn(true);
-        const storedUser = localStorage.getItem('profileUser');
+        const storedUser = localStorage.getItem("profileUser");
         if (storedUser) {
           setUser(JSON.parse(storedUser));
         }
@@ -41,17 +50,16 @@ export default function Home() {
         setUser(null);
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
-  
+
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('profileUser'));
+    const storedUser = JSON.parse(localStorage.getItem("profileUser"));
     if (storedUser) {
       setUser(storedUser);
     }
   }, []);
-  
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -95,44 +103,47 @@ export default function Home() {
     setShowModal(!showModal);
   };
 
-  console.log(user)
+  console.log(user);
+
   const handleLogin = async (e) => {
-    console.log(email,password)
-    
+    console.log(email, password);
+
     e.preventDefault();
-  
+
     if (!email || !password) {
       alert("กรุณากรอกอีเมลและรหัสผ่าน");
       return;
     }
-  
+
     try {
       const usersCollection = collection(db, "users");
       const q = query(usersCollection, where("email", "==", email.trim()));
-      
+
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot )
+      console.log(querySnapshot);
+
       if (querySnapshot.empty) {
         alert("ไม่พบผู้ใช้ที่มีอีเมลนี้");
         return;
       }
-  
+
       let userFound = false;
       querySnapshot.forEach((doc) => {
         const userData = doc.data();
+
         if (userData.password === password) {
           userFound = true;
           setUser(userData);
-  
+
           // เก็บข้อมูลผู้ใช้ใน localStorage
-          localStorage.setItem('profileUser', JSON.stringify(userData));
-  
+          localStorage.setItem("profileUser", JSON.stringify(userData));
+
           // ซ่อนโมดัลล็อกอินและเปลี่ยนเส้นทาง
           setShowLoginModal(false);
           router.push("/addAndHistory");
         }
       });
-  
+
       if (!userFound) {
         alert("รหัสผ่านไม่ถูกต้อง");
       }
@@ -140,42 +151,42 @@ export default function Home() {
       alert("การเข้าสู่ระบบล้มเหลว: " + error.message);
     }
   };
-  
+
   const handleSignup = async (e) => {
     e.preventDefault();
-  
+
     if (!email || !password) {
       alert("กรุณากรอกอีเมลและรหัสผ่าน");
       return;
     }
-  
+
     try {
       const userId = generateUniqueId();
       const newUser = {
         email: email,
-        password: password, 
+        password: password,
         createdAt: new Date(),
       };
-  
+
       await setDoc(doc(db, "users", userId), newUser);
-  
+
       // เก็บข้อมูลผู้ใช้ใน localStorage
-      localStorage.setItem('profileUser', JSON.stringify(newUser));
-  
+      localStorage.setItem("profileUser", JSON.stringify(newUser));
+
       setUser(newUser);
-  
+
       setShowLoginModal(false);
       router.push("/addAndHistory");
     } catch (error) {
       alert("การลงทะเบียนล้มเหลว: " + error.message);
     }
   };
-  
-  
+
   // ฟังก์ชันสำหรับสร้าง ID หรือ UID ที่ไม่ซ้ำกัน
   const generateUniqueId = () => {
-    return 'user_' + Math.random().toString(36).substr(2, 9); // ตัวอย่างการสร้าง ID แบบสุ่ม
+    return "user_" + Math.random().toString(36).substr(2, 9); // ตัวอย่างการสร้าง ID แบบสุ่ม
   };
+
   const loginWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -190,43 +201,36 @@ export default function Home() {
   const loginWithPhone = () => {
     router.push("/phoneLogin");
   };
+
   const goToForgetPassword = () => {
     router.push("/ForgetPassword");
   };
 
   return (
-    <div 
+    <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('https://cdn.discordapp.com/attachments/1078547722879107163/1283632728666800148/night-sky-stars-sunrise-horizon-scenery-2k-wallpaper-uhdpaper.com-8060g.jpg?ex=66e3b3a3&is=66e26223&hm=7562061e90ec777004ff5d8a20af65df1067b1fa2cb2881809a0c5a3a193be87&')" }}
+      style={{ backgroundImage: "url('bg_index.png')" }}
     >
       <div className="fixed top-4 right-4 flex items-center space-x-4">
         {isLoggedIn ? (
           <button
             onClick={logoutClick}
-            className="flex items-center px-3 py-2 bg-pink-100 border border-pink-300 rounded-full shadow-lg hover:bg-pink-200 transition-colors"
+            className="flex items-center px-3 py-2 border border-white rounded-full shadow-lg hover:bg-sky-900 transition-colors"
           >
-            <div className="flex items-center justify-center w-8 h-8 mr-2 bg-pink-300 rounded-full overflow-hidden">
-              <img
-                src="/logo_login.png"
-                alt="Logout Icon"
-                className="w-full h-full object-cover"
-              />
+            <div className="flex items-center justify-center w-8 h-8 mr-2  rounded-full overflow-hidden">
+              <MdSunny className="text-blue-500 text-8xl" />
             </div>
-            <span className="text-pink-800 font-serif ">Log out</span>
+            <span className="text-white font-serif ">Log out</span>
           </button>
         ) : (
           <button
             onClick={loginClick}
-            className="flex items-center px-3 py-2 bg-pink-100 border border-pink-300 rounded-full shadow-lg hover:bg-pink-200 transition-colors"
+            className="flex items-center px-3 py-2  border border-white rounded-full shadow-lg hover:bg-sky-900 transition-colors"
           >
-            <div className="flex items-center justify-center w-8 h-8 mr-2 bg-pink-300 rounded-full overflow-hidden">
-              <img
-                src="/logo_login.png"
-                alt="Login Icon"
-                className="w-full h-full object-cover"
-              />
+            <div className="flex items-center justify-center w-8 h-8 mr-2= rounded-full overflow-hidden">
+              <RiMoonFill className="text-blue-500 text-xl" />
             </div>
-            <span className="text-pink-800 font-serif ">Log in</span>
+            <span className="text-white font-serif ">Log in</span>
           </button>
         )}
       </div>
@@ -265,13 +269,13 @@ export default function Home() {
           <div className="mt-10 flex justify-center items-center space-x-4">
             <button
               onClick={loginClick}
-              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-blue-700 transition-colors border border-white flex items-center"
             >
               <span>เริ่มต้นใช้งาน</span>
             </button>
             <button
               onClick={toggleQRCode}
-              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-purple-600 transition-colors border border-white flex items-center"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-blue-700 transition-colors border border-white flex items-center"
             >
               <span>รับข้อความ</span>
             </button>
@@ -308,7 +312,7 @@ export default function Home() {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl font-serif text-purple-600 mb-4">
+            <h2 className="text-xl font-serif text-blue-500 mb-4">
               คำแนะนำการใช้งาน
             </h2>
             <p className="text-gray-700 font-serif">
@@ -323,7 +327,7 @@ export default function Home() {
                     alert("คุณได้ล็อกอินแล้ว เริ่มต้นใช้งานได้เลยค่ะ");
                   }
                 }}
-                className="text-purple-500 cursor-pointer"
+                className="text-blue-500 cursor-pointer"
               >
                 {""} Login {""}
               </span>
@@ -336,7 +340,7 @@ export default function Home() {
                     setShowQRCode(true);
                   }
                 }}
-                className="text-purple-500 cursor-pointer"
+                className="text-blue-500 cursor-pointer"
               >
                 {""} QRCode {""}
               </span>
@@ -345,7 +349,7 @@ export default function Home() {
 
             <button
               onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
+              className="mt-4 px-4 py-2 text-white font-serif bg-blue-500 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 w-full"
             >
               ปิด
             </button>
@@ -435,7 +439,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-              {isLogin && (
+              {isLogin && ( 
                 <button
                   type="button"
                   onClick={goToForgetPassword}
@@ -446,7 +450,7 @@ export default function Home() {
               )}
               <button
                 type="submit"
-                className="w-full text-black bg-gray-100 hover:bg-purple-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
+                className="w-full text-black bg-gray-100 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
               >
                 {isLogin ? "Sign in" : "Sign up"}
               </button>

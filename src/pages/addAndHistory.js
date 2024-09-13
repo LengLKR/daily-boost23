@@ -256,7 +256,7 @@ const AddAndHistory = () => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('https://cdn.discordapp.com/attachments/1253195538254528554/1283620890105614336/beautiful-sky-sunrise-scenery-4k-wallpaper-uhdpaper.com-8070g.jpg?ex=66e3a89c&is=66e2571c&hm=a6ea87c3c137f6855b32d6668f3daa07958d8f56e97660504c35dc62ec384215&')" }}
+      style={{ backgroundImage: "url('addAndHistory.jpg')" }}
     ><div>
 
         <div className="fixed top-4 left-4 flex items-center space-x-4">
@@ -274,7 +274,7 @@ const AddAndHistory = () => {
             <div onClick={indexClick} className="text-white font-serif">
               Daily Boost
             </div>
-          </button>
+          </button> 
           <div className="flex justify-end">
             <div className="flex justify-center m-5">
               <button
@@ -359,7 +359,7 @@ const AddAndHistory = () => {
           ></textarea>
 
           <button
-            className="mt-4 w-full max-w-56 px-6 py-2 text-white bg-purple-600 rounded-full shadow transition-colors mx-auto hover:bg-purple-700"
+            className="mt-4 w-full max-w-56 px-6 py-2 text-white bg-indigo-500 rounded-full shadow transition-colors mx-auto hover:bg-blue-700"
             onClick={handleSave}
           >
             ส่งข้อความ

@@ -47,12 +47,12 @@ const ForgetPassword = () => {
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: "url('https://cdn.discordapp.com/attachments/1078547722879107163/1283637553144004659/sky-clouds-abstract-digital-art-uhdpaper.com-4K-4.327.jpg?ex=66e3b821&is=66e266a1&hm=be2894470fb77d83fd445ccb7262dd373121c4a1cc94df7c10fb9be7a61ebd26&')", 
+        backgroundImage: "url('Forget_password.jpg')", 
       }}
     >
       <div>
         <button
-          className="fixed top-4 left-4 z-50 text-4xl text-black underline hover:text-purple-600 transition-colors font-serif"
+          className="fixed top-4 left-4 z-50 text-4xl text-black underline hover:text-white transition-colors font-serif"
           onClick={BackToLogin}
         >
          <IoMdArrowRoundBack />
@@ -84,7 +84,7 @@ const ForgetPassword = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-violet-500 rounded-lg hover:bg-violet-600"
+            className="w-full px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-600"
           >
             Reset Password
           </button>
@@ -111,7 +111,7 @@ const ForgetPassword = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-violet-500 rounded-lg hover:bg-violet-600"
+            className="w-full px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-600"
           >
             Update Password
           </button>
