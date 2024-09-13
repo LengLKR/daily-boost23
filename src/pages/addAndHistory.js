@@ -136,6 +136,11 @@ const AddAndHistory = () => {
   console.log(user?.name);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleSaveName = (name) => {
+    setUser((prevUser) => ({ ...prevUser, name }));
+  };
+
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -285,7 +290,7 @@ const AddAndHistory = () => {
             onClick={handleOpenModal}
             className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            Show success message
+            {user?.name || "Show success message"}{" "}
           </button>
         </div>
 
@@ -293,6 +298,7 @@ const AddAndHistory = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           email={user?.email}
+          onSave={handleSaveName}
         />
       </div>
 
