@@ -121,7 +121,8 @@ const badWords = [
   "แรด",
   "ตายซะ",
   "ปากหมา",
-  "ไอสัตร์นรก", "ไอสัตว์นรก",
+  "ไอสัตร์นรก",
+  "ไอสัตว์นรก",
 ];
 
 const AddAndHistory = () => {
@@ -130,9 +131,9 @@ const AddAndHistory = () => {
   const [notification, setNotification] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showRecommend, setRecommend] = useState(false);
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   const router = useRouter();
-  console.log(user?.name)
+  console.log(user?.name);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -144,18 +145,18 @@ const AddAndHistory = () => {
   };
   useEffect(() => {
     // ดึงข้อมูลจาก localStorage
-    const storedUser = localStorage.getItem('profileUser');
+    const storedUser = localStorage.getItem("profileUser");
 
     if (storedUser) {
       // แปลงข้อมูล JSON เป็นอ็อบเจกต์
       const user = JSON.parse(storedUser);
-      setUser(user)
+      setUser(user);
       // ใช้งานข้อมูลผู้ใช้ตามต้องการ
       console.log(user);
     } else {
-      console.log('No user data found in localStorage');
+      console.log("No user data found in localStorage");
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -166,7 +167,10 @@ const AddAndHistory = () => {
       }
 
       try {
-        const response = await axios.post("http://localhost:8888/api/messages", { email });
+        const response = await axios.post(
+          "http://localhost:8888/api/messages",
+          { email }
+        );
         if (response.data.length > 0) {
           const filteredMessages = response.data.map((msg) => {
             return {
@@ -193,7 +197,6 @@ const AddAndHistory = () => {
     }
   }, [user]); // เพิ่ม user เป็น dependency
 
-
   const handleSave = async () => {
     const regexPattern = new RegExp(
       badWords
@@ -215,12 +218,12 @@ const AddAndHistory = () => {
       setNotification("ข้อความของคุณไม่น่ารักเลยนะคะ ไม่สามารถบันทึกได้ค่ะ");
       return;
     }
-    const email = user?.email
-    const nickName = user?.name
+    const email = user?.email;
+    const nickName = user?.name;
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
-        { message, email,nickName }
+        { message, email, nickName }
       );
 
       setMessages([response.data, ...messages]);
@@ -257,8 +260,8 @@ const AddAndHistory = () => {
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('addAndHistory.jpg')" }}
-    ><div>
-
+    >
+      <div>
         <div className="fixed top-4 left-4 flex items-center space-x-4">
           <button className="flex items-center space-x-2">
             <div
@@ -274,21 +277,25 @@ const AddAndHistory = () => {
             <div onClick={indexClick} className="text-white font-serif">
               Daily Boost
             </div>
-          </button> 
-          <div className="flex justify-end">
-            <div className="flex justify-center m-5">
-              <button
-                id="successButton"
-                onClick={handleOpenModal}
-                className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Show success message
-              </button>
-            </div>
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} email={user?.email}/>
-          </div>
+          </button>
         </div>
+        <div className="fixed top-4 right-4">
+          <button
+            id="successButton"
+            onClick={handleOpenModal}
+            className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Show success message
+          </button>
+        </div>
+
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          email={user?.email}
+        />
       </div>
+
       <div className="w-full max-w-4xl p-8 flex flex-col items-center justify-center">
         <div className="flex-1 text-center">
           <h1 className="text-4xl font-serif text-white">
