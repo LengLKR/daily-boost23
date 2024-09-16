@@ -126,7 +126,6 @@ const badWords = [
 ];
 
 const AddAndHistory = () => {
-
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState("");
@@ -134,7 +133,7 @@ const AddAndHistory = () => {
   const [showRecommend, setRecommend] = useState(false);
   const [user, setUser] = useState(null);
   const router = useRouter();
-   console.log(user?.name);
+  console.log(user?.name);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSaveName = (name) => {
@@ -145,7 +144,6 @@ const AddAndHistory = () => {
       return updatedUser;
     });
   };
-  
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -162,7 +160,7 @@ const AddAndHistory = () => {
       setUser(user);
     }
   }, []);
-  
+
   useEffect(() => {
     const fetchMessages = async () => {
       const email = user?.email;
@@ -193,7 +191,7 @@ const AddAndHistory = () => {
         }
       } catch (error) {
         console.error("เกิดข้อผิดพลาดในการดึงข้อความ:", error);
-        setNotification("เกิดข้อผิดพลาดในการดึงข้อความ.");
+        setNotification("ใส่ข้อความที่ช่อง 👇🏻ได้เลยค่ะ ");
       }
     };
 
@@ -220,13 +218,15 @@ const AddAndHistory = () => {
     }
 
     if (containsBadWords(message)) {
-      setNotification("ข้อความของคุณไม่น่ารักเลยนะคะ ไม่สามารถบันทึกได้ค่ะ");
+      setNotification(
+        "ข้อความของคุณไม่น่ารักเลยนะคะ 🫵🏻 ไม่สามารถบันทึกได้ค่ะ"
+      );
       return;
     }
 
     const email = user?.email;
     const nickName = user?.name;
-      
+
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
@@ -292,7 +292,7 @@ const AddAndHistory = () => {
             onClick={handleOpenModal}
             className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            {user?.name || "Show success message"}{" "}
+            {user?.name || "ตั้งชื่อของคุณได้เลย"}{" "}
           </button>
         </div>
 
@@ -323,17 +323,21 @@ const AddAndHistory = () => {
                 <h2 className="text-xl text-left font-serif text-purple-600 mb-4">
                   ข้อความแนะนำ
                 </h2>
-                <p className="text-gray-800  font-serif">
-                  เลือกข้อความจากประวัติได้เลยค่ะ
+                <p className="text-gray-800 font-serif">
+                  เลือกข้อความที่ต้องการได้เลยค่ะ
                 </p>
                 <ul className="max-h-40 overflow-y-auto">
-                  {messages.map((msg) => (
+                  {[
+                    "ขอให้มีความสุขในยามเช้า",
+                    "ตอนเช้าที่สดใสขอให้เจอแต่เรื่องดีๆน้า",
+                    "ไม่ว่าเจออะไรมาขอให้เจอสิ่งดีๆในตอนเช้าน้า",
+                  ].map((msg, index) => (
                     <li
-                      key={msg.id}
+                      key={index}
                       className="p-2 mb-2 text-black bg-gray-200 rounded-lg shadow cursor-pointer hover:bg-purple-300"
-                      onClick={() => handleHistoryClick(msg.text)}
+                      onClick={() => handleHistoryClick(msg)}
                     >
-                      {msg.text}
+                      {msg}
                     </li>
                   ))}
                 </ul>
