@@ -92,7 +92,7 @@ export default function Home() {
   const logoutClick = async () => {
     await signOut(auth);
     setIsLoggedIn(false);
-    localStorage.removeItem("profileUser"); 
+    localStorage.removeItem("profileUser");
     router.push("/");
   };
 
@@ -192,12 +192,12 @@ export default function Home() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-  
+
       // ตรวจสอบว่าผู้ใช้มีอยู่ในฐานข้อมูลหรือไม่
       const usersCollection = collection(db, "users");
       const q = query(usersCollection, where("email", "==", user.email));
       const querySnapshot = await getDocs(q);
-  
+
       if (querySnapshot.empty) {
         // ถ้าไม่มีผู้ใช้ในฐานข้อมูล ให้เพิ่มข้อมูลใหม่
         const newUser = {
@@ -205,7 +205,7 @@ export default function Home() {
           displayName: user.displayName,
           createdAt: new Date(),
         };
-  
+
         await setDoc(doc(db, "users", user.uid), newUser);
         // เก็บข้อมูลผู้ใช้ใน localStorage
         localStorage.setItem("profileUser", JSON.stringify(newUser));
@@ -214,14 +214,13 @@ export default function Home() {
         const userData = querySnapshot.docs[0].data();
         localStorage.setItem("profileUser", JSON.stringify(userData));
       }
-  
+
       setShowLoginModal(false);
       router.push("/addAndHistory");
     } catch (error) {
       alert("Google sign-in failed: " + error.message);
     }
   };
-  
 
   const loginWithPhone = () => {
     router.push("/phoneLogin");
@@ -234,7 +233,11 @@ export default function Home() {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('bg_index.png')" }}
+      style={{
+        backgroundImage: "url('bg_index.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       <div className="fixed top-4 right-4 flex items-center space-x-4">
         {isLoggedIn ? (
@@ -464,7 +467,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-              {isLogin && ( 
+              {isLogin && (
                 <button
                   type="button"
                   onClick={goToForgetPassword}

@@ -266,7 +266,11 @@ const AddAndHistory = () => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('addAndHistory.jpg')" }}
+      style={{
+        backgroundImage: "url('addAndHistory.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       <div>
         <div className="fixed top-4 left-4 flex items-center space-x-4">
@@ -320,7 +324,8 @@ const AddAndHistory = () => {
           {showRecommend && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
-                <h2 className="text-xl text-left font-serif text-purple-600 mb-4">
+
+                <h2 className="text-xl text-left font-serif text-blue-500 mb-4">
                   ข้อความแนะนำ
                 </h2>
                 <p className="text-gray-800 font-serif">

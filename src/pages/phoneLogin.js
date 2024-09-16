@@ -112,18 +112,21 @@ const PhoneLogin = () => {
     router.push("/?showLogin=true");
   };
 
- 
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-100"
-      style={{ backgroundImage: "url('withPhone.jpg')" }}
+      style={{
+        backgroundImage: "url('withPhone.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-        <div>
+      <div>
         <button
           className="fixed top-4 left-4 z-50 text-4xl text-white underline hover:text-blue-800 transition-colors font-serif"
           onClick={BackToLogin}
         >
-         <IoMdArrowRoundBack />
+          <IoMdArrowRoundBack />
         </button>
       </div>
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

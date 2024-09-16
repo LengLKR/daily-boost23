@@ -40,7 +40,7 @@ const ForgetPassword = () => {
   const handleBackToLogin = () => {
     router.push("/?showLogin=true");
   };
-  
+
   const BackToLogin = () => {
     router.push("/?showLogin=true");
   };
@@ -48,7 +48,9 @@ const ForgetPassword = () => {
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: "url('Forget_password.jpg')", 
+        backgroundImage: "url('Forget_password.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       <div>
@@ -56,7 +58,7 @@ const ForgetPassword = () => {
           className="fixed top-4 left-4 z-50 text-4xl text-black underline hover:text-white transition-colors font-serif"
           onClick={BackToLogin}
         >
-         <IoMdArrowRoundBack />
+          <IoMdArrowRoundBack />
         </button>
       </div>
       <div className="w-full max-w-md p-6 bg-black rounded-lg shadow-md">
