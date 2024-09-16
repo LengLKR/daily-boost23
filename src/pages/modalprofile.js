@@ -8,7 +8,7 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "./google"; // นำเข้าการตั้งค่า Firebase ของคุณ
+import { db } from "./google"; 
 
 const Modal = ({ isOpen, onClose, email, onSave }) => {
   const [formData, setFormData] = useState({

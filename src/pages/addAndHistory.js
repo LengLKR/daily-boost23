@@ -126,6 +126,7 @@ const badWords = [
 ];
 
 const AddAndHistory = () => {
+
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState("");
@@ -222,8 +223,10 @@ const AddAndHistory = () => {
       setNotification("ข้อความของคุณไม่น่ารักเลยนะคะ ไม่สามารถบันทึกได้ค่ะ");
       return;
     }
+
     const email = user?.email;
     const nickName = user?.name;
+      
     try {
       const response = await axios.post(
         "http://localhost:8888/api/saveMessage",
