@@ -92,6 +92,7 @@ export default function Home() {
   const logoutClick = async () => {
     await signOut(auth);
     setIsLoggedIn(false);
+    localStorage.removeItem("profileUser"); 
     router.push("/");
   };
 
