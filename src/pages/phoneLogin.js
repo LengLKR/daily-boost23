@@ -7,12 +7,14 @@ import {
   PhoneAuthProvider,
   signInWithCredential,
 } from "firebase/auth";
-
+import { useRouter } from "next/router";
+import { IoMdArrowRoundBack } from "react-icons/io";
 const PhoneLogin = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [verificationId, setVerificationId] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const router = useRouter();
 
   // Firebase Configuration
   const firebaseConfig = {
@@ -26,7 +28,6 @@ const PhoneLogin = () => {
     appId: "1:265220609618:web:63c2055428b0a05baef18b",
     measurementId: "G-J63G9Y5YHJ",
   };
-
 
   // Initialize Firebase
   let app;
@@ -42,7 +43,8 @@ const PhoneLogin = () => {
   // Setup Recaptcha
   const setupRecaptcha = () => {
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(   auth,
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
         "recaptcha-container", // ต้องมี id "recaptcha-container" ใน DOM
         {
           size: "invisible", // หรือใช้ "normal" เพื่อแสดง
@@ -50,18 +52,22 @@ const PhoneLogin = () => {
             console.log("Recaptcha solved successfully.");
           },
           "expired-callback": () => {
-            console.log("Recaptcha expired. Please retry",requestOtp);
+            console.log("Recaptcha expired. Please retry", requestOtp);
           },
         }
-
       );
-      window.recaptchaVerifier.render().then((widgetId) => {
-        console.log("Recaptcha rendered successfully with widgetId:", widgetId);
-      })
-      .catch((error) => {
-        alert(error.toString())
-        console.error("Error rendering Recaptcha:", error);
-      });
+      window.recaptchaVerifier
+        .render()
+        .then((widgetId) => {
+          console.log(
+            "Recaptcha rendered successfully with widgetId:",
+            widgetId
+          );
+        })
+        .catch((error) => {
+          alert(error.toString());
+          console.error("Error rendering Recaptcha:", error);
+        });
     }
   };
 
@@ -69,15 +75,22 @@ const PhoneLogin = () => {
   const requestOtp = async (e) => {
     e.preventDefault();
     setupRecaptcha();
-    const applicationVerifier = new RecaptchaVerifier(auth,'recaptcha-container');
+    const applicationVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container"
+    );
     // try {
-    if(phoneNumber?.startsWith("0")){
-      setPhoneNumber("+66"+ phoneNumber.substring(0,1))
+    if (phoneNumber?.startsWith("0")) {
+      setPhoneNumber("+66" + phoneNumber.substring(0, 1));
     }
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, applicationVerifier);
-      // const credential = await confirmationResult.confirm(verificationCode);
-      setVerificationId(confirmationResult.verificationId);
-      setIsOtpSent(true);
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      applicationVerifier
+    );
+    // const credential = await confirmationResult.confirm(verificationCode);
+    setVerificationId(confirmationResult.verificationId);
+    setIsOtpSent(true);
     // } catch (error) {
     //   console.error("Error sending OTP:", error);
     //   alert(error.toString())
@@ -95,9 +108,24 @@ const PhoneLogin = () => {
       console.log("Error verifying OTP:", error);
     }
   };
+  const BackToLogin = () => {
+    router.push("/?showLogin=true");
+  };
 
+ 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gray-100"
+      style={{ backgroundImage: "url('withPhone.jpg')" }}
+    >
+        <div>
+        <button
+          className="fixed top-4 left-4 z-50 text-4xl text-white underline hover:text-blue-800 transition-colors font-serif"
+          onClick={BackToLogin}
+        >
+         <IoMdArrowRoundBack />
+        </button>
+      </div>
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
           Login with Phone

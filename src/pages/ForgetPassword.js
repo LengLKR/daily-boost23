@@ -40,6 +40,7 @@ const ForgetPassword = () => {
   const handleBackToLogin = () => {
     router.push("/?showLogin=true");
   };
+  
   const BackToLogin = () => {
     router.push("/?showLogin=true");
   };

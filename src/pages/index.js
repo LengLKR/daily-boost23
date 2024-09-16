@@ -315,7 +315,7 @@ export default function Home() {
             <QRCodeComponent lineID="@686bymtt" />
             <button
               onClick={toggleQRCode}
-              className="mt-4 px-4 py-2 text-white font-serif  bg-violet-500 rounded-full shadow-lg hover:bg-violet-600   transition-all duration-300 transform hover:scale-105"
+              className="mt-4 px-4 py-2 text-white font-serif  bg-blue-500 rounded-full shadow-lg hover:bg-blue-600   transition-all duration-300 transform hover:scale-105"
             >
               ปิด
             </button>
@@ -486,7 +486,7 @@ export default function Home() {
                     className="p-1 bg-white rounded-full"
                     onClick={loginWithPhone}
                   >
-                    <FaPhoneAlt className="text-2xl text-purple-500" />
+                    <FaPhoneAlt className="text-2xl text-black" />
                   </button>
                   <button
                     type="button"

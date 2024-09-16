@@ -11,14 +11,11 @@ import {
 import { auth, googleProvider } from "./google";
 import { sendDataToFirestore } from "./service";
 
-
-
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
 
   const handleToggle = () => {
     setIsLogin(!isLogin);
