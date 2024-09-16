@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./google"; // นำเข้าการตั้งค่า Firebase ของคุณ
 
-const Modal = ({ isOpen, onClose, email }) => {
+const Modal = ({ isOpen, onClose, email, onSave }) => {
   const [formData, setFormData] = useState({
     name: "",
   });
@@ -23,6 +23,7 @@ const Modal = ({ isOpen, onClose, email }) => {
     });
   };
 
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -62,9 +63,7 @@ const Modal = ({ isOpen, onClose, email }) => {
         })
       );
 
-      console.log("Users updated successfully");
-
-      // ตรวจสอบว่า formData.name มีค่าอยู่หรือไม่
+      // อัพเดทข้อมูลใน messages
       const nickName = formData?.name;
       if (nickName) {
         const messagesCollection = collection(db, "messages");
@@ -92,12 +91,11 @@ const Modal = ({ isOpen, onClose, email }) => {
               );
             })
           );
-
-          console.log("Messages updated successfully");
         }
       }
 
       console.log("ข้อมูลถูกบันทึกเรียบร้อยแล้ว:", formData);
+      onSave(formData.name); // เรียก onSave เพื่อส่งชื่อที่อัปเดตกลับไปยัง parent component
       onClose();
     } catch (error) {
       alert("การบันทึกข้อมูลล้มเหลว: " + error.message);

@@ -133,13 +133,18 @@ const AddAndHistory = () => {
   const [showRecommend, setRecommend] = useState(false);
   const [user, setUser] = useState(null);
   const router = useRouter();
-  console.log(user?.name);
+   console.log(user?.name);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSaveName = (name) => {
-    setUser((prevUser) => ({ ...prevUser, name }));
+    setUser((prevUser) => {
+      const updatedUser = { ...prevUser, name };
+      // Save updated user to localStorage
+      localStorage.setItem("profileUser", JSON.stringify(updatedUser));
+      return updatedUser;
+    });
   };
-
+  
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -148,21 +153,15 @@ const AddAndHistory = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    // ดึงข้อมูลจาก localStorage
-    const storedUser = localStorage.getItem("profileUser");
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("profileUser");
     if (storedUser) {
-      // แปลงข้อมูล JSON เป็นอ็อบเจกต์
       const user = JSON.parse(storedUser);
       setUser(user);
-      // ใช้งานข้อมูลผู้ใช้ตามต้องการ
-      console.log(user);
-    } else {
-      console.log("No user data found in localStorage");
     }
   }, []);
-
+  
   useEffect(() => {
     const fetchMessages = async () => {
       const email = user?.email;
