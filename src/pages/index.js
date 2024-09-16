@@ -192,12 +192,36 @@ export default function Home() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+  
+      // ตรวจสอบว่าผู้ใช้มีอยู่ในฐานข้อมูลหรือไม่
+      const usersCollection = collection(db, "users");
+      const q = query(usersCollection, where("email", "==", user.email));
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        // ถ้าไม่มีผู้ใช้ในฐานข้อมูล ให้เพิ่มข้อมูลใหม่
+        const newUser = {
+          email: user.email,
+          displayName: user.displayName,
+          createdAt: new Date(),
+        };
+  
+        await setDoc(doc(db, "users", user.uid), newUser);
+        // เก็บข้อมูลผู้ใช้ใน localStorage
+        localStorage.setItem("profileUser", JSON.stringify(newUser));
+      } else {
+        // ถ้ามีผู้ใช้อยู่แล้วในฐานข้อมูล ให้เก็บข้อมูลที่ได้จากฐานข้อมูล
+        const userData = querySnapshot.docs[0].data();
+        localStorage.setItem("profileUser", JSON.stringify(userData));
+      }
+  
       setShowLoginModal(false);
       router.push("/addAndHistory");
     } catch (error) {
       alert("Google sign-in failed: " + error.message);
     }
   };
+  
 
   const loginWithPhone = () => {
     router.push("/phoneLogin");
