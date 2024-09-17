@@ -155,6 +155,16 @@ const AddAndHistory = () => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("profileUser");
+    if (!storedUser) {
+      router.push("/");
+    } else {
+      const user = JSON.parse(storedUser);
+      setUser(user);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("profileUser");
     if (storedUser) {
       const user = JSON.parse(storedUser);
       setUser(user);
@@ -327,6 +337,7 @@ const AddAndHistory = () => {
 
                 <h2 className="text-xl text-left font-serif text-blue-500 mb-4">
                   ข้อความแนะนำ
+
                 </h2>
                 <p className="text-gray-800 font-serif">
                   เลือกข้อความที่ต้องการได้เลยค่ะ
