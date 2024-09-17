@@ -274,7 +274,7 @@ export default function Home() {
           <img
             src="/logo_web.png"
             alt="Home Icon"
-            className="w-full h-full object-cover"
+            className=" transition-transform duration-500 hover:rotate-180 group-hover:text-black object-cover w-full h-full"
           />
         </div>
         <div className="text-white font-serif ">Daily Boost</div>

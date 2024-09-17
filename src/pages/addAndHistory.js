@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Modal from "./modalprofile";
+import Head from "next/head";
 
 const badWords = [
   "ควย",
@@ -282,6 +283,11 @@ const AddAndHistory = () => {
         backgroundPosition: "center",
       }}
     >
+      <Head>
+        <title>addAndHistory</title>
+        <link rel="icon" href="/11zon_cropped.jpg" />
+      </Head>
+
       <div>
         <div className="fixed top-4 left-4 flex items-center space-x-4">
           <button className="flex items-center space-x-2">
@@ -290,9 +296,9 @@ const AddAndHistory = () => {
               className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-white shadow-lg"
             >
               <img
-                src="https://cdn.discordapp.com/attachments/1078547722879107163/1283640731147436094/moon_logo_half_580c61bd-cc8f-484c-9ea0-1b9414888ae1.png?ex=66e3bb17&is=66e26997&hm=989fac35a3906898079a102183d6f5208e5e5d34abc98b97c40ecd2592d12ffd&"
+                src="/logo_web.png"
                 alt="Home Icon"
-                className="w-full h-full object-cover"
+                className=" transition-transform duration-500 hover:rotate-180 group-hover:text-black object-cover w-full h-full"
               />
             </div>
             <div onClick={indexClick} className="text-white font-serif">
@@ -334,12 +340,10 @@ const AddAndHistory = () => {
           {showRecommend && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
-
                 <h2 className="text-xl text-left font-serif text-blue-500 mb-4">
                   ข้อความแนะนำ
-
                 </h2>
-                <p className="text-gray-800 font-serif">
+                <p className="text-gray-800 font-serif mb-2">
                   เลือกข้อความที่ต้องการได้เลยค่ะ
                 </p>
                 <ul className="max-h-40 overflow-y-auto">
@@ -347,10 +351,16 @@ const AddAndHistory = () => {
                     "ขอให้มีความสุขในยามเช้า",
                     "ตอนเช้าที่สดใสขอให้เจอแต่เรื่องดีๆน้า",
                     "ไม่ว่าเจออะไรมาขอให้เจอสิ่งดีๆในตอนเช้าน้า",
+                    "ตื่นมาเริ่มต้นวันใหม่ด้วยความสดใสและรอยยิ้มนะ!",
+                    "เช้านี้รับพลังบวกเต็มๆ ไปเลยนะ ขอให้เป็นวันที่แสนดี!",
+                    "เริ่มต้นวันใหม่ด้วยหัวใจที่เต็มไปด้วยความสุขนะ!",
+                    "ขอให้เช้านี้เต็มไปด้วยความสดใสและกำลังใจที่ดี!",
+                    "เช้านี้ดื่มกาแฟและรับความสุขในวันใหม่ไปพร้อมๆ กัน!",
+                    "เช้านี้ขอให้คุณพบเจอแต่สิ่งที่ทำให้คุณยิ้มได้ทั้งวัน!",
                   ].map((msg, index) => (
                     <li
                       key={index}
-                      className="p-2 mb-2 text-black bg-gray-200 rounded-lg shadow cursor-pointer hover:bg-purple-300"
+                      className="p-2 mb-2 text-black bg-gray-200 rounded-lg shadow cursor-pointer hover:bg-blue-300"
                       onClick={() => handleHistoryClick(msg)}
                     >
                       {msg}
@@ -359,7 +369,7 @@ const AddAndHistory = () => {
                 </ul>
                 <button
                   onClick={toggleRecommend}
-                  className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
+                  className="mt-4 px-4 py-2 text-white font-serif bg-indigo-500 rounded-full shadow-lg hover:bg-indigo-600 transition-all duration-300 transform hover:scale-105 w-full"
                 >
                   ปิด
                 </button>
