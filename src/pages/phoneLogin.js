@@ -129,8 +129,8 @@ const PhoneLogin = () => {
           <IoMdArrowRoundBack />
         </button>
       </div>
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+      <div className="bg-black p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-semibold text-center text-white mb-6">
           Login with Phone
         </h2>
         <div id="recaptcha-container"></div>
