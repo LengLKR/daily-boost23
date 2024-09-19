@@ -50,3 +50,69 @@ body {
     background-color: #B794F4; /* สีม่วงเข้มขึ้นเล็กน้อยเมื่อ hover */
   }
 }
+
+@keyframes fly {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  5% {
+    transform: translate(10vw, 5vh) rotate(10deg);
+  }
+  10% {
+    transform: translate(20vw, 10vh) rotate(20deg);
+  }
+  15% {
+    transform: translate(30vw, 15vh) rotate(-15deg);
+  }
+  20% {
+    transform: translate(40vw, -5vh) rotate(-30deg);
+  }
+  30% {
+    transform: translate(50vw, 10vh) rotate(0deg);
+  }
+  40% {
+    transform: translate(60vw, 20vh) rotate(50deg);
+  }
+  50% {
+    transform: translate(70vw, 50vh) rotate(30deg);
+  }
+  60% {
+    transform: translate(80vw, 40vh) rotate(-20deg);
+  }
+  70% {
+    transform: translate(70vw, 60vh) rotate(70deg);
+  }
+  80% {
+    transform: translate(60vw, 70vh) rotate(-60deg);
+  }
+  90% {
+    transform: translate(50vw, 50vh) rotate(40deg);
+  }
+  95% {
+    transform: translate(30vw, 30vh) rotate(-30deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(-45deg);
+  }
+}
+
+.bird {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  background-image: url('/path/to/bird-image.png'); /* แทนที่ด้วย URL ของรูปนก */
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: fly 30s infinite; /* เพิ่มเวลาแอนิเมชัน */
+  pointer-events: auto; /* เปิดการคลิกได้ */
+  transition: transform 0.5s ease, filter 0.5s ease; /* เพิ่ม transition */
+}
+
+.bird.clicked {
+  transform: scale(1.2) rotate(360deg); /* เพิ่มเอฟเฟกต์การหมุนและขยาย */
+  filter: brightness(1.5); /* เพิ่มความสว่าง */
+}
+
+.bird.fly {
+  animation: fly 30s infinite;
+}
