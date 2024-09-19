@@ -373,7 +373,7 @@ const AddAndHistory = () => {
       transform: `rotate(${birdPosition.angle}deg)`,
       width: "100px",
       height: "100px",
-      backgroundImage: "url('/flying-7288_256.gif')",
+      backgroundImage: "url('/turtlecoin-hummingbird.gif')",
       backgroundSize: "cover",
       transition: "left 0.5s linear, top 0.5s linear, transform 0.5s linear",
     }}
