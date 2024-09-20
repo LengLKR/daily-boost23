@@ -350,6 +350,9 @@ export default function Home() {
             cursor: "pointer",
         }}
       ></div>
+      <div>
+        <image/>
+      </div>
 
       <div className="fixed top-4 right-4 flex items-center space-x-4">
         {isLoggedIn ? (
