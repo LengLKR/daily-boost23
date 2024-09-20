@@ -37,6 +37,92 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState(null);
+  const [isFlying, setIsFlying] = useState(true);
+  const [speed, setSpeed] = useState(5); // เพิ่มตัวแปร speed เพื่อควบคุมความเร็ว
+  const [birdPosition, setBirdPosition] = useState({
+    x: 100,
+    y: 100,
+    angle: 0,
+  });
+  const [direction, setDirection] = useState({ x: 1, y: 1 }); // กำหนดให้เป็นวัตถุเพื่อลดข้อผิดพลาด
+  const [isMoving, setIsMoving] = useState(true);
+
+  useEffect(() => {
+    let animationFrameId;
+
+    const moveBird = () => {
+      if (!isMoving) return;
+
+      setBirdPosition((prevPosition) => {
+        // ปรับความเร็วให้สมูทขึ้น
+        let newX = prevPosition.x + speed * direction.x * 0.5;
+        let newY = prevPosition.y + speed * direction.y * 0.5;
+
+        // กำหนดขนาดของพื้นหลัง
+        const backgroundWidth = window.innerWidth;
+        const backgroundHeight = window.innerHeight;
+
+        // กำหนดขนาดของนก
+        const birdWidth = 100;
+        const birdHeight = 100;
+
+        // กำหนดขอบปลอดภัยเพื่อให้นกอยู่ในพื้นที่หน้าจอที่มองเห็นได้มากขึ้น
+        const safeMargin = 100;
+
+        // ตรวจสอบการชนขอบของพื้นหลัง และทำการสุ่มเปลี่ยนทิศทาง
+        let newDirectionX = direction.x;
+        let newDirectionY = direction.y;
+
+        if (
+          newX >= backgroundWidth - birdWidth - safeMargin ||
+          newX <= safeMargin
+        ) {
+          newDirectionX = -direction.x; // เปลี่ยนทิศทางแกน X
+          newDirectionY = Math.random() > 0.5 ? 1 : -1; // สุ่มทิศทางแกน Y เพื่อไม่ให้นกบินกลับในทิศทางเดิม
+        }
+
+        if (
+          newY >= backgroundHeight - birdHeight - safeMargin ||
+          newY <= safeMargin
+        ) {
+          newDirectionY = -direction.y; // เปลี่ยนทิศทางแกน Y
+          newDirectionX = Math.random() > 0.5 ? 1 : -1; // สุ่มทิศทางแกน X เพื่อไม่ให้นกบินกลับในทิศทางเดิม
+        }
+
+        // อัปเดตทิศทางใหม่
+        setDirection({ x: newDirectionX, y: newDirectionY });
+
+        // ตรวจสอบการหลุดขอบและแก้ไข
+        newX = Math.min(
+          Math.max(newX, safeMargin),
+          backgroundWidth - birdWidth - safeMargin
+        );
+        newY = Math.min(
+          Math.max(newY, safeMargin),
+          backgroundHeight - birdHeight - safeMargin
+        );
+
+        // เพิ่มการขยับมุมเพื่อให้บินแบบโค้ง
+        return { x: newX, y: newY, angle: prevPosition.angle + 1 };
+      });
+
+      animationFrameId = requestAnimationFrame(moveBird);
+    };
+
+    if (isMoving) {
+      animationFrameId = requestAnimationFrame(moveBird);
+    }
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [isMoving, direction, speed]);
+
+  // ฟังก์ชันเมื่อคลิกที่นก
+  const handleClick = () => {
+    setIsMoving((prev) => !prev); // สลับสถานะการเคลื่อนไหว
+    setSpeed((prevSpeed) => prevSpeed + 2); // เพิ่มความเร็วเมื่อคลิกที่นก
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -233,17 +319,37 @@ export default function Home() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
+      className="flex flex-col items-center justify-center  bg-cover bg-center relative"
       style={{
+        width: "100vw", 
+        height: "100vh", 
         backgroundImage: "url('bg_index.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
+        overflow: "hidden", 
       }}
     >
       <Head>
         <title>Daily Boost</title>
         <link rel="icon" href="/11zon_cropped.jpg" />
       </Head>
+      <div
+        className="bird"
+        onClick={handleClick}
+        style={{
+          position: "absolute",
+          left: `${birdPosition.x}px`,
+          top: `${birdPosition.y}px`,
+          transform: `rotate(${birdPosition.angle}deg)`,
+          width: "100px",
+          height: "100px",
+          backgroundImage: "url('14-53-01-699_512.webp')",
+          backgroundSize: "contain",
+          transition:
+            "left 0.5s linear, top 0.5s linear, transform 0.5s linear",
+            cursor: "pointer",
+        }}
+      ></div>
 
       <div className="fixed top-4 right-4 flex items-center space-x-4">
         {isLoggedIn ? (
@@ -268,7 +374,6 @@ export default function Home() {
           </button>
         )}
       </div>
-
       <div className="fixed top-4 left-4 flex items-center space-x-4">
         <div className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
@@ -279,7 +384,6 @@ export default function Home() {
         </div>
         <div className="text-white font-serif ">Daily Boost</div>
       </div>
-
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
         <div className="w-full max-w-3xl">
           <p className="text-lg text-white font-serif ">Daily Boost!</p>
@@ -316,7 +420,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
       {showQRCode && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -331,7 +434,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
       {/* ปุ่มที่มุมขวาล่าง */}
       <div className="fixed bottom-4 right-4 z-50">
         <button
@@ -341,7 +443,6 @@ export default function Home() {
           คำแนะนำการใช้งาน
         </button>
       </div>
-
       {/* ป๊อปอัพสำหรับแสดงคำแนะนำการใช้งาน */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -390,7 +491,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
       {/* ป๊อปอัพสำหรับการล็อกอิน */}
       {showLoginModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
