@@ -343,7 +343,7 @@ export default function Home() {
           transform: `rotate(${birdPosition.angle}deg)`,
           width: "100px",
           height: "100px",
-          backgroundImage: "url('14-53-01-699_512.webp')",
+          backgroundImage: "url('butterfly-5707_256.gif')",
           backgroundSize: "contain",
           transition:
             "left 0.5s linear, top 0.5s linear, transform 0.5s linear",

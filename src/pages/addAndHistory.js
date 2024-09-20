@@ -380,13 +380,13 @@ const AddAndHistory = () => {
         className="bird"
         onClick={handleClick}
         style={{
-          position: "absolute",
+          position: "absolute",cursor: "pointer",
           left: `${birdPosition.x}px`,
           top: `${birdPosition.y}px`,
           transform: `rotate(${birdPosition.angle}deg)`,
           width: "100px",
           height: "100px",
-          backgroundImage: "url('14-53-01-699_512.webp')",
+          backgroundImage: "url('butterfly-5707_256.gif')",
           backgroundSize: "contain",
           transition:
             "left 0.5s linear, top 0.5s linear, transform 0.5s linear",
@@ -543,12 +543,12 @@ const AddAndHistory = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl font-serif text-purple-600 mb-4">
+            <h2 className="text-xl font-serif text-blue-500 mb-4">
               คำแนะนำการใช้งาน
             </h2>
             <p className="text-gray-700 font">
               สามารถนำข้อความของคุณใส่ตรง{" "}
-              <span className="text-purple-400 font-serif">
+              <span className="text-blue-500 font-serif">
                 ช่องแบ่งปันข้อความ
               </span>{" "}
               ได้เลยนะคะ มาแบ่งปันข้อความของคุณให้กับคนที่คุณรัก และ ห่วงใย
@@ -556,7 +556,7 @@ const AddAndHistory = () => {
             </p>
             <button
               onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-serif bg-purple-500 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 w-full"
+              className="mt-4 px-4 py-2 text-white font-serif bg-blue-500 rounded-full shadow-lg hover:bg-blue-700  transition-all duration-300 transform hover:scale-105 w-full"
             >
               ปิด
             </button>
