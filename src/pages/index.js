@@ -321,12 +321,12 @@ export default function Home() {
     <div
       className="flex flex-col items-center justify-center  bg-cover bg-center relative"
       style={{
-        width: "100vw", 
-        height: "100vh", 
+        width: "100vw",
+        height: "100vh",
         backgroundImage: "url('bg_index.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        overflow: "hidden", 
+        overflow: "hidden",
       }}
     >
       <Head>
@@ -343,17 +343,14 @@ export default function Home() {
           transform: `rotate(${birdPosition.angle}deg)`,
           width: "100px",
           height: "100px",
-          backgroundImage: "url('butterfly-5707_256.gif')",
+          backgroundImage: "url('otw.gif')",
           backgroundSize: "contain",
           transition:
             "left 0.5s linear, top 0.5s linear, transform 0.5s linear",
-            cursor: "pointer",
+          cursor: "pointer",
         }}
       ></div>
-      <div>
-        <image/>
-      </div>
-
+    
       <div className="fixed top-4 right-4 flex items-center space-x-4">
         {isLoggedIn ? (
           <button
@@ -425,12 +422,14 @@ export default function Home() {
       </main>
       {showQRCode && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-serif  mb-4">สแกน QR code</h2>
-            <QRCodeComponent lineID="@686bymtt" />
-            <button
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 ">
+            <h2 className="text-lg font-serif text-black font-bold text-xl justify-center flex mb-4">สแกน QR code</h2>
+            {/* <div className="text-black justify-center flex ">Daily Boost</div> */}
+            <div className="justify-center flex">
+            <QRCodeComponent lineID="@686bymtt" className/>
+            </div><button
               onClick={toggleQRCode}
-              className="mt-4 px-4 py-2 text-white font-serif  bg-blue-500 rounded-full shadow-lg hover:bg-blue-600   transition-all duration-300 transform hover:scale-105"
+              className="mt-4 px-4 py-2 w-full text-white font-serif  bg-blue-500 rounded-full shadow-lg hover:bg-blue-600   transition-all duration-300 transform hover:scale-105"
             >
               ปิด
             </button>
@@ -509,11 +508,10 @@ export default function Home() {
             </h1>
             <div className="flex bg-gray-700 rounded-lg overflow-hidden border border-gray-600 relative">
               <div
-                className={`absolute inset-y-0 bg-gray-500 transition-transform duration-300 ease-in-out ${
-                  isLogin
-                    ? "transform translate-x-0"
-                    : "transform translate-x-full"
-                }`}
+                className={`absolute inset-y-0 bg-gray-500 transition-transform duration-300 ease-in-out ${isLogin
+                  ? "transform translate-x-0"
+                  : "transform translate-x-full"
+                  }`}
                 style={{
                   width: "50%",
                   borderRadius: "0.5rem",
@@ -521,17 +519,15 @@ export default function Home() {
                 }}
               />
               <button
-                className={`flex-1 p-2 z-10 relative ${
-                  isLogin ? "text-white" : "text-gray-400"
-                }`}
+                className={`flex-1 p-2 z-10 relative ${isLogin ? "text-white" : "text-gray-400"
+                  }`}
                 onClick={() => setIsLogin(true)}
               >
                 Login
               </button>
               <button
-                className={`flex-1 p-2 z-10 relative ${
-                  !isLogin ? "text-white" : "text-gray-400"
-                }`}
+                className={`flex-1 p-2 z-10 relative ${!isLogin ? "text-white" : "text-gray-400"
+                  }`}
                 onClick={() => setIsLogin(false)}
               >
                 Sign up

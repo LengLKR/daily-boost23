@@ -11,7 +11,6 @@ const ForgetPassword = () => {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
-
     try {
       await sendPasswordResetEmail(auth, email);
       setMessage("Password reset email sent! Please check your inbox.");

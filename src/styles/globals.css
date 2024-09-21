@@ -116,3 +116,82 @@ body {
 .bird.fly {
   animation: fly 30s infinite;
 }
+
+
+/* styles/global.css */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #1c1f2b;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  background-color: #2d3241;
+  border-radius: 15px;
+  padding: 2rem;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  font-size: 2.2rem;
+  margin: 10px 0;
+}
+
+h2 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+}
+
+a {
+  color: #0070f3;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+input {
+  width: calc(100% - 20px);
+  padding: 12px 10px;
+  border-radius: 5px;
+  border: 1px solid #40444f;
+  margin-bottom: 10px;
+  background-color: #40444f;
+  color: #fff;
+}
+
+button.create-btn {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+button.change-method {
+  background-color: #4e4e59;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
