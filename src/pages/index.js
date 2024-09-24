@@ -423,7 +423,7 @@ export default function Home() {
       {showQRCode && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 ">
-            <h2 className="text-lg font-serif text-black font-bold text-xl justify-center flex mb-4">สแกน QR code</h2>
+            <h2 className="font-serif text-black font-bold text-xl justify-center flex mb-4">สแกน QR code</h2>
             {/* <div className="text-black justify-center flex ">Daily Boost</div> */}
             <div className="justify-center flex">
             <QRCodeComponent lineID="@686bymtt" className/>
