@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import QRCodeComponent from "./line";
 import { useRouter } from "next/router";
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, googleProvider } from "./google"; // อ้างอิงไปที่ Firebase auth
 import { signInWithPopup } from "firebase/auth";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
@@ -323,7 +318,7 @@ export default function Home() {
       style={{
         width: "100vw",
         height: "100vh",
-        backgroundImage: "url('bg_index.png')",
+        backgroundImage: "url('image 1.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         overflow: "hidden",
@@ -333,6 +328,24 @@ export default function Home() {
         <title>Daily Boost</title>
         <link rel="icon" href="/11zon_cropped.jpg" />
       </Head>
+
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=McLaren&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+        />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text&display=swap"
+          rel="stylesheet"
+        />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Lily+Script+One&family=McLaren&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
       <div
         className="bird"
         onClick={handleClick}
@@ -350,27 +363,31 @@ export default function Home() {
           cursor: "pointer",
         }}
       ></div>
-    
+
       <div className="fixed top-4 right-4 flex items-center space-x-4">
         {isLoggedIn ? (
           <button
             onClick={logoutClick}
-            className="flex items-center px-3 py-2 border border-white rounded-full shadow-lg hover:bg-sky-900 transition-colors"
+            className="flex items-center px-3 py-2 border border-[#FF819A] rounded-full shadow-lg hover:bg-[#FFB6C4] transition-colors"
           >
             <div className="flex items-center justify-center w-8 h-8 mr-2  rounded-full overflow-hidden">
               <MdSunny className="text-blue-500 text-8xl" />
             </div>
-            <span className="text-white font-serif ">Log out</span>
+            <span className="text-white font-serif  libre-caslon-text-regular ">
+              Log out
+            </span>
           </button>
         ) : (
           <button
             onClick={loginClick}
-            className="flex items-center px-3 py-2  border border-white rounded-full shadow-lg hover:bg-sky-900 transition-colors"
+            className="flex items-center px-3 py-2  border border-[#FF819A] rounded-full shadow-lg hover:bg-[#FFB6C4] transition-colors"
           >
             <div className="flex items-center justify-center w-8 h-8 mr-2= rounded-full overflow-hidden">
               <RiMoonFill className="text-blue-500 text-xl" />
             </div>
-            <span className="text-white font-serif ">Log in</span>
+            <span className="text-white  font-serif libre-caslon-text-regular ">
+              Log in
+            </span>
           </button>
         )}
       </div>
@@ -382,38 +399,43 @@ export default function Home() {
             className=" transition-transform duration-500 hover:rotate-180 group-hover:text-black object-cover w-full h-full"
           />
         </div>
-        <div className="text-white font-serif ">Daily Boost</div>
+        <div className="text-white text-2xl  lily-script-one-regular ">
+          Daily Boost
+        </div>
       </div>
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
-        <div className="w-full max-w-3xl">
-          <p className="text-lg text-white font-serif ">Daily Boost!</p>
+        <img
+          src="/Group 10.png"
+          className="w-full h-auto object-cover"
+          alt="Group"
+        />
+        <div className="w-full max-w-3xl bg-white  rounded-xl shadow-xl p-9 mt-10 ">
           <h1
-            className="text-4xl text-center font-serif  text-white drop-shadow-lg"
+            className="text-4xl text-center font-serif  text-gray-600 drop-shadow-lg prompt-regular mt-1 "
             style={{ whiteSpace: "nowrap", marginLeft: "20px" }}
           >
             เริ่มต้นวันใหม่ด้วยพลังใจที่สดใสในทุกๆเช้า
           </h1>
-
-          <p className="text-lg text-white mt-4 font-serif ">
+          <p className="text-lg text-gray-600 mt-4 mb-4 font-serif prompt-regular ">
             เพื่อให้คุณพร้อมรับมือกับทุกความท้าทาย ไม่เพียงแค่รับแรงบันดาลใจ
           </p>
-          <p className="text-lg text-white font-serif ">
+          <p className="text-lg text-gray-600 mb-3 font-serif prompt-regular ">
             คุณยังสามารถแบ่งปันข้อความดีๆให้กับคนที่คุณรักและห่วงใยได้เช่นกัน
           </p>
-          <p className="text-lg text-white font-serif ">
+          <p className="text-lg text-gray-600 font-serif prompt-regular">
             มาเติมพลังใจทุกวันกับเรา!
           </p>
 
           <div className="mt-10 flex justify-center items-center space-x-4">
             <button
               onClick={loginClick}
-              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-blue-700 transition-colors border border-white flex items-center"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg bg-[#FF819A] hover:bg-[#FFB6C4] hover:text-white transition-colors border border-pink-300 flex items-center prompt-regular"
             >
               <span>เริ่มต้นใช้งาน</span>
             </button>
             <button
               onClick={toggleQRCode}
-              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg hover:bg-white hover:text-blue-700 transition-colors border border-white flex items-center"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg bg-[#FF819A] hover:bg-[#FFB6C4] hover:text-white transition-colors border border-pink-300 flex items-center prompt-regular"
             >
               <span>รับข้อความ</span>
             </button>
@@ -422,17 +444,36 @@ export default function Home() {
       </main>
       {showQRCode && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96 ">
-            <h2 className="font-serif text-black font-bold text-xl justify-center flex mb-4">สแกน QR code</h2>
-            {/* <div className="text-black justify-center flex ">Daily Boost</div> */}
-            <div className="justify-center flex">
-            <QRCodeComponent lineID="@686bymtt" className/>
-            </div><button
+          <div className="relative bg-white p-6 rounded-lg shadow-lg w-96">
+            <button
               onClick={toggleQRCode}
-              className="mt-4 px-4 py-2 w-full text-white font-serif  bg-blue-500 rounded-full shadow-lg hover:bg-blue-600   transition-all duration-300 transform hover:scale-105"
+              className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-700"
             >
-              ปิด
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
+
+            <h2 className="font-serif text-black font-bold text-xl justify-center flex mb-4 prompt-regular">
+              สแกน QR CODE
+            </h2>
+            <div className="justify-center flex">
+              <QRCodeComponent lineID="@686bymtt" className />
+            </div>
+            <h2 className="font-serif text-black font-bold text-xl justify-center flex mb-4 prompt-regular">
+              สแกน QR CODE เพื่อรับข้อความ
+            </h2>
           </div>
         </div>
       )}
@@ -440,7 +481,7 @@ export default function Home() {
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={toggleMedal}
-          className="text-white text-base underline hover:text-gray-300 transition-colors font-serif"
+          className="text-gray-600 text-xl underline hover:text-gray-700 transition-colors font-serif prompt-regular"
         >
           คำแนะนำการใช้งาน
         </button>
@@ -448,11 +489,31 @@ export default function Home() {
       {/* ป๊อปอัพสำหรับแสดงคำแนะนำการใช้งาน */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl font-serif text-blue-500 mb-4">
+          <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+            <button
+              onClick={toggleMedal}
+              className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            <h2 className="text-xl font-serif text-[#FF819A] mb-4 prompt-regular">
               คำแนะนำการใช้งาน
             </h2>
-            <p className="text-gray-700 font-serif">
+            <p className="text-gray-700 font-serif prompt-regular">
               เป็นเว็บที่ทำขึ้นมาเพื่อแบ่งปันข้อความดีๆให้กับคนที่คุณรัก และ
               ห่วงใยให้มีความสุขในทุกๆเช้าของวัน ทำการ
               <span
@@ -464,7 +525,7 @@ export default function Home() {
                     alert("คุณได้ล็อกอินแล้ว เริ่มต้นใช้งานได้เลยค่ะ");
                   }
                 }}
-                className="text-blue-500 cursor-pointer"
+                className="text-[#FF819A] cursor-pointer"
               >
                 {""} Login {""}
               </span>
@@ -477,41 +538,35 @@ export default function Home() {
                     setShowQRCode(true);
                   }
                 }}
-                className="text-blue-500 cursor-pointer"
+                className="text-[#FF819A] cursor-pointer"
               >
                 {""} QRCode {""}
               </span>
               เพื่อรับข้อความได้เลยค่ะ
             </p>
-
-            <button
-              onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-serif bg-blue-500 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 w-full"
-            >
-              ปิด
-            </button>
           </div>
         </div>
       )}
       {/* ป๊อปอัพสำหรับการล็อกอิน */}
       {showLoginModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-black p-3 rounded-lg shadow-lg max-w-md w-full mx-auto ">
+          <div className="bg-white p-3 rounded-lg shadow-lg max-w-md w-full mx-auto ">
             <button
               onClick={handleCloseLoginModal}
-              className="text-white flex ml-[400px] "
+              className="text-black flex ml-[400px] "
             >
               X
             </button>
-            <h1 className="justify-center text-white text-2xl font-serif  mb-4 flex ">
+            <h1 className="justify-center text-black text-5xl font-serif  mb-4 flex  lily-script-one-regular ">
               {isLogin ? "Login" : "Sign up"}
             </h1>
-            <div className="flex bg-gray-700 rounded-lg overflow-hidden border border-gray-600 relative">
+            <div className="flex bg-gray-300 rounded-lg overflow-hidden border border-gray-300 relative">
               <div
-                className={`absolute inset-y-0 bg-gray-500 transition-transform duration-300 ease-in-out ${isLogin
-                  ? "transform translate-x-0"
-                  : "transform translate-x-full"
-                  }`}
+                className={`absolute inset-y-0 bg-[#FF819A] transition-transform duration-300 ease-in-out ${
+                  isLogin
+                    ? "transform translate-x-0"
+                    : "transform translate-x-full"
+                }`}
                 style={{
                   width: "50%",
                   borderRadius: "0.5rem",
@@ -519,15 +574,21 @@ export default function Home() {
                 }}
               />
               <button
-                className={`flex-1 p-2 z-10 relative ${isLogin ? "text-white" : "text-gray-400"
-                  }`}
+                className={`flex-1 p-2 z-10 relative ${
+                  isLogin
+                    ? "text-white libre-caslon-text-regular"
+                    : "text-white libre-caslon-text-regular"
+                }`}
                 onClick={() => setIsLogin(true)}
               >
                 Login
               </button>
               <button
-                className={`flex-1 p-2 z-10 relative ${!isLogin ? "text-white" : "text-gray-400"
-                  }`}
+                className={`flex-1 p-2 z-10 relative ${
+                  !isLogin
+                    ? "text-white libre-caslon-text-regular"
+                    : "text-white libre-caslon-text-regular"
+                }`}
                 onClick={() => setIsLogin(false)}
               >
                 Sign up
@@ -535,7 +596,7 @@ export default function Home() {
             </div>
             <form
               className="space-y-4 md:space-y-6"
-              style={{ minHeight: "300px" }} // กำหนดความสูงขั้นต่ำ
+              style={{ minHeight: "300px" }}
               onSubmit={isLogin ? handleLogin : handleSignup}
             >
               <div>
@@ -543,8 +604,8 @@ export default function Home() {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-5"
-                  placeholder="name@company.com"
+                  className="bg-gray-50 border border-gray-300 text-gray-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-5 libre-caslon-text-regular"
+                  placeholder="Username"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -556,8 +617,8 @@ export default function Home() {
                     type={showPassword ? "text" : "password"}
                     name="password"
                     id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-12 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Password"
+                    className="bg-gray-50 border border-gray-300 text-gray-600 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pr-12 dark:bg-gray-700 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 libre-caslon-text-regular"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -565,7 +626,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-slate-600"
                     style={{ right: "10px" }}
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -576,14 +637,14 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={goToForgetPassword}
-                  className="text-white flex ml-[290px] font-serif "
+                  className="text-black flex ml-[290px] font-serif  libre-caslon-text-regular"
                 >
                   Forget Password
                 </button>
               )}
               <button
                 type="submit"
-                className="w-full text-black bg-gray-100 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
+                className="w-full text-white bg-[#FF819A] hover:bg-[#FFB6C4] hover:text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 libre-caslon-text-regular"
               >
                 {isLogin ? "Sign in" : "Sign up"}
               </button>
