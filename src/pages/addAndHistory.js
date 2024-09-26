@@ -428,7 +428,7 @@ const AddAndHistory = () => {
             </div>
             <div
               onClick={indexClick}
-              className="text-white text-2xl  lily-script-one-regular"
+              className="text-white text-2xl  lily-script-one-regular bg-gradient-to-r transform  duration-300 hover:scale-105"
             >
               Daily Boost
             </div>
@@ -439,7 +439,7 @@ const AddAndHistory = () => {
           <button
             id="successButton"
             onClick={handleOpenModal}
-            className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-2xl px-5 py-2.5 text-center  mclaren-regular"
+            className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-2xl px-5 py-2.5 text-center  mclaren-regular bg-gradient-to-r transform  duration-300 hover:scale-105"
           >
             {user?.name || "Enter Your Name"}{" "}
           </button>
@@ -465,7 +465,7 @@ const AddAndHistory = () => {
           </h1>
           <p className="text-white mt-3 text-xl prompt-regular">
             คุณสามารถเลือกใช้{" "}
-            <button onClick={toggleRecommend}>
+            <button onClick={toggleRecommend} className="bg-gradient-to-r transform  duration-300 hover:scale-105">
               <u>ข้อความแนะนำ</u>
             </button>{" "}
             ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
@@ -566,7 +566,7 @@ const AddAndHistory = () => {
             ></input>
 
             <button
-              className="  max-w-56 px-6 py-2 m-2 text-white bg-[#FF819A]   hover:bg-[#FFB6C4] rounded-full shadow transition-colors  mclaren-regular "
+              className="  max-w-56 px-6 py-2 m-2 text-white bg-[#FF819A]   hover:bg-[#FFB6C4] rounded-full shadow transition-colors  mclaren-regular bg-gradient-to-r transform  duration-300 hover:scale-105"
               onClick={handleSave}
             >
               Send
@@ -578,7 +578,7 @@ const AddAndHistory = () => {
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={toggleMedal}
-          className="text-gray-600 text-xl underline hover:text-gray-700 transition-colors font-serif prompt-regular"
+          className="text-gray-600 text-xl underline hover:text-gray-700 transition-colors font-serif prompt-regular bg-gradient-to-r transform  duration-300 hover:scale-105"
         >
           คำแนะนำการใช้งาน
         </button>

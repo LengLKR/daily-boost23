@@ -368,24 +368,24 @@ export default function Home() {
         {isLoggedIn ? (
           <button
             onClick={logoutClick}
-            className="flex items-center px-3 py-2 border border-[#FF819A] rounded-full shadow-lg hover:bg-[#FFB6C4] transition-colors"
+            className="flex items-center px-3 py-2 border border-[#FF819A] rounded-full shadow-lg hover:bg-[#FFB6C4] transition-colors bg-gradient-to-r transform  duration-300 hover:scale-105"
           >
             <div className="flex items-center justify-center w-8 h-8 mr-2  rounded-full overflow-hidden">
               <MdSunny className="text-blue-500 text-8xl" />
             </div>
-            <span className="text-white font-serif  libre-caslon-text-regular ">
+            <span className="text-white font-serif  libre-caslon-text-regular  ">
               Log out
             </span>
           </button>
         ) : (
           <button
             onClick={loginClick}
-            className="flex items-center px-3 py-2  border border-[#FF819A] rounded-full shadow-lg hover:bg-[#FFB6C4] transition-colors"
+            className="flex items-center px-3 py-2  border border-[#FF819A] rounded-full shadow-lg hover:bg-[#FFB6C4] transition-colors bg-gradient-to-r transform  duration-300 hover:scale-105"
           >
             <div className="flex items-center justify-center w-8 h-8 mr-2= rounded-full overflow-hidden">
               <RiMoonFill className="text-blue-500 text-xl" />
             </div>
-            <span className="text-white  font-serif libre-caslon-text-regular ">
+            <span className="text-white  font-serif libre-caslon-text-regular  ">
               Log in
             </span>
           </button>
@@ -403,7 +403,7 @@ export default function Home() {
           Daily Boost
         </div>
       </div>
-      
+
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
         <img
           src="/Group 10.png"
@@ -412,7 +412,7 @@ export default function Home() {
         />
         <div className="w-full max-w-3xl bg-white  rounded-xl shadow-xl p-9 mt-10 ">
           <h1
-            className="text-4xl text-center font-serif  text-gray-600 drop-shadow-lg prompt-regular mt-1 "
+            className="text-4xl text-center font-serif  text-gray-600 drop-shadow-lg prompt-regular mt-1  "
             style={{ whiteSpace: "nowrap", marginLeft: "20px" }}
           >
             เริ่มต้นวันใหม่ด้วยพลังใจที่สดใสในทุกๆเช้า
@@ -430,13 +430,13 @@ export default function Home() {
           <div className="mt-10 flex justify-center items-center space-x-4">
             <button
               onClick={loginClick}
-              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg bg-[#FF819A] hover:bg-[#FFB6C4] hover:text-white transition-colors border border-pink-300 flex items-center prompt-regular"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg bg-[#FF819A] hover:bg-[#FFB6C4] hover:text-white transition-colors border border-pink-300 flex items-center prompt-regular bg-gradient-to-r transform  duration-300 hover:scale-105"
             >
               <span>เริ่มต้นใช้งาน</span>
             </button>
             <button
               onClick={toggleQRCode}
-              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg bg-[#FF819A] hover:bg-[#FFB6C4] hover:text-white transition-colors border border-pink-300 flex items-center prompt-regular"
+              className="px-6 py-2 text-white font-serif   rounded-full shadow-lg bg-[#FF819A] hover:bg-[#FFB6C4] hover:text-white transition-colors border border-pink-300 flex items-center prompt-regular bg-gradient-to-r transform  duration-300 hover:scale-105"
             >
               <span>รับข้อความ</span>
             </button>
@@ -482,7 +482,7 @@ export default function Home() {
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={toggleMedal}
-          className="text-gray-600 text-xl underline hover:text-gray-700 transition-colors font-serif prompt-regular"
+          className="text-gray-600 text-xl underline hover:text-gray-700 transition-colors font-serif prompt-regular bg-gradient-to-r transform  duration-300 hover:scale-105"
         >
           คำแนะนำการใช้งาน
         </button>
@@ -517,7 +517,7 @@ export default function Home() {
             <p className="text-gray-700 font-serif prompt-regular">
               เป็นเว็บที่ทำขึ้นมาเพื่อแบ่งปันข้อความดีๆให้กับคนที่คุณรัก และ
               ห่วงใยให้มีความสุขในทุกๆเช้าของวัน ทำการ
-              <span
+              <button
                 onClick={() => {
                   if (!isLoggedIn) {
                     toggleMedal();
@@ -526,23 +526,23 @@ export default function Home() {
                     alert("คุณได้ล็อกอินแล้ว เริ่มต้นใช้งานได้เลยค่ะ");
                   }
                 }}
-                className="text-[#FF819A] cursor-pointer"
+                className="text-[#FF819A] cursor-pointer bg-gradient-to-r transform  duration-300 hover:scale-105 px-2"
               >
                 {""} Login {""}
-              </span>
+              </button>
               เพื่อใส่ข้อความดีๆให้มีกำลังใจในทุกๆเช้ากัน และ
               สามารถรับข้อความได้ง่ายๆแค่ สแกน{" "}
-              <span
+              <button
                 onClick={() => {
                   if (!showQRCode) {
                     toggleMedal();
                     setShowQRCode(true);
                   }
                 }}
-                className="text-[#FF819A] cursor-pointer"
+                className="text-[#FF819A] cursor-pointer  bg-gradient-to-r transform  duration-300 hover:scale-105 px-2"
               >
                 {""} QRCode {""}
-              </span>
+              </button>
               เพื่อรับข้อความได้เลยค่ะ
             </p>
           </div>
@@ -650,20 +650,29 @@ export default function Home() {
                 {isLogin ? "Sign in" : "Sign up"}
               </button>
               {isLogin && (
-                <div className="flex justify-between space-x-2 m-36">
-                  <button
-                    type="button"
-                    className="p-1 bg-white rounded-full"
-                    onClick={loginWithPhone}
-                  >
-                    <IoPhonePortraitOutline className="text-2xl text-black" />
-                  </button>
+                <div className="flex justify-center space-x-4 mt-10">
+                  {/* Button for Google login */}
                   <button
                     type="button"
                     onClick={loginWithGoogle}
-                    className="p-1 bg-white rounded-full"
+                    className="flex items-center justify-center border border-black rounded-full px-4 py-2 hover:bg-gray-100"
                   >
-                    <FcGoogle className="text-2xl" />
+                    <FcGoogle className="text-2xl mr-2" />
+                    <span className="text-black lily-script-one-regular ">
+                      continue with google
+                    </span>
+                  </button>
+
+                  {/* Button for Phone login */}
+                  <button
+                    type="button"
+                    onClick={loginWithPhone}
+                    className="flex items-center justify-center border border-black rounded-full px-4 py-2 hover:bg-gray-100"
+                  >
+                    <IoPhonePortraitOutline className="text-2xl mr-2 text-black" />
+                    <span className="text-black lily-script-one-regular ">
+                      continue with OTP
+                    </span>
                   </button>
                 </div>
               )}
