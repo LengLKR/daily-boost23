@@ -403,6 +403,7 @@ export default function Home() {
           Daily Boost
         </div>
       </div>
+      
       <main className="flex flex-col items-center justify-center flex-1 p-4 text-center">
         <img
           src="/Group 10.png"

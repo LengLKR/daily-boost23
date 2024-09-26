@@ -9,6 +9,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "./google"; 
+import Head from "next/head";
 
 const Modal = ({ isOpen, onClose, email, onSave }) => {
   const [formData, setFormData] = useState({
@@ -106,6 +107,24 @@ const Modal = ({ isOpen, onClose, email, onSave }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
+
+       <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Lily+Script+One&family=McLaren&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+        />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap"
+          rel="stylesheet"
+        />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=McLaren&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
       <div
         className="fixed inset-0 bg-black opacity-50"
         onClick={onClose}
@@ -133,9 +152,12 @@ const Modal = ({ isOpen, onClose, email, onSave }) => {
         </button>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
+          <h2 className="text-2xl font-semibold  text-black mb-6 lily-script-one-regular">
+           Enter Your Name
+          </h2>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-900"
+              className="block text-sm font-medium text-gray-900  libre-caslon-text-regular"
             >
               Name
             </label>
@@ -145,24 +167,27 @@ const Modal = ({ isOpen, onClose, email, onSave }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border text-black border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
+              className="mt-1 block w-full p-2 border text-gray-700 bg-gray-100    border-gray-300 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500"
               required
             />
           </div>
           <div className="flex justify-end gap-2">
+
             <button
               type="button"
-              className="py-2 px-4 text-sm font-medium text-center text-gray-900 rounded-lg bg-gray-200 hover:bg-gray-300"
+              className="py-2 px-4 text-sm font-medium text-center mclaren-regular  text-white rounded-lg bg-[#FF819A] hover:bg-[#FFB6C4] "
               onClick={onClose}
             >
               Cancel
             </button>
+
             <button
               type="submit"
-              className="py-2 px-4 text-sm font-medium text-center text-gray-900 rounded-lg bg-gray-200 hover:bg-gray-300"
+              className="py-2 px-4 text-sm font-medium text-center mclaren-regular  text-white rounded-lg bg-[#FF819A]  hover:bg-[#FFB6C4] "
             >
               Submit
             </button>
+
           </div>
         </form>
       </div>

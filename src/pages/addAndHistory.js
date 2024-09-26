@@ -364,23 +364,42 @@ const AddAndHistory = () => {
     <div
       className="flex flex-col items-center justify-center  bg-cover bg-center relative"
       style={{
-        width: "100vw", // กำหนดขนาดให้ครอบคลุมเต็มหน้าจอ
-        height: "100vh", // กำหนดขนาดให้ครอบคลุมเต็มหน้าจอ
-        backgroundImage: "url('addAndHistory.jpg')",
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: "url('bg_add.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        overflow: "hidden", // ป้องกันนกเคลื่อนที่ออกนอกขอบเขต
+        overflow: "hidden",
       }}
     >
       <Head>
         <title>addAndHistory</title>
         <link rel="icon" href="/11zon_cropped.jpg" />
       </Head>
+
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=McLaren&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+        />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text&display=swap"
+          rel="stylesheet"
+        />
+
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Lily+Script+One&family=McLaren&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
       <div
         className="bird"
         onClick={handleClick}
         style={{
-          position: "absolute",cursor: "pointer",
+          position: "absolute",
+          cursor: "pointer",
           left: `${birdPosition.x}px`,
           top: `${birdPosition.y}px`,
           transform: `rotate(${birdPosition.angle}deg)`,
@@ -393,6 +412,7 @@ const AddAndHistory = () => {
           cursor: "pointer",
         }}
       ></div>
+
       <div>
         <div className="fixed top-4 left-4 flex items-center space-x-4">
           <button className="flex items-center space-x-2">
@@ -406,18 +426,22 @@ const AddAndHistory = () => {
                 className=" transition-transform duration-500 hover:rotate-180 group-hover:text-black object-cover w-full h-full"
               />
             </div>
-            <div onClick={indexClick} className="text-white font-serif">
+            <div
+              onClick={indexClick}
+              className="text-white text-2xl  lily-script-one-regular"
+            >
               Daily Boost
             </div>
           </button>
         </div>
+
         <div className="fixed top-4 right-4">
           <button
             id="successButton"
             onClick={handleOpenModal}
-            className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-2xl px-5 py-2.5 text-center  mclaren-regular"
           >
-            {user?.name || "ตั้งชื่อของคุณได้เลย"}{" "}
+            {user?.name || "Enter Your Name"}{" "}
           </button>
         </div>
 
@@ -428,12 +452,20 @@ const AddAndHistory = () => {
           onSave={handleSaveName}
         />
       </div>
-      <div className="w-full max-w-4xl p-8 flex flex-col items-center justify-center">
-        <div className="flex-1 text-center">
-          <h1 className="text-4xl font-serif text-white">
-            แบ่งปันข้อความดี ๆ ให้กับคนที่คุณรักและห่วงใย
+
+      <div className="w-full max-w-4xl p-8 flex flex-col items-center justify-center ">
+
+      <img
+          src="/Group 10.png"
+          className="w-[500px] h-auto object-cover mb-3"
+          alt="Group"
+        />
+        <div className="flex-1 text-center rounded-2xl bg-[#babbf4] p-6">
+
+          <h1 className="text-3xl font-serif text-white prompt-regular">
+            แบ่งปันข้อความดีๆ ให้กับคนที่คุณรักและห่วงใย
           </h1>
-          <p className="text-white mt-5 text-xl">
+          <p className="text-white mt-3 text-xl prompt-regular">
             คุณสามารถเลือกใช้{" "}
             <button onClick={toggleRecommend}>
               <u>ข้อความแนะนำ</u>
@@ -481,11 +513,24 @@ const AddAndHistory = () => {
             </div>
           )}
 
+          <div className="flex-1 mt-5 p-5 text-center bg-white  rounded-3xl">
+            <ul className="mt-4 max-h-64 overflow-y-auto scrollbar-custom">
+              {messages.map((msg) => (
+                <li
+                  key={msg.id}
+                  className=" w-full  p-1 m-2  text-white bg-[#FF819A]    rounded-full shadow transition-colors  prompt-regular "
+                >
+                  <h2>{msg.text}</h2>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {notification && (
-            <div className="relative bg-violet-400 p-1 mt-2 rounded text-black">
+            <div className="relative bg-[#FF819A] p-1 mt-2 rounded text-white prompt-regular">
               {notification}
               <button
-                className="absolute top-0 right-0 z-10 p-1 text-black rounded-full"
+                className="absolute top-0 right-0 z-10 p-1 text-white rounded-full"
                 onClick={handleNotificationClose}
               >
                 X
@@ -493,48 +538,35 @@ const AddAndHistory = () => {
             </div>
           )}
 
-          <textarea
-            className="w-3/4 max-w-lg p-4 mt-6 text-purple-300 bg-gray-800 rounded-lg resize-none"
-            rows={4}
-            placeholder="แบ่งปันข้อความของคุณ..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSave();
-              }
-            }}
-          ></textarea>
+          <div className="flex mt-2">
+            <input
+              className="w-full px-4 py-2 mt-1 rounded-full text-gray-700 bg-gray-100  prompt-regular "
+              rows={4}
+              placeholder="Message Here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSave();
+                }
+              }}
+            ></input>
 
-          <button
-            className="mt-4 w-full max-w-56 px-6 py-2 text-white bg-indigo-500 rounded-full shadow transition-colors mx-auto hover:bg-blue-700"
-            onClick={handleSave}
-          >
-            ส่งข้อความ
-          </button>
-        </div>
-
-        {/* ประวัติข้อความ */}
-        <div className="flex-1 mt-8 text-center ">
-          <h1 className="text-xl font-serif text-white">ประวัติ</h1>
-          <ul className="mt-4 max-h-64 overflow-y-auto scrollbar-custom">
-            {messages.map((msg) => (
-              <li
-                key={msg.id}
-                className="p-2 mb-2 text-white bg-gray-800 bg-opacity-70 rounded-lg shadow"
-              >
-                <p>{msg.text}</p>
-              </li>
-            ))}
-          </ul>
+            <button
+              className="  max-w-56 px-6 py-2 m-2 text-white bg-[#FF819A]   hover:bg-[#FFB6C4] rounded-full shadow transition-colors  mclaren-regular "
+              onClick={handleSave}
+            >
+              Send
+            </button>
+          </div>
         </div>
       </div>
       {/* ปุ่มที่มุมขวาล่าง */}
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={toggleMedal}
-          className="text-white text-base underline hover:text-gray-300 transition-colors"
+          className="text-gray-600 text-xl underline hover:text-gray-700 transition-colors font-serif prompt-regular"
         >
           คำแนะนำการใช้งาน
         </button>
@@ -542,24 +574,39 @@ const AddAndHistory = () => {
       {/* ป๊อปอัพสำหรับแสดงคำแนะนำการใช้งาน */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-xl font-serif text-blue-500 mb-4">
+          <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+          <button
+              onClick={toggleMedal}
+              className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            <h2 className="text-xl font-serif text-[#FF819A] mb-4 prompt-regular">
               คำแนะนำการใช้งาน
             </h2>
-            <p className="text-gray-700 font">
+            <p className="text-gray-700 font prompt-regular">
               สามารถนำข้อความของคุณใส่ตรง{" "}
-              <span className="text-blue-500 font-serif">
+              <span className="text-[#FF819A]  font-serif">
                 ช่องแบ่งปันข้อความ
               </span>{" "}
               ได้เลยนะคะ มาแบ่งปันข้อความของคุณให้กับคนที่คุณรัก และ ห่วงใย
               กันค่ะ!
             </p>
-            <button
-              onClick={toggleMedal}
-              className="mt-4 px-4 py-2 text-white font-serif bg-blue-500 rounded-full shadow-lg hover:bg-blue-700  transition-all duration-300 transform hover:scale-105 w-full"
-            >
-              ปิด
-            </button>
+            
           </div>
         </div>
       )}
