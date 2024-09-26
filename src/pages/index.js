@@ -5,7 +5,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, googleProvider } from "./google"; // อ้างอิงไปที่ Firebase auth
 import { signInWithPopup } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
-import { FaPhoneAlt } from "react-icons/fa";
+import { IoPhonePortraitOutline } from "react-icons/io5";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import {
@@ -326,7 +326,7 @@ export default function Home() {
     >
       <Head>
         <title>Daily Boost</title>
-        <link rel="icon" href="/11zon_cropped.jpg" />
+        <link rel="icon" href="\logoproject.png" />
       </Head>
 
       <Head>
@@ -394,7 +394,7 @@ export default function Home() {
       <div className="fixed top-4 left-4 flex items-center space-x-4">
         <div className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
-            src="/logo_web.png"
+            src="\logoproject.png"
             alt="Home Icon"
             className=" transition-transform duration-500 hover:rotate-180 group-hover:text-black object-cover w-full h-full"
           />
@@ -656,7 +656,7 @@ export default function Home() {
                     className="p-1 bg-white rounded-full"
                     onClick={loginWithPhone}
                   >
-                    <FaPhoneAlt className="text-2xl text-black" />
+                    <IoPhonePortraitOutline className="text-2xl text-black" />
                   </button>
                   <button
                     type="button"

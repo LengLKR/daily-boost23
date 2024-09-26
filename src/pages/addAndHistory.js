@@ -374,7 +374,7 @@ const AddAndHistory = () => {
     >
       <Head>
         <title>addAndHistory</title>
-        <link rel="icon" href="/11zon_cropped.jpg" />
+        <link rel="icon" href="\logoproject.png" />
       </Head>
 
       <Head>
@@ -421,7 +421,7 @@ const AddAndHistory = () => {
               className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-4 border-white shadow-lg"
             >
               <img
-                src="/logo_web.png"
+                src="\logoproject.png"
                 alt="Home Icon"
                 className=" transition-transform duration-500 hover:rotate-180 group-hover:text-black object-cover w-full h-full"
               />
@@ -454,14 +454,12 @@ const AddAndHistory = () => {
       </div>
 
       <div className="w-full max-w-4xl p-8 flex flex-col items-center justify-center ">
-
-      <img
+        <img
           src="/Group 10.png"
           className="w-[500px] h-auto object-cover mb-3"
           alt="Group"
         />
         <div className="flex-1 text-center rounded-2xl bg-[#babbf4] p-6">
-
           <h1 className="text-3xl font-serif text-white prompt-regular">
             แบ่งปันข้อความดีๆ ให้กับคนที่คุณรักและห่วงใย
           </h1>
@@ -474,15 +472,35 @@ const AddAndHistory = () => {
           </p>
 
           {showRecommend && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
-                <h2 className="text-xl text-left font-serif text-blue-500 mb-4">
+            <div className=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="relative bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto border border-purple-400">
+                <button
+                  onClick={toggleRecommend}
+                  className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-700"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+
+                <h2 className="text-xl text-left font-serif text-[#FF819A]  mb-4 prompt-regular">
                   ข้อความแนะนำ
                 </h2>
-                <p className="text-gray-800 font-serif mb-2">
+                <p className="text-gray-800 font-serif mb-2 prompt-regular">
                   เลือกข้อความที่ต้องการได้เลยค่ะ
                 </p>
-                <ul className="max-h-40 overflow-y-auto">
+                <ul className="max-h-40 overflow-y-auto prompt-regular scrollbar-custom">
                   {[
                     "ขอให้มีความสุขในยามเช้า",
                     "ตอนเช้าที่สดใสขอให้เจอแต่เรื่องดีๆน้า",
@@ -496,19 +514,13 @@ const AddAndHistory = () => {
                   ].map((msg, index) => (
                     <li
                       key={index}
-                      className="p-2 mb-2 text-black bg-gray-200 rounded-lg shadow cursor-pointer hover:bg-blue-300"
+                      className="p-3 mb-2 text-white bg-[#FF819A] hover:bg-[#FFB6C4]  rounded-lg shadow cursor-pointer prompt-regular"
                       onClick={() => handleHistoryClick(msg)}
                     >
                       {msg}
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={toggleRecommend}
-                  className="mt-4 px-4 py-2 text-white font-serif bg-indigo-500 rounded-full shadow-lg hover:bg-indigo-600 transition-all duration-300 transform hover:scale-105 w-full"
-                >
-                  ปิด
-                </button>
               </div>
             </div>
           )}
@@ -518,7 +530,7 @@ const AddAndHistory = () => {
               {messages.map((msg) => (
                 <li
                   key={msg.id}
-                  className=" w-full  p-1 m-2  text-white bg-[#FF819A]    rounded-full shadow transition-colors  prompt-regular "
+                  className="   p-1 m-2  text-white bg-[#FF819A]   rounded-full shadow transition-colors  prompt-regular "
                 >
                   <h2>{msg.text}</h2>
                 </li>
@@ -575,7 +587,7 @@ const AddAndHistory = () => {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-          <button
+            <button
               onClick={toggleMedal}
               className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-700"
             >
@@ -606,7 +618,6 @@ const AddAndHistory = () => {
               ได้เลยนะคะ มาแบ่งปันข้อความของคุณให้กับคนที่คุณรัก และ ห่วงใย
               กันค่ะ!
             </p>
-            
           </div>
         </div>
       )}
