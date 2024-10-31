@@ -17,17 +17,16 @@ const PhoneLogin = () => {
   const [verificationId, setVerificationId] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
   const router = useRouter();
-  const [isFlying, setIsFlying] = useState(true);
-  const [speed, setSpeed] = useState(5); // เพิ่มตัวแปร speed เพื่อควบคุมความเร็ว
-  const [birdPosition, setBirdPosition] = useState({
-    x: 100,
-    y: 100,
-    angle: 0,
-  });
-  const [direction, setDirection] = useState({ x: 1, y: 1 }); // กำหนดให้เป็นวัตถุเพื่อลดข้อผิดพลาด
-  const [isMoving, setIsMoving] = useState(true);
+  // const [isFlying, setIsFlying] = useState(true);
+  // const [speed, setSpeed] = useState(5); // เพิ่มตัวแปร speed เพื่อควบคุมความเร็ว
+  // const [birdPosition, setBirdPosition] = useState({
+  //   x: 100,
+  //   y: 100,
+  //   angle: 0,
+  // });
+  // const [direction, setDirection] = useState({ x: 1, y: 1 }); // กำหนดให้เป็นวัตถุเพื่อลดข้อผิดพลาด
+  // const [isMoving, setIsMoving] = useState(true);
 
- 
   // Firebase Configuration
   const firebaseConfig = {
     apiKey: "AIzaSyAGrDbcLB6Xx8t8rh2noyFrSPVoRYdeizU",
@@ -95,7 +94,7 @@ const PhoneLogin = () => {
     if (phoneNumber?.startsWith("0")) {
       setPhoneNumber("+66" + phoneNumber.substring(0, 1));
     }
-    
+
     const confirmationResult = await signInWithPhoneNumber(
       auth,
       phoneNumber,
@@ -111,12 +110,33 @@ const PhoneLogin = () => {
   };
 
   // Verify OTP
+  // Verify OTP
   const verifyOtp = async (e) => {
     e.preventDefault();
     try {
       const credential = PhoneAuthProvider.credential(verificationId, otp);
       const userCredential = await signInWithCredential(auth, credential);
-      console.log("Verification successful:", userCredential.user);
+
+      // ตรวจสอบว่ามีข้อมูล userCredential หรือไม่
+      if (userCredential) {
+        const user = userCredential.user;
+
+        // ตรวจสอบว่ามีข้อมูล phoneNumber หรือไม่
+        if (user && user.phoneNumber) {
+          // บันทึกข้อมูลผู้ใช้ลงใน localStorage
+          localStorage.setItem(
+            "profileUser",
+            JSON.stringify({ email: user.phoneNumber })
+          );
+
+          // หลังจาก sign in สำเร็จให้เปลี่ยนเส้นทางไปยังหน้า addAndHistory
+          router.push("/addAndHistory");
+        } else {
+          console.log("User does not have a phoneNumber.");
+        }
+      } else {
+        console.log("No userCredential found.");
+      }
     } catch (error) {
       console.log("Error verifying OTP:", error);
     }
@@ -126,83 +146,86 @@ const PhoneLogin = () => {
     router.push("/?showLogin=true");
   };
 
-  useEffect(() => {
-    let animationFrameId;
+  // useEffect(() => {
+  //   let animationFrameId;
 
-    const moveBird = () => {
-      if (!isMoving) return;
+  //   const moveBird = () => {
+  //     if (!isMoving) return;
 
-      setBirdPosition((prevPosition) => {
-        // ปรับความเร็วให้สมูทขึ้น
-        let newX = prevPosition.x + speed * direction.x * 0.5;
-        let newY = prevPosition.y + speed * direction.y * 0.5;
+  //     setBirdPosition((prevPosition) => {
+  //       // ปรับความเร็วให้สมูทขึ้น
+  //       let newX = prevPosition.x + speed * direction.x * 0.5;
+  //       let newY = prevPosition.y + speed * direction.y * 0.5;
 
-        // กำหนดขนาดของพื้นหลัง
-        const backgroundWidth = window.innerWidth;
-        const backgroundHeight = window.innerHeight;
+  //       // กำหนดขนาดของพื้นหลัง
+  //       const backgroundWidth = window.innerWidth;
+  //       const backgroundHeight = window.innerHeight;
 
-        // กำหนดขนาดของนก
-        const birdWidth = 100;
-        const birdHeight = 100;
+  //       // กำหนดขนาดของนก
+  //       const birdWidth = 100;
+  //       const birdHeight = 100;
 
-        // กำหนดขอบปลอดภัยเพื่อให้นกอยู่ในพื้นที่หน้าจอที่มองเห็นได้มากขึ้น
-        const safeMargin = 100;
+  //       // กำหนดขอบปลอดภัยเพื่อให้นกอยู่ในพื้นที่หน้าจอที่มองเห็นได้มากขึ้น
+  //       const safeMargin = 100;
 
-        // ตรวจสอบการชนขอบของพื้นหลัง และทำการสุ่มเปลี่ยนทิศทาง
-        let newDirectionX = direction.x;
-        let newDirectionY = direction.y;
+  //       // ตรวจสอบการชนขอบของพื้นหลัง และทำการสุ่มเปลี่ยนทิศทาง
+  //       let newDirectionX = direction.x;
+  //       let newDirectionY = direction.y;
 
-        if (
-          newX >= backgroundWidth - birdWidth - safeMargin ||
-          newX <= safeMargin
-        ) {
-          newDirectionX = -direction.x; // เปลี่ยนทิศทางแกน X
-          newDirectionY = Math.random() > 0.5 ? 1 : -1; // สุ่มทิศทางแกน Y เพื่อไม่ให้นกบินกลับในทิศทางเดิม
-        }
+  //       if (
+  //         newX >= backgroundWidth - birdWidth - safeMargin ||
+  //         newX <= safeMargin
+  //       ) {
+  //         newDirectionX = -direction.x; // เปลี่ยนทิศทางแกน X
+  //         newDirectionY = Math.random() > 0.5 ? 1 : -1; // สุ่มทิศทางแกน Y เพื่อไม่ให้นกบินกลับในทิศทางเดิม
+  //       }
 
-        if (
-          newY >= backgroundHeight - birdHeight - safeMargin ||
-          newY <= safeMargin
-        ) {
-          newDirectionY = -direction.y; // เปลี่ยนทิศทางแกน Y
-          newDirectionX = Math.random() > 0.5 ? 1 : -1; // สุ่มทิศทางแกน X เพื่อไม่ให้นกบินกลับในทิศทางเดิม
-        }
+  //       if (
+  //         newY >= backgroundHeight - birdHeight - safeMargin ||
+  //         newY <= safeMargin
+  //       ) {
+  //         newDirectionY = -direction.y; // เปลี่ยนทิศทางแกน Y
+  //         newDirectionX = Math.random() > 0.5 ? 1 : -1; // สุ่มทิศทางแกน X เพื่อไม่ให้นกบินกลับในทิศทางเดิม
+  //       }
 
-        // อัปเดตทิศทางใหม่
-        setDirection({ x: newDirectionX, y: newDirectionY });
+  //       // อัปเดตทิศทางใหม่
+  //       setDirection({ x: newDirectionX, y: newDirectionY });
 
-        // ตรวจสอบการหลุดขอบและแก้ไข
-        newX = Math.min(
-          Math.max(newX, safeMargin),
-          backgroundWidth - birdWidth - safeMargin
-        );
-        newY = Math.min(
-          Math.max(newY, safeMargin),
-          backgroundHeight - birdHeight - safeMargin
-        );
+  //       // ตรวจสอบการหลุดขอบและแก้ไข
+  //       newX = Math.min(
+  //         Math.max(newX, safeMargin),
+  //         backgroundWidth - birdWidth - safeMargin
+  //       );
+  //       newY = Math.min(
+  //         Math.max(newY, safeMargin),
+  //         backgroundHeight - birdHeight - safeMargin
+  //       );
 
-        // เพิ่มการขยับมุมเพื่อให้บินแบบโค้ง
-        return { x: newX, y: newY, angle: prevPosition.angle + 1 };
-      });
+  //       // เพิ่มการขยับมุมเพื่อให้บินแบบโค้ง
+  //       return { x: newX, y: newY, angle: prevPosition.angle + 1 };
+  //     });
 
-      animationFrameId = requestAnimationFrame(moveBird);
-    };
+  //     animationFrameId = requestAnimationFrame(moveBird);
+  //   };
 
-    if (isMoving) {
-      animationFrameId = requestAnimationFrame(moveBird);
-    }
+  //   if (isMoving) {
+  //     animationFrameId = requestAnimationFrame(moveBird);
+  //   }
 
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [isMoving, direction, speed]);
+  //   return () => {
+  //     cancelAnimationFrame(animationFrameId);
+  //   };
+  // }, [isMoving, direction, speed]);
 
-  // ฟังก์ชันเมื่อคลิกที่นก
-  const handleClick = () => {
-    setIsMoving((prev) => !prev); // สลับสถานะการเคลื่อนไหว
-    setSpeed((prevSpeed) => prevSpeed + 2); // เพิ่มความเร็วเมื่อคลิกที่นก
+  // // ฟังก์ชันเมื่อคลิกที่นก
+  // const handleClick = () => {
+  //   setIsMoving((prev) => !prev); // สลับสถานะการเคลื่อนไหว
+  //   setSpeed((prevSpeed) => prevSpeed + 2); // เพิ่มความเร็วเมื่อคลิกที่นก
+  // };
+
+  const indexClick = () => {
+    router.push("/addAndHistory");
   };
-
 
   return (
     <div
@@ -233,7 +256,7 @@ const PhoneLogin = () => {
         />
       </Head>
 
-      <div
+      {/* <div
         className="bird"
         onClick={handleClick}
         style={{
@@ -249,7 +272,7 @@ const PhoneLogin = () => {
             "left 0.5s linear, top 0.5s linear, transform 0.5s linear",
           cursor: "pointer",
         }}
-      ></div>
+      ></div> */}
 
       <div>
         <button
@@ -290,10 +313,10 @@ const PhoneLogin = () => {
               >
                 Send OTP
               </button>
-              
             </form>
           ) : (
             <form onSubmit={verifyOtp}>
+              <div id="recaptcha-container"></div>
               <div className="mb-4">
                 <input
                   type="text"
@@ -305,6 +328,7 @@ const PhoneLogin = () => {
               </div>
 
               <button
+                onClick={indexClick}
                 type="submit"
                 className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 focus:outline-none"
               >

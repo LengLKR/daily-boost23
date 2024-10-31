@@ -640,7 +640,7 @@ export default function Home() {
                   onClick={goToForgetPassword}
                   className="text-black flex ml-[290px] font-serif  libre-caslon-text-regular"
                 >
-                  Forget Password
+                  Forgot Password
                 </button>
               )}
               <button

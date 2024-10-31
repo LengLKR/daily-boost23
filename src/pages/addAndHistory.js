@@ -465,7 +465,10 @@ const AddAndHistory = () => {
           </h1>
           <p className="text-white mt-3 text-xl prompt-regular">
             คุณสามารถเลือกใช้{" "}
-            <button onClick={toggleRecommend} className="bg-gradient-to-r transform  duration-300 hover:scale-105">
+            <button
+              onClick={toggleRecommend}
+              className="bg-gradient-to-r transform  duration-300 hover:scale-105"
+            >
               <u>ข้อความแนะนำ</u>
             </button>{" "}
             ของ <strong>Daily Boost</strong> เพื่อส่งไปให้คนที่คุณรักได้
